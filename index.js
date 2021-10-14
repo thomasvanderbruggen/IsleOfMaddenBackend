@@ -14,12 +14,12 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
         body += chunk.toString();
     })
     req.on('end', () =>{ 
-        const teams = JSON.parse(body)['teamStandingInfoList']; 
-        console.log('----Teams----')
+        const teams = JSON.parse(body)['leagueTeamInfoList'];
+        console.log('----Teams----');
         for (team of teams){ 
-            console.log(team['teamId']);
+            console.log(team['teamName']);
         }
-
+        res.sendStatus(200);
     })
 })
 
@@ -32,7 +32,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         console.log('----Standings----');
         const teams = JSON.parse(body)['teamStandingInfoList'];
         for (team of teams){ 
-            console.log(team['teamId']);
+            console.log(team['teamName']);
         }
         res.sendStatus(200); 
     });
