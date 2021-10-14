@@ -8,13 +8,18 @@ app.get('*', (req, res) => {
     res.send('Testing'); 
 });
 
-app.post('/:username/:platform/:leagueId/leagueTeams', (req, res) => { 
+app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
     let body = ''; 
     req.on('data', chunk=>{ 
+        body += chunk.toString();
+    })
+    req.on('end', () =>{ 
         const teams = JSON.parse(body)['teamStandingInfoList']; 
+        console.log('----Teams----')
         for (team of teams){ 
             console.log(team['teamId']);
         }
+
     })
 })
 
@@ -24,7 +29,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         body += chunk.toString(); 
     }); 
     req.on('end', () => { 
-        console.log('----Teams----');
+        console.log('----Standings----');
         const teams = JSON.parse(body)['teamStandingInfoList'];
         for (team of teams){ 
             console.log(team['teamId']);
@@ -32,20 +37,6 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         res.sendStatus(200); 
     });
 })
-
-app.post('/:platform/:leagueId/standings', (req, res) => { 
-    let body = ''; 
-
-    req.on('data', chunk =>{ 
-        body += chunk.toString(); 
-    }); 
-
-    req.on('end', () => { 
-        console.log('----Standings----'); 
-        //console.log(JSON.parse(body)); 
-        res.sendStatus(200); 
-    });
-});
 
 
 app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res) => { 
