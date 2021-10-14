@@ -22,7 +22,7 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
             console.log(key);
         });
         for (const team of teams) { 
-            teamsWithInfo.push({team}); 
+            teamsWithInfo.push(team); 
         }
         res.sendStatus(200);
     })
