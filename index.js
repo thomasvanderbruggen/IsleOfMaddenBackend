@@ -1,7 +1,8 @@
 const express = require('express'); 
 
 const app = express(); 
-
+let teamInfoKeys = []; 
+let teamStandingsKeys = []; 
 app.set('port', (process.env.PORT || 3001)); 
 
 app.get('*', (req, res) => { 
@@ -18,6 +19,7 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
         console.log('----Teams----');
         let team = teams[0]; 
         Object.keys(team).forEach(key => { 
+            teamInfoKeys.push(key);
             console.log(key);
         })
         res.sendStatus(200);
@@ -34,8 +36,16 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         const teams = JSON.parse(body)['teamStandingInfoList'];
         let team = teams[0]; 
         Object.keys(team).forEach(key => { 
-            console.log(key);
+            teamStandingsKeys.push(key);
         })
+        for (key of teamInfoKeys) { 
+            if (!teamStandingsKeys.includes(key)){ 
+                teamStandingsKeys.push(key);
+            }
+        }
+        for (key of teamStandingsKeys) { 
+            console.log(key);
+        }
         res.sendStatus(200); 
     });
 })
