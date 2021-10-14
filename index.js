@@ -44,6 +44,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         for (let i = 0; i < teamsWithInfo.length; i++){ 
             console.log(`${teams[i]['teamId']} ${teamsWithInfo[i]['teamId']}`); 
         }
+        teamsWithInfo = []; 
         res.sendStatus(200); 
     });
 })
