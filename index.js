@@ -8,7 +8,7 @@ app.get('*', (req, res) => {
     res.send('Testing'); 
 });
 
-app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
+app.post('/:platform/:leagueId/standings', (req, res) => { 
     let body = ''; 
     req.on('data', chunk => { 
         body += chunk.toString(); 
@@ -21,7 +21,7 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
         });
         res.sendStatus(200); 
     }
-});
+})
 
 app.post('/:platform/:leagueId/standings', (req, res) => { 
     let body = ''; 
