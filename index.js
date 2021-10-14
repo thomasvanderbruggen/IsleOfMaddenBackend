@@ -2,7 +2,8 @@ const express = require('express');
 
 const app = express(); 
 let teamInfoKeys = []; 
-let teamStandingsKeys = []; 
+let teamStandingsKeys = [];
+let teamsWithInfo = []; 
 app.set('port', (process.env.PORT || 3001)); 
 
 app.get('*', (req, res) => { 
@@ -17,11 +18,9 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
     req.on('end', () =>{ 
         const teams = JSON.parse(body)['leagueTeamInfoList'];
         console.log('----Teams----');
-        let team = teams[0]; 
-        Object.keys(team).forEach(key => { 
-            teamInfoKeys.push(key);
-            console.log(key);
-        })
+        for (const team of teams) { 
+            teamsWithInfo.push({team}); 
+        }
         res.sendStatus(200);
     })
 })
@@ -39,11 +38,8 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
             teamStandingsKeys.push(key);
             console.log(key);
         })
-        console.log("Keys not included in teamStandingsKeys"); 
-        for (key of teamInfoKeys) { 
-            if (!teamStandingsKeys.includes(key)){ 
-                console.log(key);
-            }
+        for (let i = 0; i < teamsWithInfo.length; i++){ 
+            console.log(`${teams[i]['teamId']} ${teamsWithInfo[i]['teamId']}`); 
         }
         res.sendStatus(200); 
     });
