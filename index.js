@@ -14,8 +14,11 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
         body += chunk.toString(); 
     }); 
     req.on('end'), () => { 
-        console.log('----Teams----'); 
-        console.log(JSON.parse(body)); 
+        console.log('----Teams----');
+        let x = JSON.parse(body);
+        Object.keys(x).forEach(key => { 
+            console.log(key); 
+        }); 
         res.sendStatus(200); 
     }
 });
