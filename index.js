@@ -16,7 +16,7 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
     req.on('end', () =>{ 
         const teams = JSON.parse(body)['leagueTeamInfoList'];
         console.log('----Teams----');
-        team = teams[0]; 
+        let team = teams[0]; 
         Object.keys(team).forEach(key => { 
             console.log(key);
         })
@@ -32,9 +32,10 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
     req.on('end', () => { 
         console.log('----Standings----');
         const teams = JSON.parse(body)['teamStandingInfoList'];
-        for (team of teams){ 
-            console.log(team['teamName']);
-        }
+        let team = teams[0]; 
+        Object.keys(team).forEach(key => { 
+            console.log(key);
+        })
         res.sendStatus(200); 
     });
 })
@@ -67,7 +68,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
     })
 });
 
-app.post('/:username/:platform/:leagueId/team/:teamId/roster', (req, res) => { 
+app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => { 
     let body = '';
     req.on('data', (req, res) => { 
         body += chunk.toString();
