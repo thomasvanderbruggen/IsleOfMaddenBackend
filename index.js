@@ -37,14 +37,13 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         let team = teams[0]; 
         Object.keys(team).forEach(key => { 
             teamStandingsKeys.push(key);
+            console.log(key);
         })
+        console.log("Keys not included in teamStandingsKeys"); 
         for (key of teamInfoKeys) { 
             if (!teamStandingsKeys.includes(key)){ 
-                teamStandingsKeys.push(key);
+                console.log(key);
             }
-        }
-        for (key of teamStandingsKeys) { 
-            console.log(key);
         }
         res.sendStatus(200); 
     });
