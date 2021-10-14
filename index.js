@@ -8,6 +8,16 @@ app.get('*', (req, res) => {
     res.send('Testing'); 
 });
 
+app.post('/:username/:platform/:leagueId/leagueTeams', (req, res) => { 
+    let body = ''; 
+    req.on('data', chunk=>{ 
+        const teams = JSON.parse(body)['teamStandingInfoList']; 
+        for (team of teams){ 
+            console.log(team['teamId']);
+        }
+    })
+})
+
 app.post('/:platform/:leagueId/standings', (req, res) => { 
     let body = ''; 
     req.on('data', chunk => { 
