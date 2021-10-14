@@ -15,10 +15,10 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
     }); 
     req.on('end'), () => { 
         console.log('----Teams----');
-        let x = JSON.parse(body);
-        for (a of x) {
-            console.log(x.teamName);
-        }
+        const { leagueTeamInfoList: teams} = JSON.parse(body); 
+        teams.forEach(team =>{ 
+            console.log(team[teamId]); 
+        });
         res.sendStatus(200); 
     }
 });
@@ -32,7 +32,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
 
     req.on('end', () => { 
         console.log('----Standings----'); 
-        console.log(JSON.parse(body)); 
+        //console.log(JSON.parse(body)); 
         res.sendStatus(200); 
     });
 });
@@ -48,7 +48,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
     req.on('end', () => {
         const {params: {dataType},} = req; 
         console.log(`----${dataType}----`); 
-        console.log(JSON.parse(body));
+        //console.log(JSON.parse(body));
         res.sendStatus(200);
     })
 });
@@ -60,7 +60,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
     });
     req.on('end', () => { 
         console.log('----Free Agents----'); 
-        console.log(JSON.parse(body)); 
+        //console.log(JSON.parse(body)); 
         res.sendStatus(200); 
     })
 });
@@ -72,7 +72,7 @@ app.post('/:username/:platform/:leagueId/team/:teamId/roster', (req, res) => {
     }); 
     req.end('end', () => { 
         console.log('---Team Rosters----'); 
-        console.log(JSON.parse(body)); 
+        //console.log(JSON.parse(body)); 
         res.sendStatus(200);
     });
 });
