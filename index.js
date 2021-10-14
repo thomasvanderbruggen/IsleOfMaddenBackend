@@ -16,7 +16,9 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
     req.on('end', () => { 
         console.log('----Teams----');
         const teams = JSON.parse(body); 
-        console.log(typeof teams);
+        Object.keys(teams).forEach(key => { 
+            console.log(key);
+        })
         res.sendStatus(200); 
     });
 })
