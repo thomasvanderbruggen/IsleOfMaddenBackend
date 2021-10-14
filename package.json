@@ -1,0 +1,14 @@
+{
+  "name": "madden-export-test",
+  "version": "1.0.0",
+  "description": "Visualizing data from madden-export",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thomas VanderBruggen",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
