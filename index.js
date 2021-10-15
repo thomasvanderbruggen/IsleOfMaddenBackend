@@ -158,7 +158,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
 
                     
         }
-        
+        con.end();
         res.sendStatus(200); 
     })
 });
@@ -171,6 +171,12 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
     req.on('end', () => { 
        // console.log('---Team Rosters----'); 
         const json = JSON.parse(body)['rosterInfoList'];
+        let con = mysql.createConnection({
+            "host": process.env.host,
+            "user": process.env.user,
+            "password": process.env.pw,
+            "database": "tomvandy_isle_of_madden"
+            });
         for (player of json) { 
             if (player.teamId == 0) { 
                 player.teamId = 1;
@@ -203,10 +209,8 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                 con.query(sql, (err, res) => { 
                     if (err) throw err;
                 })
-            
-
-                    
         }
+        con.end();
         res.sendStatus(200);
     });
 });
