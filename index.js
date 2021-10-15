@@ -96,14 +96,14 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
     }); 
 
     req.on('end', () => {
-        const {params: {dataType},} = req; 
-        console.log(`----${dataType}----`);
-        if (dataType === 'teamstats'){  
-            let json = JSON.parse(body)['teamStatInfoList']; 
-            for (const obj in json) { 
-                console.log(obj.statId);
-            }
-        }
+        // const {params: {dataType},} = req; 
+        // console.log(`----${dataType}----`);
+        // if (dataType === 'teamstats'){  
+        //     let json = JSON.parse(body)['teamStatInfoList']; 
+        //     for (const obj in json) { 
+        //         console.log(obj.statId);
+        //     }
+        // }
         res.sendStatus(200);
     })
 });
@@ -115,7 +115,10 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
     });
     req.on('end', () => { 
         //console.log('----Free Agents----'); 
-        //console.log(JSON.parse(body)); 
+        const json = JSON.parse(body); 
+        Object.keys(json).forEach(key => { 
+            console.log(key);
+        }) 
         res.sendStatus(200); 
     })
 });
