@@ -51,7 +51,8 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         let con = mysql.createConnection({
             "host": process.env.host,
             "user": process.env.user,
-            "password": process.env.pw
+            "password": process.env.pw,
+            "database": "tomvandy_iom"
         });
         let sqlTeams = [];
         let counter = 0; 
