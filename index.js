@@ -97,8 +97,13 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
 
     req.on('end', () => {
         const {params: {dataType},} = req; 
-        console.log(`----${dataType}----`); 
-        //console.log(JSON.parse(body));
+        console.log(`----${dataType}----`);
+        if (dataType === 'teamstats'){  
+            let json = JSON.parse(body); 
+            Object.keys(json).forEach(key => {
+                console.log(key);
+            });
+        }
         res.sendStatus(200);
     })
 });
