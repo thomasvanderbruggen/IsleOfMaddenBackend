@@ -128,7 +128,7 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
     req.on('data', chunk => { 
         body += chunk.toString();
     }); 
-    req.end('end', () => { 
+    req.on('end', () => { 
        // console.log('---Team Rosters----'); 
         //console.log(JSON.parse(body)); 
         res.sendStatus(200);
