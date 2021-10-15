@@ -52,7 +52,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
             "host": process.env.host,
             "user": process.env.user,
             "password": process.env.pw,
-            "database": "tomvandy_iom"
+            "database": "tomvandy_isle_of_madden"
         });
         let sqlTeams = [];
         let counter = 0; 
