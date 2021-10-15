@@ -46,7 +46,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         }
         console.log('----Merged----');
         Object.keys(teams[0]).forEach(key => { 
-            console.log(`${key} ${teams[0][key]}`);
+            console.log(`${key} ${teams[0][key]} ${typeof teams[0][key]}`);
         })
         teamsWithInfo = []; 
         res.sendStatus(200); 
