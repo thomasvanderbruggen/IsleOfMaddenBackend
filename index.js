@@ -1,6 +1,6 @@
 const express = require('express'); 
 const mysql = require('mysql');
-const  dbcredentials =  require('./secrets/dbcredentials');
+const  dbcredentials =  require('./secrets/dbcredentials.js');
 const app = express(); 
 let teamInfoKeys = []; 
 let teamStandingsKeys = [];
