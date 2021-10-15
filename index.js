@@ -125,7 +125,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
 
 app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => { 
     let body = '';
-    req.on('data', (req, res) => { 
+    req.on('data', chunk => { 
         body += chunk.toString();
     }); 
     req.end('end', () => { 
