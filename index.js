@@ -1,4 +1,3 @@
-import dbcredentials from './secrets/dbcredentials.js';
 const express = require('express'); 
 const mysql = require('mysql');
 const app = express(); 
