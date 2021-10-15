@@ -99,7 +99,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         const {params: {dataType},} = req; 
         console.log(`----${dataType}----`);
         if (dataType === 'teamstats'){  
-            let json = JSON.parse(body); 
+            let json = JSON.parse(body)['teamStatInfoList']; 
             Object.keys(json).forEach(key => {
                 console.log(key);
             });
