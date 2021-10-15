@@ -130,7 +130,11 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
     }); 
     req.on('end', () => { 
        // console.log('---Team Rosters----'); 
-        //console.log(JSON.parse(body)); 
+        const playerList = JSON.parse(body)['rosterInfoList'];
+        const player = playerList[0]; 
+        Object.keys(player).forEach(key => { 
+            console.log(key);
+        }) 
         res.sendStatus(200);
     });
 });
