@@ -48,7 +48,11 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         Object.keys(teams[0]).forEach(key => { 
             console.log(`${key} ${teams[0][key]} ${typeof teams[0][key]}`);
         })
-        let con = mysql.createConnection({dbcredentials});
+        let con = mysql.createConnection({
+            "host": process.env.host,
+            "user": process.env.user,
+            "password": process.env.pw
+        });
         con.connect(err => { 
             if (err) console.log(err);
             for (team of teams){
