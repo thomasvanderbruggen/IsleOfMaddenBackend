@@ -98,18 +98,28 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
     req.on('end', () => {
         const {params: {dataType},} = req; 
         console.log(`----${dataType}----`);
+        let json = JSON.parse(body)
+        let stat = {}; 
         if (dataType === 'teamstats'){  
-            let json = JSON.parse(body)['teamStatInfoList']; 
-            let stats = json[0]; 
-            Object.keys(stats).forEach(key => { 
-                console.log(key);
-            })
-        }else{ 
-            let json= JSON.parse(body); 
-            Object.keys(json).forEach(key => { 
-                console.log(key);
-            })
+            stat = json['teamStatInfoList'][0]; 
+        }else if (dataType === 'schedules'){ 
+            stat= json['gameScheduleInfoList'][0]; 
+        }else if (dataType === 'punting'){ 
+            stat = json['puntingStatInfoList'][0]; 
+        }else if (dataType === 'passing'){ 
+            stat = json['passingStatInfoList'][0];
+        }else if (dataType === 'defense'){ 
+            stat = json['defenseInfoList'][0]; 
+        }else if (dataType === 'kicking'){ 
+            stat = json['kickingInfoList'][0]; 
+        }else if (dataType === 'rushing') {
+            stat = json['rushingInfoList'][0]; 
+        }else if (dataType === 'receiving') { 
+            stat = json['receivingInfoList'][0];
         }
+        Object.keys(stat).forEach(key => { 
+            console.log(key);
+        }) 
         res.sendStatus(200);
     });
 });
