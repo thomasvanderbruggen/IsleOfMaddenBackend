@@ -105,17 +105,17 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         }else if (dataType === 'schedules'){ 
             stat= json['gameScheduleInfoList'][0]; 
         }else if (dataType === 'punting'){ 
-            stat = json['puntingStatInfoList'][0]; 
+            stat = json['playerPuntingStatInfoList'][0]; 
         }else if (dataType === 'passing'){ 
-            stat = json['passingStatInfoList'][0];
+            stat = json['playerPassingStatInfoList'][0];
         }else if (dataType === 'defense'){ 
-            stat = json['defenseInfoList'][0]; 
+            stat = json['playerDefenseInfoList'][0]; 
         }else if (dataType === 'kicking'){ 
-            stat = json['kickingInfoList'][0]; 
+            stat = json['playerKickingInfoList'][0]; 
         }else if (dataType === 'rushing') {
-            stat = json['rushingInfoList'][0]; 
+            stat = json['playerRushingInfoList'][0]; 
         }else if (dataType === 'receiving') { 
-            stat = json['receivingInfoList'][0];
+            stat = json['playerReceivingInfoList'][0];
         }
         Object.keys(stat).forEach(key => { 
             console.log(key);
