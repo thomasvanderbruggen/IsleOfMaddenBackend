@@ -2,6 +2,8 @@ const express = require('express');
 const mysql = require('mysql');
 const app = express(); 
 const SQL = require('sql-template-strings');
+const Clinet = require('ftp');
+const Client = require('ftp');
 let teamInfoKeys = []; 
 let teamStandingsKeys = [];
 let teamsWithInfo = []; 
@@ -87,7 +89,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
     });
 })
 
-
+let counter = 0; 
 app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res) => { 
     let body = ''; 
 
@@ -101,9 +103,20 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         if (dataType === 'teamstats'){  
             let json = JSON.parse(body)['teamStatInfoList']; 
             let stats = json[0]; 
-            Object.keys(stats).forEach(key => { 
-                console.log(key);
-            })
+            let c = new Client();  
+            c.on('ready', () => {
+                if (err) throw err; 
+                c.put(`${dataType}${counter}.json`,  Buffer.from(JSON.stringify(json)), (err) => {
+                    if (err) throw err; 
+                    c.end();
+                })
+            });
+            counter++; 
+            c.connect({
+                "host": process.env.ftphost,
+                "user": process.env.ftpuser,
+                "password": process.env.ftppw,
+            });
         }
         res.sendStatus(200);
     })

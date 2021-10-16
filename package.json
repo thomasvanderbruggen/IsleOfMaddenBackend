@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "ftp": "^0.3.10",
     "mysql": "^2.18.1",
     "sql-template-strings": "^2.2.2"
   }
