@@ -104,19 +104,22 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let json = JSON.parse(body)['teamStatInfoList']; 
             let stats = json[0]; 
             let c = new Client();  
-            c.on('ready', () => {
-                if (err) throw err; 
-                c.put(`${dataType}${counter}.json`,  Buffer.from(JSON.stringify(json)), (err) => {
-                    if (err) throw err; 
-                    c.end();
-                })
-            });
-            counter++; 
-            c.connect({
-                "host": process.env.ftphost,
-                "user": process.env.ftpuser,
-                "password": process.env.ftppw,
-            });
+            // c.on('ready', () => {
+            //     if (err) throw err; 
+            //     c.put(`${dataType}${counter}.json`,  Buffer.from(JSON.stringify(json)), (err) => {
+            //         if (err) throw err; 
+            //         c.end();
+            //     })
+            // });
+            // counter++; 
+            // c.connect({
+            //     "host": process.env.ftphost,
+            //     "user": process.env.ftpuser,
+            //     "password": process.env.ftppw,
+            // });
+            console.log(process.env.ftphost);
+            console.log(process.env.ftppw);
+            console.log(process.env.ftpuser);
         }
         res.sendStatus(200);
     })
