@@ -134,10 +134,10 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
         //console.log('----Free Agents----'); 
         const json = JSON.parse(body)['rosterInfoList']; 
         let con = mysql.createConnection({
-            "host": process.env.host,
-            "user": process.env.user,
-            "password": process.env.pw,
-            "database": "tomvandy_isle_of_madden"
+            host: process.env.host,
+            user: process.env.user,
+            password: process.env.pw,
+            database: "tomvandy_isle_of_madden"
             });
         for (player of json) { 
             if (player.teamId == 0) { 
