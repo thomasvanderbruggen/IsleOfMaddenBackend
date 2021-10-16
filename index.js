@@ -109,7 +109,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         }else if (dataType === 'passing'){ 
             stat = json['playerPassingStatInfoList'][0];
         }else if (dataType === 'defense'){ 
-            stat = json['playerDefenseStatInfoList'][0]; 
+            stat = json['playerDefensiveStatInfoList'][0]; 
         }else if (dataType === 'kicking'){ 
             stat = json['playerKickingStatInfoList'][0]; 
         }else if (dataType === 'rushing') {
