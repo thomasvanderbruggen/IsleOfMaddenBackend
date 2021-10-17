@@ -99,31 +99,105 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         const {params: {dataType},} = req; 
         console.log(`----${dataType}----`);
         let json = JSON.parse(body)
-        let stat = {}; 
-        // if (dataType === 'teamstats'){  
-        //     stat = json['teamStatInfoList'][0]; 
-        // }else if (dataType === 'schedules'){ 
-        //     stat= json['gameScheduleInfoList'][0]; 
-        // }else if (dataType === 'punting'){ 
-        //     stat = json['playerPuntingStatInfoList'][0]; 
-        // }else if (dataType === 'passing'){ 
-        //     stat = json['playerPassingStatInfoList'][0];
-        // }else if (dataType === 'defense'){ 
-        //     stat = json['playerDefensiveStatInfoList'][0]; 
-        // }else if (dataType === 'kicking'){ 
-        //     stat = json['playerKickingStatInfoList'][0]; 
-        // }else if (dataType === 'rushing') {
-        //     stat = json['playerRushingStatInfoList'][0]; 
-        // }else if (dataType === 'receiving') { 
-        //     stat = json['playerReceivingStatInfoList'][0];
-        // }
-        // Object.keys(stat).forEach(key => { 
-        //     console.log(`${key} ${typeof stat[key]}`);
-        // }) 
+        let sql; 
+        let con = mysql.createConnection({
+            "host": process.env.host,
+            "user": process.env.user,
+            "password": process.env.pw,
+            "database": "tomvandy_isle_of_madden"
+            });
+        if (dataType === 'teamstats'){  
+            let stats = json['teamStatInfoList'];
+            for (const stat of stats) { 
+                sql = SQL`INSERT INTO team_stats (defForcedFum, defFumRec, defIntsRec, defPtsPerGame, defPassYds, defRushYds,
+                    defRedZoneFGs, defRedZones, defRedZonePct, defRedZoneTDs, defSacks, defTtotalYds, off4thDownAtt, off4thDownConv,
+                    off4thDownConvPct, offFumLost, offIntsLost, off1stDowns, offPtsPerGame, offPassTDs, offPassYds, offRushTDs, offRushYds,
+                    offRedZoneFGs, offRedZones, offRedZonePct, offRedZoneTDs, offSacks, off3rdDownAtt, off3rdDownConv, off3rdDownConvPct,
+                    off2PtAtt, off2PtConv, off2PtConvPct, offTotalYds, offTotalYdsGained, penalties, penaltyYds, scheduleId, seed, seasonIndex,
+                    statId, stageIndex, totalLosses, teamId, tODiff, tOGiveaways, tOTakeaways, totalTies, totalWins, weekIndex)
+                    VALUES (${stat.defForcedFum}, ${stat.defFumRec}, ${stat.defIntsRec}, ${stat.defPtsPerGame}, ${stat.defPassYds}, ${stat.defRushYds},
+                    ${stat.defRedZoneFGs}, ${stat.defRedZones}, ${stat.defRedZonePct}, ${stat.defRedZoneTDs}, ${stat.defSacks}, ${stat.defTotalYds},
+                    ${stat.off4thDownAtt}, ${stat.off4thDownConv}, ${stat.off4thDownConvPct}, ${stat.offFumLost}, ${stat.offIntsLost}, ${stat.off1stDowns},
+                    ${stat.offPtsPergame}, ${stat.offPassTds}, ${stat.offPassYds}, ${stat.offRushTDs}, ${stat.offRushYds}, ${stat.offRedZoneFGs}, ${stat.ofFRedZones},
+                    ${stat.offRedZonePct}, ${stat.offRedZoneTDs}, ${stat.offSacks}, ${stat.off3rdDownAtt}, ${stat.off3rdDownConv}, ${stat.off3rdDownConvPct}, ${stat.off2PtAtt},
+                    ${stat.off2PtConv}, ${stat.off2PtConvPct}, ${stat.offTotalYds}, ${stat.offTotalYdsGained}, ${stat.penalties}, ${stat.penaltyYds}, ${stat.scheduleId},
+                    ${stat.seed}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.totalLosses}, ${stat.teamId}, ${stat.tODiff}, ${stat.tOGiveaways}, ${stat.tOTakeaways},
+                    ${stat.totalTies}, ${stat.totalWins}, ${stat.weekIndex}) ON DUPLICATE KEY UPDATE defForcedFum=VALUES(defForcedFum), defFumRec=VALUES(defFumRec), defIntsRec=VALUES(defIntsRec), 
+                    defPtsPerGame=VALUES(defPtsPerGame), defPassYds=VALUES(defPassYds), defRushYds=VALUES(defRushedYds), defRedZoneFGs=VALUES(defRedZoneFGs), defRedZones=VALUES(defRedZones), defRedZonePct=VALUES(defRedZonePct),
+                    defRedZoneTDs=VALUES(defRedZoneTDs), defSacks=VALUES(defSacks), defTotalYds=VALUES(defTotalYds), off4thDownAtt=VALUES(off4thDownAtt), off4thDownConv=VALUeS(off4thDownConv), off4thDownConvPct=VALUES(off4thDownConvPct), 
+                    offFumLost=VALUES(offFumLost), offIntsLost=VALUES(ofFIntsLost), off1stDowns=VALUES(off1stDowns), offPtsPerGame=VALUES(offPtsPerGame), offPassTDs=VALUES(offPassTDs), offPassYds=VALUES(offPassYds), offRushTDs=VALUES(ofFRushTDs),
+                    offRushYds=VALUES(offRushYds), offRedZoneFGs=VALUES(offRedZoneFGs), offRedZones=VALUES(ofFRedZones), offRedZonePct=VALUES(offRedZonePct), offRedZoneTDs=VALUES(offRedZoneTDs), offSacks=VALUES(offSacks), 
+                    off3rdDownAtt=VALUES(off3rdDownAtt), off3rdDownConv=VALUES(off3rdDownConv), off3rdDownConvPct=VALUES(off3rdDownConvPct), off2PtAtt=VALUES(off2PtAtt), off2PtConv=VALUES(off2PtConv), off2PtConvPct=VALUES(off2PtConvPct),
+                    offTotalYds=VALUES(offTotalYds), offTotalYdsGained=VALUES(offTotalYdsGained), penalties=VALUES(penalties), penaltyYds=VALUES(penaltyYds), scheduleId=VALUES(scheduleId), totalLosses=VALUES(totalLosses), tODiff=VALUES(tODiff),
+                    tOGiveaways=VALUES(tOGiveaways), tOTakeaways=VALUES(tOTakeaways), totalTies=VALUES(totalTies), totalWins=VALUES(totalWins), weekIndex=VALUES(weekIndex)`; 
+                con.query(sql, (err, res) => { 
+                    if (err) throw err;
+                })
+            }
+
+        }else if (dataType === 'schedules'){ 
+            let stats= json['gameScheduleInfoList']; 
+            for (const stat of stats) { 
+                sql = SQL`INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, status, weekIndex) VALUES 
+                (${stat.awayScore}, ${stat.awayTeamId}, ${stat.isGameOfTheWeek}, ${stat.homeScore}, ${stat.homeTeamId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.stageIndex}, ${stat.status}, ${stat.weekindex})`;
+                con.query(sql, (err, res) => { 
+                    if (err) throw err;
+                })
+            }
+        }else if (dataType === 'punting'){ 
+            let stats = json['playerPuntingStatInfoList'];
+            for (const stat of stats) { 
+                sql = SQL`INSERT INTO punting_stats (fullName, puntsBlocked, puntsIn20, puntLongest, puntTBs, puntNetYdsPerAtt, puntNetYds, puntAtt, rosterId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES
+                (${stat.fullName}, ${stat.puntsBlocked}, ${stat.puntsIn20}, ${stat.puntLongest}, ${stat.puntTBs}, ${stat.puntNetYdsPerAtt}, ${stat.puntNetYds}, ${stat.puntAtt}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})`;
+                con.query(sql, (err, res) => { 
+                    if (err) throw err;
+                })
+            } 
+        }else if (dataType === 'passing'){ 
+            let stats = json['playerPassingStatInfoList'];
+            for (const stat of stats) { 
+                sql = SQL`INSERT INTO passing_stats (fullName, passAtt, passComp, passCompPct, passInts, passLongest, passPts, passerRating, passSacks, passTDs, passYds, passYdsPerAtt, passYdsPerGame, rosterid, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
+                (${stat.fullName}, ${stat.passAtt}, ${stat.passComp}, ${stat.passCompPct}, ${stat.passIntx}, ${stat.passLongest}, ${stat.passPts}, ${stat.passerRating}, ${stat.passSacks}, ${stat.passTDs}, ${stat.passYds}, ${stat.passYdsPerAtt}, ${stat.passYdsPerGame}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})`;
+                con.query(sql, (err, res) => { 
+                    if (err) throw err;
+                })
+            }
+        }else if (dataType === 'defense'){ 
+            let stats = json['playerDefensiveStatInfoList']; 
+            for (const stat of stats) { 
+                sql = SQL`INSERT INTO defensive_stats (defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotatlTackles, fullName, rosterId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
+                (${stat.defCatchAllowed}, ${stat.defDeflections}, ${stat.defForcedFum}, ${stat.defFumRec}, ${stat.defInts}, ${defIntReturnYds}, ${stat.defPts}, ${stat.defSacks}, ${stat.defSafeties}, ${stat.defTDs}, ${stat.defTotalTackles}, ${stat.fullName}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stage.teamId}, ${stat.weekIndex})`;
+                con.query(sql, (err, res) => {
+                    if (err) throw err;
+                })
+            }
+        }else if (dataType === 'kicking'){ 
+            let stats = json['playerKickingStatInfoList'];
+            for (const stat of stats) { 
+                sql = SQL`INSERT INTO kicking_stats kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, fGCompPct, fullName, kickoffAtt, kickoffTBs, rosterId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex, xPAtt, xPMade, xPCompPct)
+                VALUES (${stat.kickPts}, ${stat.fGAtt}, ${stat.fG50PlusAtt}, ${stat.fGPlusMade}, ${stat.fGLongest}, ${stat.fGMade}, ${stat.fGCompPct}, ${stat.fullName}, ${stat.kickoffAtt}, ${stat.kickOffTBs}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stage.teamId}, ${stage.weekIndex}, ${stage.xPAtt}, ${stage.xPMade}, ${stage.xPMade}, ${stat.xPCompPct})`;
+                con.query(sql, (err, res) => { 
+                    if (err) throw err;
+                })
+            } 
+        }else if (dataType === 'rushing') {
+            let stats = json['playerRushingStatInfoList']; 
+            for (const stat of stats) { 
+                sql = SQL`INSERT INTO rushing_stats (fullName, rushAtt, rushBrokenTackles, rushFum, rushLongest, rushPts, rosterId, rushTDs, rushToPct, rush20PlusYds, rushYdsAfterContact, rushYds, rushYdsPerAtt, rushYdsPerGame, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
+                (${stat.fullName}, ${stat.rushAtt}, ${stat.rushBrokenTackles}, ${stat.rushFum}, ${stat.rushLongest}, ${stat.rushPts}, ${stat.rosterId}, ${stat.rushTDs}, ${stat.rushToPct}, ${stat.rush20PlusYds}, ${stat.rushYdsAfterContact}, ${stat.rushYds}, ${stat.rushYdsPerAtt}, ${stat.rushYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})`;
+            }
+        }else if (dataType === 'receiving') { 
+            let stats = json['playerReceivingStatInfoList'];
+            for (const stat of stats) { 
+                sql = SQL`INSERT INTO receiving_stats (fullName, recCatches, recCatchPct, recDrops, recLongest, recPts, rosterId, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
+                (${stat.fullName}, ${stat.recCatches}, ${stat.recCatchPct}, ${stat.recDrops}, ${stat.recLongest}, ${stat.recPts}, ${stat.rosterId}, ${stat.recTDs}, ${stat.recToPct}, ${stat.recYdsAfterCatch}, ${stat.recYacAfterCatch}, ${stat.recYds}, ${stat.recYdsPerCatch}, ${stat.recYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})`;
+            }
+        }
         if (dataType === 'schedules'){ 
-            for (const sch of json['gameScheduleInfoList']){
-                console.log(`Week Index ${sch['weekIndex']}`); 
-                console.log(`ScheduleId ${sch['scheduleId']}`);
+            let stats = json['gameScheduleInfoList'];
+            for (const stat of stats) { 
+                sql = SQL`INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, status, weekIndex) VALUES 
+                (${stat.awayScore}, ${stat.awayTeamId}, ${stat.isGameOfTheWeek}, ${stat.homeScore}, ${stat.homeTeamId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.stageIndex}, ${stat.status}, ${stat.weekIndex})`;
             }
         }
         res.sendStatus(200);
