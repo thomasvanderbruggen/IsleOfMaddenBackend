@@ -136,9 +136,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         }else if (dataType === 'schedules'){ 
             let stats= json['gameScheduleInfoList']; 
             for (let stat of stats) {
-                stats.weekIndex++; 
-                if (req.params.weekType == 'pre'){ 
-                    stats.weekIndex += 23; 
+                stat.weekIndex++; 
+                if (req.params.weekType === 'pre'){ 
+                    stat.weekIndex += 23; 
                 }
                 console.log(`WeekType = ${req.params.weekType}`)
                 sql = SQL`INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, weekStatus, weekIndex) VALUES 
