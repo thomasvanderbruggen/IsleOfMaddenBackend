@@ -54,8 +54,6 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
             "password": process.env.pw,
             "database": "tomvandy_isle_of_madden"
         });
-        let sqlTeams = [];
-        let counter = 0; 
         for (const team of teams) {
                 let sql = SQL`INSERT INTO teams (awayLosses, awayTies, calendarYear, conferenceId, confLosses, conferenceName, confTies, confWins, 
                     capRoom, capAvailable, capSpent, defPassYds, defPassYdsRank, defRushYds, defRushYdsRank, defTotalYds, defTotalYdsRank, divisionId,
@@ -138,8 +136,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         }else if (dataType === 'schedules'){ 
             let stats= json['gameScheduleInfoList']; 
             for (const stat of stats) { 
-                sql = SQL`INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, status, weekIndex) VALUES 
-                (${stat.awayScore}, ${stat.awayTeamId}, ${stat.isGameOfTheWeek}, ${stat.homeScore}, ${stat.homeTeamId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.stageIndex}, ${stat.status}, ${stat.weekindex})`;
+                sql = SQL`INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, weekStatus, weekIndex) VALUES 
+                (${stat.awayScore}, ${stat.awayTeamId}, ${stat.isGameOfTheWeek}, ${stat.homeScore}, ${stat.homeTeamId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.stageIndex}, ${stat.status}, ${stat.weekindex}) 
+                ON DUPLICATE KEY UPDATE awayScore=VALUES(awayScore), awayTeamId=VALUES(awayTeamId), isGameOfTheWeek=VALUES(isGameOfTheWeek), homeScore=VALUES(homeScore), homeTeamId=VALUES(homeTeamId), seasonIndex=VALUES(seasonIndex), weekStatus=VALUES(weekStatus), weekIndex=VALUES(weekIndex)`;                
                 con.query(sql, (err, res) => { 
                     if (err) throw err;
                 })
@@ -148,7 +147,8 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerPuntingStatInfoList'];
             for (const stat of stats) { 
                 sql = SQL`INSERT INTO punting_stats (fullName, puntsBlocked, puntsIn20, puntLongest, puntTBs, puntNetYdsPerAtt, puntNetYds, puntAtt, rosterId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES
-                (${stat.fullName}, ${stat.puntsBlocked}, ${stat.puntsIn20}, ${stat.puntLongest}, ${stat.puntTBs}, ${stat.puntNetYdsPerAtt}, ${stat.puntNetYds}, ${stat.puntAtt}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})`;
+                (${stat.fullName}, ${stat.puntsBlocked}, ${stat.puntsIn20}, ${stat.puntLongest}, ${stat.puntTBs}, ${stat.puntNetYdsPerAtt}, ${stat.puntNetYds}, ${stat.puntAtt}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
+                ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), puntsBlocked=VALUES(puntsBlocked), puntsIn20=VALUES(puntsIn20), puntLongest=VALUES(puntLongest), puntTBs=VALUES(puntTBs), puntNetYdsPerAtt=VALUES(puntNetYdsPerAtt), puntNetYds=VALUES(puntNetYds), roserId=VALUES(rosterId), scheduleId=VALUES(scheduleId), seasonIndex=VALUES(seasonIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
                 con.query(sql, (err, res) => { 
                     if (err) throw err;
                 })
@@ -157,7 +157,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerPassingStatInfoList'];
             for (const stat of stats) { 
                 sql = SQL`INSERT INTO passing_stats (fullName, passAtt, passComp, passCompPct, passInts, passLongest, passPts, passerRating, passSacks, passTDs, passYds, passYdsPerAtt, passYdsPerGame, rosterid, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
-                (${stat.fullName}, ${stat.passAtt}, ${stat.passComp}, ${stat.passCompPct}, ${stat.passIntx}, ${stat.passLongest}, ${stat.passPts}, ${stat.passerRating}, ${stat.passSacks}, ${stat.passTDs}, ${stat.passYds}, ${stat.passYdsPerAtt}, ${stat.passYdsPerGame}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})`;
+                (${stat.fullName}, ${stat.passAtt}, ${stat.passComp}, ${stat.passCompPct}, ${stat.passIntx}, ${stat.passLongest}, ${stat.passPts}, ${stat.passerRating}, ${stat.passSacks}, ${stat.passTDs}, ${stat.passYds}, ${stat.passYdsPerAtt}, ${stat.passYdsPerGame}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
+                ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), passAtt=VALUES(passAtt), passComp=VALUES(passComp), passInts=VALUES(passInts), passLongest=VALUES(passLongest), passPts=VALUES(passPts), passerRating=VALUES(passerRating), passSacks=VALUES(passSacks), passTDs=VALUES(passTDs), passYds=VALUES(passYds), passYdsPerAtt=VALUES(passYdsPerAtt), passYdsPerGame=VALUES(passYdsPerGame), rosterId=VALUES(rosterId), scheduleId=VALUES(scheduleId),
+                seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
                 con.query(sql, (err, res) => { 
                     if (err) throw err;
                 })
@@ -166,7 +168,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerDefensiveStatInfoList']; 
             for (const stat of stats) { 
                 sql = SQL`INSERT INTO defensive_stats (defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotatlTackles, fullName, rosterId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
-                (${stat.defCatchAllowed}, ${stat.defDeflections}, ${stat.defForcedFum}, ${stat.defFumRec}, ${stat.defInts}, ${defIntReturnYds}, ${stat.defPts}, ${stat.defSacks}, ${stat.defSafeties}, ${stat.defTDs}, ${stat.defTotalTackles}, ${stat.fullName}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stage.teamId}, ${stat.weekIndex})`;
+                (${stat.defCatchAllowed}, ${stat.defDeflections}, ${stat.defForcedFum}, ${stat.defFumRec}, ${stat.defInts}, ${stat.defIntReturnYds}, ${stat.defPts}, ${stat.defSacks}, ${stat.defSafeties}, ${stat.defTDs}, ${stat.defTotalTackles}, ${stat.fullName}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stage.teamId}, ${stat.weekIndex})
+                ON DUPLICATE KEY UPDATE defCatchAllowed=VALUES(defCatchAllowed), defDeflections=VALUES(defDeflections), defForcedFum=VALUES(defForcedFum), defFumRec=VALUES(defFumRec), defInts=VALUES(defInts), defIntReturnYds=VALUES(defIntReturnYds),
+                defPts=VALUES(defPts), defSacks=VALUES(defSacks), defSafeties=VALUES(defSafeties), defTDs=VALUES(defTDs), defTotalTackles=VALUES(defTotalTackles), scheduleId=VALUES(scheduleId), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
                 con.query(sql, (err, res) => {
                     if (err) throw err;
                 })
@@ -175,7 +179,8 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerKickingStatInfoList'];
             for (const stat of stats) { 
                 sql = SQL`INSERT INTO kicking_stats kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, fGCompPct, fullName, kickoffAtt, kickoffTBs, rosterId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex, xPAtt, xPMade, xPCompPct)
-                VALUES (${stat.kickPts}, ${stat.fGAtt}, ${stat.fG50PlusAtt}, ${stat.fGPlusMade}, ${stat.fGLongest}, ${stat.fGMade}, ${stat.fGCompPct}, ${stat.fullName}, ${stat.kickoffAtt}, ${stat.kickOffTBs}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stage.teamId}, ${stage.weekIndex}, ${stage.xPAtt}, ${stage.xPMade}, ${stage.xPMade}, ${stat.xPCompPct})`;
+                VALUES (${stat.kickPts}, ${stat.fGAtt}, ${stat.fG50PlusAtt}, ${stat.fGPlusMade}, ${stat.fGLongest}, ${stat.fGMade}, ${stat.fGCompPct}, ${stat.fullName}, ${stat.kickoffAtt}, ${stat.kickoffTBs}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stage.teamId}, ${stage.weekIndex}, ${stage.xPAtt}, ${stage.xPMade}, ${stage.xPMade}, ${stat.xPCompPct})
+                ON DUPLICATE KEY UPDATE kickPts=VALUES(kickPts), fGAtt=VALUES(fGAtt), fG50PlusAtt=VALUES(fGPlusAtt), fG50PlusMade=VALUES(fGPlusMade), fGLongest=VALUES(fGLongest), fGMade=VALUES(fGMade), fGCompPct=VALUES(fGCompPct), kickoffAtt=VALUES(kickoffAtt), kickoffTBs=VALUES(kickoffTBs), rosterId=VALUES(rosterId), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), weekIndex=VALUES(weekIndex), xPAtt=VALUES(xPAtt), xPMade=VALUES(xPMade), xPCompPct=VALUES(xPCompPct)`;
                 con.query(sql, (err, res) => { 
                     if (err) throw err;
                 })
@@ -184,20 +189,17 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerRushingStatInfoList']; 
             for (const stat of stats) { 
                 sql = SQL`INSERT INTO rushing_stats (fullName, rushAtt, rushBrokenTackles, rushFum, rushLongest, rushPts, rosterId, rushTDs, rushToPct, rush20PlusYds, rushYdsAfterContact, rushYds, rushYdsPerAtt, rushYdsPerGame, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
-                (${stat.fullName}, ${stat.rushAtt}, ${stat.rushBrokenTackles}, ${stat.rushFum}, ${stat.rushLongest}, ${stat.rushPts}, ${stat.rosterId}, ${stat.rushTDs}, ${stat.rushToPct}, ${stat.rush20PlusYds}, ${stat.rushYdsAfterContact}, ${stat.rushYds}, ${stat.rushYdsPerAtt}, ${stat.rushYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})`;
+                (${stat.fullName}, ${stat.rushAtt}, ${stat.rushBrokenTackles}, ${stat.rushFum}, ${stat.rushLongest}, ${stat.rushPts}, ${stat.rosterId}, ${stat.rushTDs}, ${stat.rushToPct}, ${stat.rush20PlusYds}, ${stat.rushYdsAfterContact}, ${stat.rushYds}, ${stat.rushYdsPerAtt}, ${stat.rushYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
+                ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), rushAtt=VALUES(rushAtt), rushBrokenTackles=VALUES(rushBrokenTackles), rushFum=VALUES(rushFum), rushLongest=VALUES(rushLongest), rushPts=VALUES(rushPts), rosterId=VALUES(rosterId), rushTDs=VALUES(rushTDs), rushToPct=VALUES(rushToPct), rush20PlusYds=VALUES(rush20PlusYds), rushYdsAfterContact=VALUES(rushYdsAfterContact), rushYds=VALUES(rushYds), rushYdsPerAtt=VALUES(rushYdsPerAtt), rushYdsPerGame=VALUES(rushYdsPerGame, seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex)`;
+
             }
         }else if (dataType === 'receiving') { 
             let stats = json['playerReceivingStatInfoList'];
             for (const stat of stats) { 
                 sql = SQL`INSERT INTO receiving_stats (fullName, recCatches, recCatchPct, recDrops, recLongest, recPts, rosterId, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
-                (${stat.fullName}, ${stat.recCatches}, ${stat.recCatchPct}, ${stat.recDrops}, ${stat.recLongest}, ${stat.recPts}, ${stat.rosterId}, ${stat.recTDs}, ${stat.recToPct}, ${stat.recYdsAfterCatch}, ${stat.recYacAfterCatch}, ${stat.recYds}, ${stat.recYdsPerCatch}, ${stat.recYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})`;
-            }
-        }
-        if (dataType === 'schedules'){ 
-            let stats = json['gameScheduleInfoList'];
-            for (const stat of stats) { 
-                sql = SQL`INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, status, weekIndex) VALUES 
-                (${stat.awayScore}, ${stat.awayTeamId}, ${stat.isGameOfTheWeek}, ${stat.homeScore}, ${stat.homeTeamId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.stageIndex}, ${stat.status}, ${stat.weekIndex})`;
+                (${stat.fullName}, ${stat.recCatches}, ${stat.recCatchPct}, ${stat.recDrops}, ${stat.recLongest}, ${stat.recPts}, ${stat.rosterId}, ${stat.recTDs}, ${stat.recToPct}, ${stat.recYdsAfterCatch}, ${stat.recYacAfterCatch}, ${stat.recYds}, ${stat.recYdsPerCatch}, ${stat.recYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
+                ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), recCatches=VALUES(recCatches), recCatchPct=VALUES(recCatchPct), recDrops=VALUES(recDrops), recLongest=VALUES(recLongest), recPts=VALUES(recPts), rosterId=VALUES(rosterId), recTDs=VALUES(recTDs), recToPct=VALUES(recToPct), recYdsAfterCatch=VALUES(recYdsAfterCatch), recYacPerCatch=VALUES(recYacPerCatch)
+                recYds=VALUES(recYds), recYdsPerCatch=VALUES(recYdsPerCatch), recYdsPerGame=VALUES(recYdsPerGame), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
             }
         }
         res.sendStatus(200);
