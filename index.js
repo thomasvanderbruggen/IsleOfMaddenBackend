@@ -118,7 +118,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             stat = json['playerReceivingStatInfoList'][0];
         }
         Object.keys(stat).forEach(key => { 
-            console.log(key);
+            console.log(`${key} ${typeof stat[key]}`);
         }) 
         res.sendStatus(200);
     });
