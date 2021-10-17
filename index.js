@@ -137,10 +137,10 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats= json['gameScheduleInfoList']; 
             for (const stat of stats) {
                 stats.weekIndex++; 
-                if (weekType == 'pre'){ 
+                if (req.params.weekType == 'pre'){ 
                     stats.weekIndex += 22; 
                 }
-                console.log(`${stat.isGameOfTheWeek} ${typeof stat.isGameOfTheWeek}`)
+                console.log(`WeekType = ${req.params.weekType}`)
                 sql = SQL`INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, weekStatus, weekIndex) VALUES 
                 (${stat.awayScore}, ${stat.awayTeamId}, ${stat.isGameOfTheWeek}, ${stat.homeScore}, ${stat.homeTeamId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.stageIndex}, ${stat.status}, ${stat.weekIndex}) 
                 ON DUPLICATE KEY UPDATE awayScore=VALUES(awayScore), awayTeamId=VALUES(awayTeamId), isGameOfTheWeek=VALUES(isGameOfTheWeek), homeScore=VALUES(homeScore), homeTeamId=VALUES(homeTeamId), seasonIndex=VALUES(seasonIndex), weekStatus=VALUES(weekStatus), weekIndex=VALUES(weekIndex)`;                
