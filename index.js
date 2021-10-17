@@ -94,7 +94,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
     }); 
 
     req.on('end', () => {
-        const {params: {dataType},} = req; 
+        const {params: {dataType, weekType},} = req; 
         console.log(`----${dataType}----`);
         let json = JSON.parse(body)
         let sql; 
@@ -135,7 +135,11 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
 
         }else if (dataType === 'schedules'){ 
             let stats= json['gameScheduleInfoList']; 
-            for (const stat of stats) { 
+            for (const stat of stats) {
+                stats.weekIndex++; 
+                if (weekType == 'pre'){ 
+                    stats.weekIndex += 22; 
+                }
                 console.log(`${stat.isGameOfTheWeek} ${typeof stat.isGameOfTheWeek}`)
                 sql = SQL`INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, weekStatus, weekIndex) VALUES 
                 (${stat.awayScore}, ${stat.awayTeamId}, ${stat.isGameOfTheWeek}, ${stat.homeScore}, ${stat.homeTeamId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.stageIndex}, ${stat.status}, ${stat.weekIndex}) 
