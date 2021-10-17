@@ -202,6 +202,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                 recYds=VALUES(recYds), recYdsPerCatch=VALUES(recYdsPerCatch), recYdsPerGame=VALUES(recYdsPerGame), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
             }
         }
+        con.end();
         res.sendStatus(200);
     });
 });
