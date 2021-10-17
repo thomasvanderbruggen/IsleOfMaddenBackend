@@ -135,7 +135,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
 
         }else if (dataType === 'schedules'){ 
             let stats= json['gameScheduleInfoList']; 
-            for (const stat of stats) {
+            for (let stat of stats) {
                 stats.weekIndex++; 
                 if (req.params.weekType == 'pre'){ 
                     stats.weekIndex += 22; 
