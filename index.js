@@ -100,26 +100,32 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         console.log(`----${dataType}----`);
         let json = JSON.parse(body)
         let stat = {}; 
-        if (dataType === 'teamstats'){  
-            stat = json['teamStatInfoList'][0]; 
-        }else if (dataType === 'schedules'){ 
-            stat= json['gameScheduleInfoList'][0]; 
-        }else if (dataType === 'punting'){ 
-            stat = json['playerPuntingStatInfoList'][0]; 
-        }else if (dataType === 'passing'){ 
-            stat = json['playerPassingStatInfoList'][0];
-        }else if (dataType === 'defense'){ 
-            stat = json['playerDefensiveStatInfoList'][0]; 
-        }else if (dataType === 'kicking'){ 
-            stat = json['playerKickingStatInfoList'][0]; 
-        }else if (dataType === 'rushing') {
-            stat = json['playerRushingStatInfoList'][0]; 
-        }else if (dataType === 'receiving') { 
-            stat = json['playerReceivingStatInfoList'][0];
+        // if (dataType === 'teamstats'){  
+        //     stat = json['teamStatInfoList'][0]; 
+        // }else if (dataType === 'schedules'){ 
+        //     stat= json['gameScheduleInfoList'][0]; 
+        // }else if (dataType === 'punting'){ 
+        //     stat = json['playerPuntingStatInfoList'][0]; 
+        // }else if (dataType === 'passing'){ 
+        //     stat = json['playerPassingStatInfoList'][0];
+        // }else if (dataType === 'defense'){ 
+        //     stat = json['playerDefensiveStatInfoList'][0]; 
+        // }else if (dataType === 'kicking'){ 
+        //     stat = json['playerKickingStatInfoList'][0]; 
+        // }else if (dataType === 'rushing') {
+        //     stat = json['playerRushingStatInfoList'][0]; 
+        // }else if (dataType === 'receiving') { 
+        //     stat = json['playerReceivingStatInfoList'][0];
+        // }
+        // Object.keys(stat).forEach(key => { 
+        //     console.log(`${key} ${typeof stat[key]}`);
+        // }) 
+        if (dataType === 'schedules'){ 
+            for (const sch of json['gameScheduleInfoList']){
+                console.log(`Week Index ${sch['weekIndex']}`); 
+                console.log(`ScheduleId ${sch['scheduleId']}`);
+            }
         }
-        Object.keys(stat).forEach(key => { 
-            console.log(`${key} ${typeof stat[key]}`);
-        }) 
         res.sendStatus(200);
     });
 });
