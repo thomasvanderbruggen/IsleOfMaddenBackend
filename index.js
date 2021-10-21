@@ -28,6 +28,11 @@ app.get('/api/team/:teamName', (req, res) => {
     }) 
 })
 
+app.get('/api/roster/:teamId', (req, res) => { 
+    const {params: {teamId},} = req;
+    let sql = SQL`select * from players where teamId = ${teamId}`; 
+})
+
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
     let body = ''; 
     req.on('data', chunk=>{ 
