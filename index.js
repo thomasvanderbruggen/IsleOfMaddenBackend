@@ -24,9 +24,8 @@ app.get('/api/team/:teamName', (req, res) => {
     let response = {}; 
     con.query(sql, (err, sqlRes) => {
         if (err) res.send(404); 
-        response = sqlRes; 
+        res.send(sqlRes); 
     }) 
-    res.send(response);
 })
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
