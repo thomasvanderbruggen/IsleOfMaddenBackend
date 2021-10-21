@@ -30,7 +30,17 @@ app.get('/api/team/:teamName', (req, res) => {
 
 app.get('/api/roster/:teamId', (req, res) => { 
     const {params: {teamId},} = req;
-    let sql = SQL`select * from players where teamId = ${teamId}`; 
+    let sql = SQL`select * from players where teamId = ${teamId}`;
+    let con = mysql.createConnection({
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    });
+    con.query(sql, (err, sqlRes) => { 
+        if (err) res.send(404); 
+        res.send(sqlRes); 
+    })
 })
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
