@@ -13,21 +13,19 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/team/:teamName', (req, res) => {
-    const {params: {teamId},} = req; 
+    const {params: {teamName},} = req; 
     let con = mysql.createConnection({
         "host": process.env.host,
         "user": process.env.user,
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     });
-    let sql = SQL`select * from teams where teamName = ${teamId}`;
+    let sql = SQL`select * from teams where teamName = ${teamName}`;
     let response = {}; 
     con.query(sql, (err, sqlRes) => {
         if (err) res.send(404); 
         response = sqlRes; 
     }) 
-    con.end();
-    res.send(response);
 })
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
