@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const app = express(); 
 const SQL = require('sql-template-strings');
+const cors = require('cors');
 let teamInfoKeys = []; 
 let teamStandingsKeys = [];
 let teamsWithInfo = []; 
