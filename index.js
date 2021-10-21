@@ -7,7 +7,7 @@ let teamInfoKeys = [];
 let teamStandingsKeys = [];
 let teamsWithInfo = []; 
 app.set('port', (process.env.PORT || 3001)); 
-
+app.use(cors());
 app.get('/', (req, res) => { 
     res.send('Testing'); 
 });
