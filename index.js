@@ -21,10 +21,13 @@ app.get('/api/team/:teamName', (req, res) => {
         "database": "tomvandy_isle_of_madden"
     });
     let sql = SQL`select * from teams where teamName = ${teamId}`;
+    let response = {}; 
     con.query(sql, (err, sqlRes) => {
         if (err) res.send(404); 
-        res.send(sqlRes);
+        response = sqlRes; 
     }) 
+    con.end();
+    res.send(respose);
 })
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
