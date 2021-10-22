@@ -25,7 +25,8 @@ app.get('/api/team/:teamName', (req, res) => {
     con.query(sql, (err, sqlRes) => {
         if (err) res.send(404); 
         res.send(sqlRes); 
-    }) 
+    })
+    con.end();  
 })
 
 app.get('/api/roster/:teamId', (req, res) => { 
@@ -41,6 +42,7 @@ app.get('/api/roster/:teamId', (req, res) => {
         if (err) res.send(404); 
         res.send(sqlRes); 
     })
+    con.end();
 })
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
