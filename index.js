@@ -21,7 +21,9 @@ app.get('/test', (req, res)=> {
     });
     con.query("select * from teams where teamId = 2", (err, resp) => {
         console.log(resp); 
+        res.send(resp);
     })
+    con.end();
 })
 
 app.get('/api/team/:teamName', (req, res) => {
