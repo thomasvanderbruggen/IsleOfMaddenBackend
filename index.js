@@ -59,7 +59,7 @@ app.get('/api/roster/:teamId', (req, res) => {
     con.end();
 })
 
-const calculatePasserRating = (stats) => { 
+function calculatePasserRating (stats) { 
     let total = 0; 
     total += (stats.passCompPct - 30) * .05;
     total += (stats.passYdsPerAtt - 3) * .25; 
