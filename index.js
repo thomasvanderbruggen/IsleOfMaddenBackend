@@ -62,7 +62,7 @@ app.get('/api/player/:rosterId', (req, res) => {
 })
 
 app.get('/api/powerranking/', (req, res) => { 
-    let sql = "select cityName, teamName, totalWins, totalLosses, totalTies, primaryColor, secondaryColor from teams;"
+    let sql = "select cityName, teamName, totalWins, totalLosses, totalTies, primaryColor, secondaryColor from teams order by teamRank ASC;"
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
