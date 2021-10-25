@@ -295,6 +295,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
 
             }
         }else if (dataType === 'receiving') { 
+            Object.keys(json).forEach(key => { 
+                console.log(`Receivng stats keys ${key}`)
+            })
             let stats = json['playerReceivingStatInfoList'];
             for (let stat of stats) { 
                 stat.weekIndex++; 
