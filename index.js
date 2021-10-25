@@ -67,7 +67,7 @@ function calculatePasserRating (stats) {
     console.log(second); 
     let third= (stats.passTDs / stats.passAttempts) * .2;
     console.log(third); 
-    let fourth = 2.375 - (stats.passInts / stats.passAttempts); 
+    let fourth = 2.375 - (stats.ints / stats.passAttempts); 
     console.log(fourth); 
     return total;  
 }
