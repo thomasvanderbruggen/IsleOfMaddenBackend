@@ -299,7 +299,8 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                 console.log(`Receivng stats keys ${key}`)
             })
             let stats = json['playerReceivingStatInfoList'];
-            for (let stat of stats) { 
+            for (let stat of stats) {
+                console.log(stat);  
                 stat.weekIndex++; 
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
