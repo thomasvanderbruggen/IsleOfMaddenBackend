@@ -60,7 +60,7 @@ app.get('/api/roster/:teamId', (req, res) => {
 })
 
 function calculatePasserRating (stats) { 
-    let total = ((stats.passCompletions / stats.passAttempts - 30) * .05) + ((stats.passYds / stats.passAttempts - 3) * .25) + ((stats.passTDS / stats.passAtt) * .2) + (2.375 - (stats.ints / stats.passAttempts) * .25) / 6 * 100; 
+    let total = ((stats.passCompletions / stats.passAttempts - 30) * .05) + ((stats.passYds / stats.passAttempts - 3) * .25) + ((stats.passTDs / stats.passAtt) * .2) + (2.375 - (stats.ints / stats.passAttempts) * .25) / 6 * 100; 
     return total;  
 }
 
