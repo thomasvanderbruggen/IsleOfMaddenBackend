@@ -134,12 +134,12 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 response.passYdsPerGame = week.passYdsPerGame;
             }
             response.rushYdsPerAtt = response.rushYds / response.rushAttempts; 
-            response.passCompPct = response.passCompletions / response.passAttempts; 
+            response.passCompPct = response.passCompletions / response.passAttempts * 100; 
             response.passYdsPerAtt = response.passYds / response.passAttempts;
             response.passerRating = calculatePasserRating(response);
             res.send(response);
-
         })
+        con.end();
     } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
         sql = SQL`select ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
         ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
