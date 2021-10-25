@@ -138,10 +138,10 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
     } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
         sql = SQL`select ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
         ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
-        re.recToPct, re.recYdsAfterCatch, re.recYdsPerGame from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex where ru.rosterId = ${playerId} and re.seasonIndex = ${year}`; 
+        re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex where ru.rosterId = ${playerId} and re.seasonIndex = ${year}`; 
 
         con.query(sql, (err, sqlRes)=> { 
-            if (err) res.send(500); 
+            if (err || sqlRes === []) res.send(500) 
             let response = { 
                 "name": '',
                 "rushAttempts": 0, 
@@ -160,6 +160,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 "recLongest": 0, 
                 "recPts": 0, 
                 "recTDs": 0, 
+                "recYds": 0,
                 "recYdsAfterCatch": 0, 
                 "recYdsPerGame": 0, 
                 "recYdsPerCatch": 0
@@ -181,6 +182,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 if (response.recLongest < week.recLongest) response.recLongest = week.recLongest; 
                 response.recPts += week.recPts; 
                 response.recTDs += week.recTDs; 
+                response.recYds += week.recYds;
                 response.recYdsAfterCatch += week.recYdsAfterCatch; 
                 response.recYdsPerGame = week.recYdsPerGame;
             }
@@ -189,7 +191,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             if (response.recCatches > 0){ 
                 response.recYdsPerCatch = response.recYds / response.recCatches;
             }
-            
+            res.send(response);
 
         })
     } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
