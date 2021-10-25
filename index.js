@@ -61,14 +61,11 @@ app.get('/api/roster/:teamId', (req, res) => {
 
 function calculatePasserRating (stats) { 
     let total = 0; 
-    let first = (stats.passCompPct - 30) * .05;
-    console.log(first); 
-    let second = (stats.passYdsPerAtt - 3) * .25; 
-    console.log(second); 
-    let third= (stats.passTDs / stats.passAttempts) * .2;
-    console.log(third); 
-    let fourth = 2.375 - (stats.ints / stats.passAttempts); 
-    console.log(fourth); 
+    total += (stats.passCompPct - 30) * .05;
+    total += (stats.passYdsPerAtt - 3) * .25; 
+    total += (stats.passTDs / stats.passAttempts) * .2;
+    total += 2.375 - (stats.ints / stats.passAttempts); 
+    total = total / 6 * 100; 
     return total;  
 }
 
