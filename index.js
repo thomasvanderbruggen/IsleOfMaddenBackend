@@ -45,6 +45,23 @@ app.get('/api/roster/:teamId', (req, res) => {
     con.end();
 })
 
+
+app.get('/api/seasonstats/:position/:playerId', (req, res) => { 
+    const {params: {position, playerId}, } = req; 
+    let con = mysql.createConnection({
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    });
+    let sql;
+    if (position === 'qb' || position === 'QB') { 
+        sql = SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20YardsPlus, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame, p.passAtt, p.passComp, p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame from rushing_stats r, passing_stats p where p.rosterId = ${playerId} and p.rosterId = r.rosterId`;
+    } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
+        sql = SQL`select ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20YardsPlus, ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recToPct, re.recYdsAfterCatch, re.recYdsPerGame from rushing_stats ru, receiving_stats re where ru.rosterId = ${playerId} and ru.rosterId = re.rosterId`; 
+    }
+})
+
 app.get('/api/player/:rosterId', (req, res) => { 
     const {params: {rosterId}, } = req; 
     let sql = SQL`SELECT p.*, t.primaryColor, t.secondaryColor from players p, teams t where p.teamId = t.teamId and p.rosterId = ${rosterId};`; 
@@ -84,9 +101,6 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
     req.on('end', () =>{ 
         const teams = JSON.parse(body)['leagueTeamInfoList'];
         console.log('----Teams----');
-        Object.keys(teams[0]).forEach(key => { 
-            console.log(`${key} ${teams[0][key]}`);
-        });
         for (const team of teams) { 
             teamsWithInfo.push(team); 
         }
@@ -104,15 +118,10 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         const teams = JSON.parse(body)['teamStandingInfoList'];
         Object.keys(teams[0]).forEach(key => { 
             teamStandingsKeys.push(key);
-            console.log(key);
         })
         for (let i = 0; i < teamsWithInfo.length; i++){ 
             teams[i] = {...teams[i], ...teamsWithInfo[i]};  
         }
-        console.log('----Merged----');
-        Object.keys(teams[0]).forEach(key => { 
-            console.log(`${key} ${teams[0][key]} ${typeof teams[0][key]}`);
-        })
         let con = mysql.createConnection({
             "host": process.env.host,
             "user": process.env.user,
@@ -208,7 +217,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
-                console.log(`WeekType = ${req.params.weekType}`)
                 sql = SQL`INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, weekStatus, weekIndex) VALUES 
                 (${stat.awayScore}, ${stat.awayTeamId}, ${stat.isGameOfTheWeek}, ${stat.homeScore}, ${stat.homeTeamId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.stageIndex}, ${stat.status}, ${stat.weekIndex}) 
                 ON DUPLICATE KEY UPDATE awayScore=VALUES(awayScore), awayTeamId=VALUES(awayTeamId), isGameOfTheWeek=VALUES(isGameOfTheWeek), homeScore=VALUES(homeScore), homeTeamId=VALUES(homeTeamId), seasonIndex=VALUES(seasonIndex), weekStatus=VALUES(weekStatus), weekIndex=VALUES(weekIndex)`;                
@@ -237,7 +245,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
-                console.log(`passing index: ${stat.weekIndex}`); 
                 sql = SQL`INSERT INTO passing_stats (fullName, passAtt, passComp, passCompPct, passInts, passLongest, passPts, passerRating, passSacks, passTDs, passYds, passYdsPerAtt, passYdsPerGame, rosterid, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
                 (${stat.fullName}, ${stat.passAtt}, ${stat.passComp}, ${stat.passCompPct}, ${stat.passInts}, ${stat.passLongest}, ${stat.passPts}, ${stat.passerRating}, ${stat.passSacks}, ${stat.passTDs}, ${stat.passYds}, ${stat.passYdsPerAtt}, ${stat.passYdsPerGame}, ${stat.rosterId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
                 ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), passAtt=VALUES(passAtt), passComp=VALUES(passComp), passInts=VALUES(passInts), passLongest=VALUES(passLongest), passPts=VALUES(passPts), passerRating=VALUES(passerRating), passSacks=VALUES(passSacks), passTDs=VALUES(passTDs), passYds=VALUES(passYds), passYdsPerAtt=VALUES(passYdsPerAtt), passYdsPerGame=VALUES(passYdsPerGame), rosterId=VALUES(rosterId), scheduleId=VALUES(scheduleId),
