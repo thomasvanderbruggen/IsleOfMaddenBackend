@@ -60,8 +60,11 @@ app.get('/api/roster/:teamId', (req, res) => {
 })
 
 function calculatePasserRating (stats) { 
-    let total = ((stats.passCompletions / stats.passAttempts - 30) * .05) + ((stats.passYds / stats.passAttempts - 3) * .25) + ((stats.passTDs / stats.passAtt) * .2) + (2.375 - (stats.ints / stats.passAttempts) * .25) / 6 * 100; 
-    return total;  
+    let a = (stats.passCompletions / stats.passAttempts - 30) * .05; 
+    let b = (stats.passYds / stats.passAttempts - 3) * .25; 
+    let c = (stats.passTDs / stats.passAttempts) * .2; 
+    let d = 2.375 - (stats.ints / stats.passAttempts) * .25;
+    return (a + b + c + d) / 6 * 100;  
 }
 
 app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => { 
