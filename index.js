@@ -191,7 +191,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 response.recYdsPerCatch = response.recYds / response.recCatches;
             }
             res.send(response);
-
+            con.end();
         })
     } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
         sql = SQL`select recCatches, recCatchpct, recDrops, recLongest, recPts, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame from receiving_stats where rosterId = ${playerId} and seasonIndex = ${year}`;
