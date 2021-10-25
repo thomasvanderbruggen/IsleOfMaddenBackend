@@ -45,6 +45,37 @@ app.get('/api/roster/:teamId', (req, res) => {
     con.end();
 })
 
+app.get('/api/player/:rosterId', (req, res) => { 
+    const {params: {rosterId}, } = req; 
+    let sql = SQL`SELECT p.*, t.primaryColor, t.secondaryColor from players p, teams t where p.teamId = t.teamId and p.rosterId = ${rosterId};`; 
+    let con = mysql.createConnection({ 
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    });
+    con.query(sql, (err, sqlRes) => { 
+        if (err) res.send(404); 
+        res.send(sqlRes); 
+    })
+    con.end(); 
+})
+
+app.get('/api/powerranking/', (req, res) => { 
+    let sql = "select cityName, teamName, totalWins, totalLosses, totalTies, primaryColor, secondaryColor from teams;"
+    let con = mysql.createConnection({ 
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    });
+    con.query(sql, (err, sqlRes) => { 
+        if (err) res.send(404); 
+        res.send(sqlRes); 
+    })
+    con.end();
+})
+
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
     let body = ''; 
     req.on('data', chunk=>{ 
