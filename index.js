@@ -310,7 +310,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                 sql = SQL`INSERT INTO receiving_stats (fullName, recCatches, recCatchPct, recDrops, recLongest, recPts, rosterId, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
                 (${stat.fullName}, ${stat.recCatches}, ${stat.recCatchPct}, ${stat.recDrops}, ${stat.recLongest}, ${stat.recPts}, ${stat.rosterId}, ${stat.recTDs}, ${stat.recToPct}, ${stat.recYdsAfterCatch}, ${stat.recYacAfterCatch}, ${stat.recYds}, ${stat.recYdsPerCatch}, ${stat.recYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
                 ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), recCatches=VALUES(recCatches), recCatchPct=VALUES(recCatchPct), recDrops=VALUES(recDrops), recLongest=VALUES(recLongest), recPts=VALUES(recPts), rosterId=VALUES(rosterId), recTDs=VALUES(recTDs), recToPct=VALUES(recToPct), recYdsAfterCatch=VALUES(recYdsAfterCatch), recYacPerCatch=VALUES(recYacPerCatch)
-                recYds=V LUES(recYds), recYdsPerCatch=VALUES(recYdsPerCatch), recYdsPerGame=VALUES(recYdsPerGame), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
+                recYds=VALUES(recYds), recYdsPerCatch=VALUES(recYdsPerCatch), recYdsPerGame=VALUES(recYdsPerGame), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
                 con.query(sql, (err, res) => {
                     if (err) throw err;
                 })
