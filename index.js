@@ -64,7 +64,7 @@ function calculatePasserRating (stats) {
     total += (stats.passCompPct - 30) * .05;
     total += (stats.passYdsPerAtt - 3) * .25; 
     total += (stats.passTDs / stats.passAttempts) * .2;
-    total += 2.375 - (stats.ints / stats.passAttempts); 
+    total += 2.375 - (stats.ints / stats.passAttempts) * .25; 
     total = total / 6 * 100; 
     return total;  
 }
