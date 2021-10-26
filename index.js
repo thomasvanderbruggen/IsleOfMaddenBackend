@@ -81,33 +81,34 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         sql = SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
          p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName
         from passing_stats p left join rushing_stats r ON p.rosterId = r.rosterId and p.weekIndex = r.weekIndex where p.rosterId = ${playerId} and p.seasonIndex = ${year};`;
+        let response = {
+            "name": '', 
+            "rushAttempts": 0, 
+            "rushBTackles": 0, 
+            "fumbles": 0, 
+            "rushLongest": 0, 
+            "rushPts": 0, 
+            "rushTDs": 0, 
+            "rushOver20": 0, 
+            "rushYds": 0, 
+            "rushYdsPerAtt": 0, 
+            "rushYdsPerGame": 0, 
+            "passAttempts": 0, 
+            "passCompletions": 0, 
+            "passCompPct": 0, 
+            "ints": 0, 
+            "passLongest": 0, 
+            "passPts": 0, 
+            "passerRating": 0, 
+            "passSacks": 0, 
+            "passTDs": 0, 
+            "passYds": 0, 
+            "passYdsPerGame": 0,
+            "passYdsPerAtt": 0
+        }
         con.query(sql, (err, sqlRes) => { 
             if (err) throw res.send(500);
-            let response = {
-                "name": '', 
-                "rushAttempts": 0, 
-                "rushBTackles": 0, 
-                "fumbles": 0, 
-                "rushLongest": 0, 
-                "rushPts": 0, 
-                "rushTDs": 0, 
-                "rushOver20": 0, 
-                "rushYds": 0, 
-                "rushYdsPerAtt": 0, 
-                "rushYdsPerGame": 0, 
-                "passAttempts": 0, 
-                "passCompletions": 0, 
-                "passCompPct": 0, 
-                "ints": 0, 
-                "passLongest": 0, 
-                "passPts": 0, 
-                "passerRating": 0, 
-                "passSacks": 0, 
-                "passTDs": 0, 
-                "passYds": 0, 
-                "passYdsPerGame": 0,
-                "passYdsPerAtt": 0
-            }
+
             for (const week of sqlRes) { 
                 response.name = week.fullName;
                 response.rushAttempts += week.rushAtt; 
@@ -134,6 +135,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             res.send(response);
         })
         con.end();
+
     } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
         sql = SQL`select ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
         ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
@@ -191,8 +193,9 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 response.recYdsPerCatch = response.recYds / response.recCatches;
             }
             res.send(response);
-            con.end();
+
         })
+        con.end();
     } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
         sql = SQL`select recCatches, recCatchpct, recDrops, recLongest, recPts, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame from receiving_stats where rosterId = ${playerId} and seasonIndex = ${year}`;
     } else if (position === 'DT' || position === 'dt' || position === 'DE' || position === 'de' || position === 'LOLB' || position === 'lolb' || position === 'ROLB' || position === 'rolb' || position === 'MLB' || position === 'mlb' || position === 'FS'|| position === 'fs' || position === 'SS' || position === 'ss' || position === 'CB' || position === 'cb' || position === 'def'){
