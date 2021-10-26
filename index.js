@@ -134,7 +134,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             response.passerRating = calculatePasserRating(response);
             res.send(response);
         })
-        con.end();
+
 
     } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
         sql = SQL`select ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
@@ -207,6 +207,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
     } else { 
         res.send(500); 
     }
+    con.end();
 })
 
 app.get('/api/player/:rosterId', (req, res) => { 
