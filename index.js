@@ -195,7 +195,6 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             res.send(response);
 
         })
-        con.end();
     } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
        let response = { 
             "name": '',
@@ -213,7 +212,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         }
         sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${playerId} and seasonIndex = ${year}`;
         con.query(sql, (err, sqlRes) => { {
-            if (err) res.send(500); 
+            if (err) {res.send(500);}
             else{ 
                 for (const week of sqlRes) {  
                     response.recCatches += week.recCatches; 
@@ -231,7 +230,6 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             }
 
         }})
-        con.end();
     } else if (position === 'DT' || position === 'dt' || position === 'DE' || position === 'de' || position === 'LOLB' || position === 'lolb' || position === 'ROLB' || position === 'rolb' || position === 'MLB' || position === 'mlb' || position === 'FS'|| position === 'fs' || position === 'SS' || position === 'ss' || position === 'CB' || position === 'cb' || position === 'def'){
         let response = { 
             "defCatchAllowed": 0, 
@@ -266,7 +264,6 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 res.send(response);
             }
         })
-        con.end();
     } else if (position === 'P' || position === 'p'){ 
         let response = { 
             "puntsBlocked": 0, 
@@ -301,7 +298,6 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 res.send(response);
             }
         })
-        con.end(); 
 
     } else if (position === 'K' || position === 'k') {
         let response = { 
@@ -339,7 +335,6 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 res.send(response); 
             }
         })
-        con.end();
     } else { 
         res.send(500); 
     }
