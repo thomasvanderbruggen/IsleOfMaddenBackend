@@ -278,7 +278,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "kickoffAtt": 0, 
             "kickoffTBs": 0
         }
-        sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds k.kickoffAtt, k.kickoffTBs from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId where seasonIndex = ${year} and rosterId = ${playerId}`; 
+        sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, k.kickoffAtt, k.kickoffTBs from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId where seasonIndex = ${year} and rosterId = ${playerId}`; 
         con.query(sql, (err, sqlRes) => { 
             if (err) {
                 res.sendStatus(500);
