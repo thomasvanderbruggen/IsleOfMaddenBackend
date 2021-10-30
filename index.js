@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
 });
 app.get('/api/coaches', (req, res) => { 
     let con = mysql.createConnection({
-        "host": proccess.env.host,
+        "host": process.env.host,
         "user": process.env.user,
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
