@@ -107,7 +107,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "passYdsPerAtt": 0
         }
         con.query(sql, (err, sqlRes) => { 
-            if (err) throw res.send(500);
+            if (err) res.send(500);
 
             for (const week of sqlRes) { 
                 response.name = week.fullName;
@@ -197,7 +197,35 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         })
         con.end();
     } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
-        sql = SQL`select recCatches, recCatchpct, recDrops, recLongest, recPts, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame from receiving_stats where rosterId = ${playerId} and seasonIndex = ${year}`;
+       let response = { 
+            "name": '',
+            "recCatches": 0,
+            "recCatchPct": 0, 
+            "recDrops": 0, 
+            "recLongest": 0, 
+            "recPts": 0, 
+            "recTDs": 0, 
+            "recToPct": 0, 
+            "recYdsAfterCatch": 0, 
+            "recYacPerCatch": 0, 
+            "recYds": 0, 
+            "recYdsPerCatch": 0, 
+            "recYdsPerGame": 0
+        }
+        sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${playerId} and seasonIndex = ${year}`;
+        con.query(sql, (err, sqlRes) => { {
+            if (err) res.send(500); 
+            else{ 
+                for (const week of sqlRes) {  
+                    response.recCatches += week.recCatches; 
+                    response.recDrops += week.recDrops; 
+                    if (week.recLongest > response.recLongest) response.recLongest = week.recLongest; 
+                    response.recPts += week.recPts;
+                    response.recTDs += week.recTDs; 
+                    response.
+                }
+            }
+        }})
     } else if (position === 'DT' || position === 'dt' || position === 'DE' || position === 'de' || position === 'LOLB' || position === 'lolb' || position === 'ROLB' || position === 'rolb' || position === 'MLB' || position === 'mlb' || position === 'FS'|| position === 'fs' || position === 'SS' || position === 'ss' || position === 'CB' || position === 'cb' || position === 'def'){
         sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles from defensive_stats where seasonIndex = ${year} and rosterId = ${playerId}`; 
     } else if (position === 'P' || position === 'p'){ 
@@ -458,7 +486,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                     stat.weekIndex += 23; 
                 }
                 sql = SQL`INSERT INTO receiving_stats (fullName, recCatches, recCatchPct, recDrops, recLongest, recPts, rosterId, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
-                (${stat.fullName}, ${stat.recCatches}, ${stat.recCatchPct}, ${stat.recDrops}, ${stat.recLongest}, ${stat.recPts}, ${stat.rosterId}, ${stat.recTDs}, ${stat.recToPct}, ${stat.recYdsAfterCatch}, ${stat.recYacAfterCatch}, ${stat.recYds}, ${stat.recYdsPerCatch}, ${stat.recYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
+                (${stat.fullName}, ${stat.recCatches}, ${stat.recCatchPct}, ${stat.recDrops}, ${stat.recLongest}, ${stat.recPts}, ${stat.rosterId}, ${stat.recTDs}, ${stat.recToPct}, ${stat.recYdsAfterCatch}, ${stat.recYacPerCatch}, ${stat.recYds}, ${stat.recYdsPerCatch}, ${stat.recYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
                 ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), recCatches=VALUES(recCatches), recCatchPct=VALUES(recCatchPct), recDrops=VALUES(recDrops), recLongest=VALUES(recLongest), recPts=VALUES(recPts), rosterId=VALUES(rosterId), recTDs=VALUES(recTDs), recToPct=VALUES(recToPct), recYdsAfterCatch=VALUES(recYdsAfterCatch), recYacPerCatch=VALUES(recYacPerCatch),
                 recYds=VALUES(recYds), recYdsPerCatch=VALUES(recYdsPerCatch), recYdsPerGame=VALUES(recYdsPerGame), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
                 con.query(sql, (err, res) => {
