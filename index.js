@@ -30,7 +30,7 @@ app.get('/api/coaches', (req, res) => {
 app.get('/api/coach/:teamName', (req, res) => {
     const {params: {teamName},} = req;
     let con = mysql.createConnection({
-        "host": proccess.env.host,
+        "host": process.env.host,
         "user": process.env.user,
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
