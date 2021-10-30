@@ -67,7 +67,7 @@ function calculatePasserRating (stats) {
     let d = 2.375 - (stats.ints / stats.passAttempts * 100) * .25;
     return (a + b + c + d) / 6 * 100;  
 }
-/*
+
 app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => { 
     const {params: {year, position, playerId}, } = req; 
     let con = mysql.createConnection({
@@ -205,14 +205,13 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "recLongest": 0, 
             "recPts": 0, 
             "recTDs": 0, 
-            "recToPct": 0, 
             "recYdsAfterCatch": 0, 
-            "recYacPerCatch": 0, 
+            "recYac": 0, 
             "recYds": 0, 
             "recYdsPerCatch": 0, 
             "recYdsPerGame": 0
         }
-        sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${playerId} and seasonIndex = ${year}`;
+        sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${playerId} and seasonIndex = ${year}`;
         con.query(sql, (err, sqlRes) => { {
             if (err) res.send(500); 
             else{ 
@@ -222,22 +221,131 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                     if (week.recLongest > response.recLongest) response.recLongest = week.recLongest; 
                     response.recPts += week.recPts;
                     response.recTDs += week.recTDs; 
-                    response.
+                    response.recYdsAfterCatch += week.recYdsAfterCatch; 
+                    response.recYac += (week.recYacPerCatch * week.recCatches); 
+                    response.recYds += week.recYds;
                 }
+                response.recYdsPerGame = sqlRes[0].recYdsPerGame;
+                response.recYdsPerCatch = (response.recYds / response.recCatches); 
+                res.send(response);
             }
+
         }})
+        con.end();
     } else if (position === 'DT' || position === 'dt' || position === 'DE' || position === 'de' || position === 'LOLB' || position === 'lolb' || position === 'ROLB' || position === 'rolb' || position === 'MLB' || position === 'mlb' || position === 'FS'|| position === 'fs' || position === 'SS' || position === 'ss' || position === 'CB' || position === 'cb' || position === 'def'){
+        let response = { 
+            "defCatchAllowed": 0, 
+            "defDeflections": 0, 
+            "defForcedFum": 0, 
+            "defFumRec": 0,
+            "defInts": 0, 
+            "defIntReturnYds": 0, 
+            "defPts": 0, 
+            "defSacks": 0, 
+            "defSafeties": 0, 
+            "defTDs": 0, 
+            "defTotalTackles": 0
+        }
         sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles from defensive_stats where seasonIndex = ${year} and rosterId = ${playerId}`; 
+        con.query(sql, (err, sqlRes) => { 
+            if (err) res.send(50);
+            else { 
+                for (const week of sqlRes) { 
+                    response.defCatchAllowed += week.defCatchAllowed; 
+                    response.defDeflections += week.defDeflections; 
+                    response.defForcedFum += week.defForcedFum;
+                    response.defFumRec += week.defFumRec;
+                    response.defInts += week.defInts;
+                    response.defIntReturnYds += week.defIntReturnYds;
+                    response.defPts += week.defPts;
+                    response.defSacks += week.defSacks;
+                    response.defSafeties += week.defSafeties;
+                    response.defTDs += week.defTDs; 
+                    response.defTotalTackles += week.defTotalTackles;
+                }
+                res.send(response);
+            }
+        })
+        con.end();
     } else if (position === 'P' || position === 'p'){ 
-        sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYdsPerAtt, p.puntNetYds, p.puntAtt, p.puntYdsPerAtt, p.puntYds k.kickoffAtt, k.kickoffTBs from punting_stats left join kicking_stats k ON p.rosterId = k.rosterId where seasonIndex = ${year} and rosterId = ${playerId}`; 
-    } else if (position === 'K' || position === 'k') { 
-        sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, fgCompPct, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct from kicking_stats where seasonIndex = ${year} and rosterId = ${playerId}`;
+        let response = { 
+            "puntsBlocked": 0, 
+            "puntsIn20": 0, 
+            "puntLongest": 0, 
+            "puntTBs": 0, 
+            "puntNetYdsPerAtt": 0, 
+            "puntNetYds": 0, 
+            "puntAtt": 0, 
+            "puntYdsPerAtt": 0, 
+            "puntYds": 0, 
+            "kickoffAtt": 0, 
+            "kickoffTBs": 0
+        }
+        sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds k.kickoffAtt, k.kickoffTBs from punting_stats left join kicking_stats k ON p.rosterId = k.rosterId where seasonIndex = ${year} and rosterId = ${playerId}`; 
+        con.query(sql, (err, sqlRes) => { 
+            if (err) res.send(500); 
+            else {
+                for (const week of sqlRes) { 
+                    response.puntsBlocked += week.puntsBlocked; 
+                    response.puntsIn20 += week.puntsIn20; 
+                    response.puntLongest += week.puntLongest; 
+                    response.puntTBs += week.puntTBs; 
+                    response.puntNetYds += week.puntNetYds;
+                    response.puntAtt += week.puntAtt;  
+                    response.puntYds += week.puntYds; 
+                    response.kickoffAtt += week.kickoffAtt; 
+                    response.kickoffTBs += week.kickoffTBs; 
+                }
+                response.puntNetYdsPerAtt = response.puntNetYds / response.puntAtt; 
+                response.puntYdsPerAtt = response.puntYds / response.puntAtt; 
+                res.send(response);
+            }
+        })
+        con.end(); 
+
+    } else if (position === 'K' || position === 'k') {
+        let response = { 
+            "kickPts": 0, 
+            "fgAtt": 0, 
+            "fg50PlusAtt": 0, 
+            "fg50PlusMade": 0,
+            "fgLongest": 0, 
+            "fgMade": 0, 
+            "fgCompPct": 0, 
+            "kickoffAtt": 0, 
+            "kickoffTBs": 0, 
+            "xpAtt": 0, 
+            "xpMade": 0,
+            "xpCompPct": 0
+        } 
+        sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct from kicking_stats where seasonIndex = ${year} and rosterId = ${playerId}`;
+        con.query(sql, (err, sqlRes) => { 
+            if (err) res.send(500); 
+            else { 
+                for (const week of sqlRes) { 
+                    response.kickPts += week.kickPts; 
+                    response.fgAtt += week.fGAtt; 
+                    response.fg50PlusAtt += week.fG50PlusAtt; 
+                    response.fg50PlusMade += week.fG50PlusMade; 
+                    if (week.fGlongest > response.fgLongest) response.fgLongest = week.fGLongest; 
+                    response.fgMade += week.fGMade; 
+                    response.kickoffAtt += week.kickoffAtt; 
+                    response.kickoffTBs += week.kickoffTBs; 
+                    response.xpAtt += week.xPAtt; 
+                    response.xpMade += week.xPMade;
+                }
+                response.fgCompPct = response.fgMade / response.fgAtt; 
+                response.xpCompPct = response.xpMade / response.xpAtt;
+                res.send(response); 
+            }
+        })
+        con.end();
     } else { 
         res.send(500); 
     }
     con.end();
 })
-*/
+
 app.get('/api/player/:rosterId', (req, res) => { 
     const {params: {rosterId}, } = req; 
     let sql = SQL`SELECT p.*, t.primaryColor, t.secondaryColor from players p, teams t where p.teamId = t.teamId and p.rosterId = ${rosterId};`; 
