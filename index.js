@@ -107,7 +107,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "passYdsPerAtt": 0
         }
         con.query(sql, (err, sqlRes) => { 
-            if (err) res.send(500);
+            if (err) res.sendStatus(500);
 
             for (const week of sqlRes) { 
                 response.name = week.fullName;
@@ -142,7 +142,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex where ru.rosterId = ${playerId} and re.seasonIndex = ${year}`; 
 
         con.query(sql, (err, sqlRes)=> { 
-            if (err || sqlRes === []) res.send(500) 
+            if (err || sqlRes === []) res.sendStatus(500) 
             let response = { 
                 "name": '',
                 "rushAttempts": 0, 
@@ -212,7 +212,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         }
         sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${playerId} and seasonIndex = ${year}`;
         con.query(sql, (err, sqlRes) => { {
-            if (err) {res.send(500);}
+            if (err) {res.sendStatus(500);}
             else{ 
                 for (const week of sqlRes) {  
                     response.recCatches += week.recCatches; 
@@ -280,7 +280,11 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         }
         sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds k.kickoffAtt, k.kickoffTBs from punting_stats left join kicking_stats k ON p.rosterId = k.rosterId where seasonIndex = ${year} and rosterId = ${playerId}`; 
         con.query(sql, (err, sqlRes) => { 
-            if (err) res.send(500); 
+            if (err) {
+                res.sendStatus(500);
+                console.log(err); 
+            }
+                
             else {
                 for (const week of sqlRes) { 
                     response.puntsBlocked += week.puntsBlocked; 
@@ -316,7 +320,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         } 
         sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct from kicking_stats where seasonIndex = ${year} and rosterId = ${playerId}`;
         con.query(sql, (err, sqlRes) => { 
-            if (err) res.send(500); 
+            if (err) res.sendStatus(500); 
             else { 
                 for (const week of sqlRes) { 
                     response.kickPts += week.kickPts; 
@@ -336,7 +340,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             }
         })
     } else { 
-        res.send(500); 
+        res.sendStatus(500); 
     }
     con.end();
 })
