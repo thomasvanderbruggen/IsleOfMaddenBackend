@@ -11,6 +11,39 @@ app.use(cors());
 app.get('/', (req, res) => { 
     res.send('Testing'); 
 });
+app.get('/api/coaches', (req, res) => { 
+    let con = mysql.createConnection({
+        "host": proccess.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    }); 
+    con.query("select * from coaches", (err, sqlRes) => { 
+        if (err) res.sendStatus(500); 
+        else { 
+            res.send(sqlRes); 
+        }
+    });
+    con.end();
+})
+
+app.get('/api/coach/:teamName', (req, res) => {
+    const {params: {teamName},} = req;
+    let con = mysql.createConnection({
+        "host": proccess.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    }); 
+    let sql = SQL`select * from coaches where teamName = ${teamName}`; 
+    con.query(sql, (err, sqlRes) => { 
+        if (err) res.sendStatus(500); 
+        else { 
+            res.send(sqlRes);
+        }
+    })
+    con.end();
+})
 
 app.get('/test', (req, res)=> { 
     let con = mysql.createConnection({
