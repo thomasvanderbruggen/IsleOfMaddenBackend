@@ -137,7 +137,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
 
 
     } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
-        sql = SQL`select ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
+        sql = SQL`select ru.fullName, ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
         ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
         re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex where ru.rosterId = ${playerId} and re.seasonIndex = ${year}`; 
 
@@ -168,7 +168,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             }
             
             for (const week of sqlRes){ 
-                response.name = week.name;
+                response.name = week.fullName;
                 response.rushAttempts += week.rushAtt; 
                 response.rushBrokenTackles += week.rushBrokenTackles; 
                 response.fumbles += week.rushFum; 
@@ -226,12 +226,14 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 }
                 response.recYdsPerGame = sqlRes[0].recYdsPerGame;
                 response.recYdsPerCatch = (response.recYds / response.recCatches); 
+                response.name = sqlRes[0].fullName;
                 res.send(response);
             }
 
         }})
     } else if (position === 'DT' || position === 'dt' || position === 'DE' || position === 'de' || position === 'LOLB' || position === 'lolb' || position === 'ROLB' || position === 'rolb' || position === 'MLB' || position === 'mlb' || position === 'FS'|| position === 'fs' || position === 'SS' || position === 'ss' || position === 'CB' || position === 'cb' || position === 'def'){
-        let response = { 
+        let response = {
+            "name": '', 
             "defCatchAllowed": 0, 
             "defDeflections": 0, 
             "defForcedFum": 0, 
@@ -244,7 +246,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "defTDs": 0, 
             "defTotalTackles": 0
         }
-        sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles from defensive_stats where seasonIndex = ${year} and rosterId = ${playerId}`; 
+        sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName from defensive_stats where seasonIndex = ${year} and rosterId = ${playerId}`; 
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500);
             else { 
@@ -261,11 +263,13 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                     response.defTDs += week.defTDs; 
                     response.defTotalTackles += week.defTotalTackles;
                 }
+                response.name = sqlRes[0].fullName;
                 res.send(response);
             }
         })
     } else if (position === 'P' || position === 'p'){ 
         let response = { 
+            "name": '',
             "puntsBlocked": 0, 
             "puntsIn20": 0, 
             "puntLongest": 0, 
@@ -278,7 +282,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "kickoffAtt": 0, 
             "kickoffTBs": 0
         }
-        sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, k.kickoffAtt, k.kickoffTBs from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId where p.seasonIndex = ${year} and p.rosterId = ${playerId}`; 
+        sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId where p.seasonIndex = ${year} and p.rosterId = ${playerId}`; 
         con.query(sql, (err, sqlRes) => { 
             if (err) {
                 res.sendStatus(500);
@@ -299,12 +303,14 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 }
                 response.puntNetYdsPerAtt = response.puntNetYds / response.puntAtt; 
                 response.puntYdsPerAtt = response.puntYds / response.puntAtt; 
+                response.name = sqlRes[0].fullName;
                 res.send(response);
             }
         })
 
     } else if (position === 'K' || position === 'k') {
         let response = { 
+            "name": 0,
             "kickPts": 0, 
             "fgAtt": 0, 
             "fg50PlusAtt": 0, 
@@ -318,7 +324,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "xpMade": 0,
             "xpCompPct": 0
         } 
-        sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct from kicking_stats where seasonIndex = ${year} and rosterId = ${playerId}`;
+        sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct, fullName from kicking_stats where seasonIndex = ${year} and rosterId = ${playerId}`;
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500); 
             else { 
@@ -336,6 +342,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 }
                 response.fgCompPct = response.fgMade / response.fgAtt; 
                 response.xpCompPct = response.xpMade / response.xpAtt;
+                response.name = sqlRes[0].fullName;
                 res.send(response); 
             }
         })
