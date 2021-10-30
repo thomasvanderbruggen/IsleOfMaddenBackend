@@ -246,7 +246,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         }
         sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles from defensive_stats where seasonIndex = ${year} and rosterId = ${playerId}`; 
         con.query(sql, (err, sqlRes) => { 
-            if (err) res.send(50);
+            if (err) res.sendStatus(500);
             else { 
                 for (const week of sqlRes) { 
                     response.defCatchAllowed += week.defCatchAllowed; 
