@@ -67,7 +67,7 @@ function calculatePasserRating (stats) {
     let d = 2.375 - (stats.ints / stats.passAttempts * 100) * .25;
     return (a + b + c + d) / 6 * 100;  
 }
-
+/*
 app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => { 
     const {params: {year, position, playerId}, } = req; 
     let con = mysql.createConnection({
@@ -237,7 +237,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
     }
     con.end();
 })
-
+*/
 app.get('/api/player/:rosterId', (req, res) => { 
     const {params: {rosterId}, } = req; 
     let sql = SQL`SELECT p.*, t.primaryColor, t.secondaryColor from players p, teams t where p.teamId = t.teamId and p.rosterId = ${rosterId};`; 
