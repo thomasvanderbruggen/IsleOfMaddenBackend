@@ -50,7 +50,8 @@ app.get('/api/coach/:teamName', (req, res) => {
 app.get('/api/allPlayers', (req, res) => {
     let firstRun = true;
     if (!firstRun) { 
-        if (playerDate.getHours() + 2 < Date.now().getHours()) { 
+        if (playerDate.getHours() + 2 < Date.now().getHours()) {
+            console.log('in second run, fetching players'); 
             let con = mysql.createConnection({ 
                 "host": process.env.host,
                 "user": process.env.user,
@@ -66,9 +67,11 @@ app.get('/api/allPlayers', (req, res) => {
             })
             con.end();
         }else{ 
+            console.log('in second run, using players array');
             res.send(players); 
         }
     }else { 
+        console.log('in first run');
         let con = mysql.createConnection({ 
             "host": process.env.host,
             "user": process.env.user,
