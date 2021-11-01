@@ -6,6 +6,8 @@ const cors = require('cors');
 let teamInfoKeys = []; 
 let teamStandingsKeys = [];
 let teamsWithInfo = []; 
+let players = [];
+let playerDate;  
 app.set('port', (process.env.PORT || 3001)); 
 app.use(cors());
 app.get('/', (req, res) => { 
@@ -45,21 +47,46 @@ app.get('/api/coach/:teamName', (req, res) => {
     con.end();
 })
 
-app.get('/api/allPlayers', (req, res) => { 
-    let con = mysql.createConnection({ 
-        "host": process.env.host,
-        "user": process.env.user,
-        "password": process.env.pw,
-        "database": "tomvandy_isle_of_madden"
-    }); 
-    let sql = SQL`select * from players`; 
-    con.query(sql, (err, sqlRes) => { 
-        if (err) res.sendStatus(500); 
-        else { 
-            res.send(sqlRes); 
+app.get('/api/allPlayers', (req, res) => {
+    let firstRun = true;
+    if (!firstRun) { 
+        if (playerDate.getHours() + 2 < Date.now().getHours()) { 
+            let con = mysql.createConnection({ 
+                "host": process.env.host,
+                "user": process.env.user,
+                "password": process.env.pw,
+                "database": "tomvandy_isle_of_madden"
+            }); 
+            let sql = SQL`select * from players`; 
+            con.query(sql, (err, sqlRes) => { 
+                if (err) res.sendStatus(500); 
+                else { 
+                    res.send(sqlRes); 
+                }
+            })
+            con.end();
+        }else{ 
+            res.send(players); 
         }
-    })
-    con.end();
+    }else { 
+        let con = mysql.createConnection({ 
+            "host": process.env.host,
+            "user": process.env.user,
+            "password": process.env.pw,
+            "database": "tomvandy_isle_of_madden"
+        }); 
+        let sql = SQL`select * from players`; 
+        con.query(sql, (err, sqlRes) => { 
+            if (err) res.sendStatus(500); 
+            else { 
+                res.send(sqlRes);
+                players = sqlRes; 
+            }
+        })
+        firstRun = false;
+        con.end();
+    } 
+   
 })
 
 app.get('/test', (req, res)=> { 
