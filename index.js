@@ -65,11 +65,12 @@ app.get('/api/allPlayers', (req, res) => {
                 players = sqlRes; 
             }
         })
-        playerDate = Date.now();
+        playerDate = new Date(Date.now());
         firstRun = false;
         con.end();
     } else { 
-        if (playerDate.getHours() + 2 < Date.now().getHours()) {
+        let nowDate = new Date(Date.now());
+        if (playerDate.getHours() + 2 < nowDate.getHours()) {
             console.log('in second run, fetching players'); 
             let con = mysql.createConnection({ 
                 "host": process.env.host,
