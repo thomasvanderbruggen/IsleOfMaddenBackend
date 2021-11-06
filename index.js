@@ -47,9 +47,28 @@ app.get('/api/coach/:teamName', (req, res) => {
     con.end();
 })
 
+let firstRun = true;
 app.get('/api/allPlayers', (req, res) => {
-    let firstRun = true;
-    if (!firstRun) { 
+    if (firstRun) { 
+        console.log('in first run');
+        let con = mysql.createConnection({ 
+            "host": process.env.host,
+            "user": process.env.user,
+            "password": process.env.pw,
+            "database": "tomvandy_isle_of_madden"
+        }); 
+        let sql = SQL`select * from players order by concat(firstName, lastName) desc;`; 
+        con.query(sql, (err, sqlRes) => { 
+            if (err) res.sendStatus(500); 
+            else { 
+                res.send(sqlRes);
+                players = sqlRes; 
+            }
+        })
+        playerDate = Date.now();
+        firstRun = false;
+        con.end();
+    } else { 
         if (playerDate.getHours() + 2 < Date.now().getHours()) {
             console.log('in second run, fetching players'); 
             let con = mysql.createConnection({ 
@@ -58,37 +77,21 @@ app.get('/api/allPlayers', (req, res) => {
                 "password": process.env.pw,
                 "database": "tomvandy_isle_of_madden"
             }); 
-            let sql = SQL`select * from players`; 
+            let sql = SQL`select * from players order by concat(firstName, lastName) desc;`; 
             con.query(sql, (err, sqlRes) => { 
                 if (err) res.sendStatus(500); 
                 else { 
                     res.send(sqlRes); 
+                    players = sqlRes;
                 }
             })
+            playerDate = Date.now();
             con.end();
         }else{ 
             console.log('in second run, using players array');
             res.send(players); 
         }
-    }else { 
-        console.log('in first run');
-        let con = mysql.createConnection({ 
-            "host": process.env.host,
-            "user": process.env.user,
-            "password": process.env.pw,
-            "database": "tomvandy_isle_of_madden"
-        }); 
-        let sql = SQL`select * from players`; 
-        con.query(sql, (err, sqlRes) => { 
-            if (err) res.sendStatus(500); 
-            else { 
-                res.send(sqlRes);
-                players = sqlRes; 
-            }
-        })
-        firstRun = false;
-        con.end();
-    } 
+    }
    
 })
 
