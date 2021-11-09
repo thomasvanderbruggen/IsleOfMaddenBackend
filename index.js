@@ -506,7 +506,7 @@ app.get('/api/playerSearch?', (req, res) => {
         if (req.query.team) sql += ` team=${req.query.team}`; 
         if (req.query.name) sql += ` UPPER(concat(firstName,lastName)) LIKE UPPER(${req.query.name})`; 
     }
-    sql += "ORDER BY CONCAT(lastName, firstName);"; 
+    sql += " ORDER BY CONCAT(lastName, firstName);"; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
