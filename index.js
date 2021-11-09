@@ -497,6 +497,7 @@ app.get('/api/playerSearch?', (req, res) => {
             sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating`; 
         }
     }
+    sql += " FROM players"
     if (!req.query.position && !req.query.team && !req.query.name) { 
          
     }else { 
