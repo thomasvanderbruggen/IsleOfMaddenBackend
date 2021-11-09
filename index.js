@@ -497,7 +497,7 @@ app.get('/api/playerSearch', (req, res) => {
         }
     }
     if (!req.query.position && !req.query.team && !req.query.nam) { 
-        continue; 
+         
     }else { 
         sql += " WHERE"; 
         if (req.query.position) sql += ` position=${req.query.position}`; 
