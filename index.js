@@ -517,9 +517,9 @@ app.get('/api/playerSearch?', (req, res) => {
         }
         if(req.query.name) { 
             if (haveFirstParam) { 
-                sql += ` and CONCAT(UPPER(firstName),' ', UPPER(lastName)) LIKE UPPER(${req.query.name})`; 
+                sql += ` and CONCAT(UPPER(firstName),' ', UPPER(lastName)) LIKE UPPER('${req.query.name}')`; 
             } else { 
-                sql += ` CONCAT(UPPER(firstName),' ', UPPER(lastName)) LIKE UPPER(${req.query.name})`;
+                sql += ` CONCAT(UPPER(firstName),' ', UPPER(lastName)) LIKE UPPER('${req.query.name}')`;
             }
         }
     }
