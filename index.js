@@ -524,7 +524,7 @@ app.get('/api/playerSearch?', (req, res) => {
         }
     }
     sql += " ORDER BY CONCAT(lastName, firstName);"; 
-    /*let con = mysql.createConnection({ 
+    let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
         "password": process.env.pw,
@@ -538,7 +538,7 @@ app.get('/api/playerSearch?', (req, res) => {
             res.send(sqlRes); 
         }
     })
-    con.end(); */ 
+    con.end(); 
     console.log(sql);
 })
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
