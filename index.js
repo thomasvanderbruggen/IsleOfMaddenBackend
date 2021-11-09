@@ -7,7 +7,8 @@ let teamInfoKeys = [];
 let teamStandingsKeys = [];
 let teamsWithInfo = []; 
 let players = [];
-let playerDate;  
+let playerDate;
+
 app.set('port', (process.env.PORT || 3001)); 
 app.use(cors());
 app.get('/', (req, res) => { 
@@ -467,6 +468,56 @@ app.get('/api/powerranking/', (req, res) => {
     con.end();
 })
 
+app.get('/api/playerSearch', (req, res) => { 
+    let sql; 
+    let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr"; 
+    if (!req.query.position) { 
+        sql = `SELECT ${commonCols}, speedRating, awareRating`; 
+    }else { 
+        if (req.query.position === "QB"){ 
+            sql = `SELECT ${commonCols}, throwPowerRating, throwAccRating, throwOnRunRating, throwAccShortRating, throwAccMedRating, throwAcceDeepRating, speedRating`; 
+        }else if (req.query.position === "HB"){ 
+            sql = `SELECT ${commonCols}, awareRating, speedRating, strengthRating, agilityRating, truckRating, jukeRating, changeOfDirectionRating, spinRating, stiffArmRating, carryRating`; 
+        }else if (req.query.position === "FB"){ 
+            sql = `SELECT ${commonCols}, carryRating, impactBlockRating, leadBlockRating, runBlockRating, strengthRating, speedRating, truckRating, accelRating, agilityRating, catchrating`; 
+        }else if(req.query.position === "TE"){ 
+            sql = `SELECT ${commonCols}, speedRating, catchRating, cITRating, specCatchRating, routeRunShortRating, routeRunMedRating, routeRunDeepRating, jumpRating, runBlockRating, impactBlockRating`; 
+        }else if (req.query.position === "WR"){
+            sql = `SELECT ${commonCols}, speedRating, accelRating, routeRunShortRating, routeRunMedRating, routeRunDeepRating, catchRating, cITRating,  specCatchRating, jumpRating, releaseRating`; 
+        }else if(req.query.position === "LT" || req.query.position === "LG" || req.query.position === "C" || req.query.position === "RG" || req.query.position === "RT") { 
+            sql = `SELECT ${commonCols}, strengthRating, runBlockRating, runBlockPowerRating, runBlockFinesseRating, runBlockRating, passBlockPowerRating, passBlockFinesseRating, leadBlockRating, impactBlockrating, awareRating`; 
+        }else if (req.query.position === "LE" || req.query.position === "DT" || req.query.position === "RE"){ 
+            sql = `SELECT ${commonCols}, blockShedRating, powerMoveRating, finesseMoveRating, playRecRating, pursuitRating, hitPowerRating, strengthRating, tackleRating, awareRating, speedRating`; 
+        }else if (req.query.position === "LOLB"  || req.query.position === "ROLB"  || req.query.position === "MLB"){ 
+            sql = `SELECT ${commonCols}, speedRating, tackleRating, powerMoveRating, finesseMoveRating, playRecRating, zoneCoverRating, manCoverRating, pursuitRating, agilityRating, hitPowerRating`; 
+        }else if (req.query.position === "CB"  || req.query.position === "SS"  || req.query.position === "FS") { 
+            sql = `SELECT ${commonCols}, speedRatign, accelRating, zoneCoverRating, manCoverRating, playRecRating, awareRating, pressRating, hitPowerRating, catchRating, agilityRating`; 
+        } else if (req.query.position === "K"  || req.query.position === "P") { 
+            sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating`; 
+        }
+    }
+    if (!req.query.position && !req.query.team && !req.query.nam) { 
+        continue; 
+    }else { 
+        sql += " WHERE"; 
+        if (req.query.position) sql += ` position=${req.query.position}`; 
+        if (req.query.team) sql += ` team=${req.query.team}`; 
+        if (req.query.name) sql += ` UPPER(concat(firstName,lastName)) LIKE UPPER(${req.query.name})`; 
+    }
+    sql += "ORDER BY CONCAT(lastName, firstName);"; 
+    let con = mysql.createConnection({ 
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    });
+    con.query(SQL`${sql}`, (err, sqlRes) => { 
+        if (err) {res.send(500);} 
+        else {
+            res.send(sqlRes); 
+        }
+    })
+})
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
     let body = ''; 
     req.on('data', chunk=>{ 
