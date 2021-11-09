@@ -468,7 +468,7 @@ app.get('/api/powerranking/', (req, res) => {
     con.end();
 })
 
-app.get('/api/playerSearch', (req, res) => { 
+app.get('/api/playerSearch?', (req, res) => { 
     let sql; 
     let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr"; 
     if (!req.query.position) { 
@@ -517,6 +517,7 @@ app.get('/api/playerSearch', (req, res) => {
             res.send(sqlRes); 
         }
     })
+    con.end();
 })
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
     let body = ''; 
