@@ -478,7 +478,7 @@ app.get('/api/playerSearch?', (req, res) => {
         if (req.query.position === "QB"){ 
             sql = `SELECT ${commonCols}, throwPowerRating, throwAccRating, throwOnRunRating, throwAccShortRating, throwAccMedRating, throwAcceDeepRating, speedRating`; 
         }else if (req.query.position === "HB"){ 
-            sql = `SELECT ${commonCols}, awareRating, speedRating, strengthRating, agilityRating, truckRating, jukeRating, changeOfDirectionRating, spinRating, stiffArmRating, carryRating`; 
+            sql = `SELECT ${commonCols}, awareRating, speedRating, strengthRating, agilityRating, truckRating, jukeMoveRating, changeOfDirectionRating, spinMoveRating, stiffArmRating, carryRating`; 
         }else if (req.query.position === "FB"){ 
             sql = `SELECT ${commonCols}, carryRating, impactBlockRating, leadBlockRating, runBlockRating, strengthRating, speedRating, truckRating, accelRating, agilityRating, catchrating`; 
         }else if(req.query.position === "TE"){ 
@@ -517,9 +517,9 @@ app.get('/api/playerSearch?', (req, res) => {
         }
         if(req.query.name) { 
             if (haveFirstParam) { 
-                sql += ` and UPPER(CONCAT(firstName, lastName)) LIKE UPPER(${req.query.name})`; 
+                sql += ` and CONCAT(UPPER(firstName),' ', UPPER(lastName)) LIKE UPPER(${req.query.name})`; 
             } else { 
-                sql += ` UPPER(CONCAT(firstName, lastName)) LIKE UPPER(${req.query.name})`;
+                sql += ` CONCAT(UPPER(firstName),' ', UPPER(lastName)) LIKE UPPER(${req.query.name})`;
             }
         }
     }
