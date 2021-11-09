@@ -509,7 +509,7 @@ app.get('/api/playerSearch?', (req, res) => {
         } 
         if (req.query.team) { 
             if (haveFirstParam) { 
-                sql += ` and team=${req.query.team}`; 
+                sql += ` and teamId=${req.query.team}`; 
             }else { 
                 sql += `team=${req.query.team}`; 
                 haveFirstParam = true;
