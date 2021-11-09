@@ -511,7 +511,9 @@ app.get('/api/playerSearch?', (req, res) => {
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     });
-    con.query(SQL`${sql}`, (err, sqlRes) => { 
+    con.query(SQL`${sql}`, (err, sqlRes) => {
+        console.log(sql);
+        console.log(err);
         if (err) {res.send(500);} 
         else {
             res.send(sqlRes); 
