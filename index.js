@@ -471,8 +471,9 @@ app.get('/api/powerranking/', (req, res) => {
 app.get('/api/playerSearch?', (req, res) => { 
     let sql; 
     let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr"; 
+    console.log(req.query);
     if (!req.query.position) { 
-        sql = `SELECT ${commonCols}, speedRating, awareRating`; 
+        sql = `SELECT ${commonCols}, speedRating, awareRating `; 
     }else { 
         if (req.query.position === "QB"){ 
             sql = `SELECT ${commonCols}, throwPowerRating, throwAccRating, throwOnRunRating, throwAccShortRating, throwAccMedRating, throwAcceDeepRating, speedRating`; 
@@ -496,7 +497,7 @@ app.get('/api/playerSearch?', (req, res) => {
             sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating`; 
         }
     }
-    if (!req.query.position && !req.query.team && !req.query.nam) { 
+    if (!req.query.position && !req.query.team && !req.query.name) { 
          
     }else { 
         sql += " WHERE"; 
