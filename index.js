@@ -501,13 +501,30 @@ app.get('/api/playerSearch?', (req, res) => {
     if (!req.query.position && !req.query.team && !req.query.name) { 
          
     }else { 
+        let haveFirstParam = false; 
         sql += " WHERE"; 
-        if (req.query.position) sql += ` position=${req.query.position}`; 
-        if (req.query.team) sql += ` team=${req.query.team}`; 
-        if (req.query.name) sql += ` UPPER(concat(firstName,lastName)) LIKE UPPER(${req.query.name})`; 
+        if (req.query.position){ 
+            sql += ` position=${req.query.position}`; 
+            haveFirstParam = true;
+        }
+        if (req.query.team) { 
+            if (haveFirstParam) { 
+                sql += ` and team=${req.query.team}`; 
+            }else { 
+                sql += `team=${req.query.team}`; 
+                haveFirstParam = true;
+            }
+        }
+        if(req.query.name) { 
+            if (haveFirstParam) { 
+                sql += ` and UPPER(CONCAT(firstName, lastName)) LIKE UPPER(${req.query.name})`; 
+            } else { 
+                sql += ` UPPER(CONCAT(firstName, lastName)) LIKE UPPER(${req.query.name})`;
+            }
+        }
     }
     sql += " ORDER BY CONCAT(lastName, firstName);"; 
-    let con = mysql.createConnection({ 
+    /*let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
         "password": process.env.pw,
@@ -521,7 +538,8 @@ app.get('/api/playerSearch?', (req, res) => {
             res.send(sqlRes); 
         }
     })
-    con.end();
+    con.end(); */ 
+    console.log(sql);
 })
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
     let body = ''; 
