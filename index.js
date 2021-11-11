@@ -8,6 +8,40 @@ let teamStandingsKeys = [];
 let teamsWithInfo = []; 
 let players = [];
 let playerDate;
+let teamNameToID = new Map([
+    ['49ers', 980680704],
+    ['Bears', 980680705],
+    ['Bengals', 980680706],
+    ['Bills',980680707],
+    ['Broncos',980680708],
+    ['Browns',980680709],
+    ['Buccaneers',980680710],
+    ['Cardinals',980680711],
+    ['Chargers',980680744],
+    ['Chiefs',980680745],
+    ['Colts',980680746],
+    ['Cowboys',980680747],
+    ['Dolphins',980680748],
+    ['Eagles',980680749],
+    ['Falcons',980680750],
+    ['Football Team',980680751], 
+    ['Giants',980680753],
+    ['Jaguars',980680755],
+    ['Jets',980680756],
+    ['Lions',980680757],
+    ['Packers',980680759],
+    ['Panthers',980680760],
+    ['Patriots',980680761],
+    ['Raiders',980680762],
+    ['Rams',980680763],
+    ['Ravens',980680764],
+    ['Saints',980680765],
+    ['Seahawks',980680766],
+    ['Steelers',980680767],
+    ['Texans',980680768],
+    ['Titans',980680769],
+    ['Vikings',980680770]
+]);
 
 app.set('port', (process.env.PORT || 3001)); 
 app.use(cors());
@@ -106,7 +140,7 @@ app.get('/api/teamroster/:teamName', (req, res) => {
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     }); 
-    con.query(SQL`select * from teams where teamname = ${teamName};`, (err, resp) => { 
+    con.query(SQL`select * from players where teamname = ${teamNameToID.get(teamName)};`, (err, resp) => { 
         res.send(resp); 
     })
     con.end();
