@@ -97,6 +97,21 @@ app.get('/api/allPlayers', (req, res) => {
    
 })
 
+
+app.get('/api/teamroster/:teamName', (req, res) => { 
+    const {params: {teamName},} = req; 
+    let con = mysql.createConnection({
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    }); 
+    con.query(SQL`select * from teams where teamname = ${teamName};`, (err, resp) => { 
+        res.send(resp); 
+    })
+    con.end();
+})
+
 app.get('/test', (req, res)=> { 
     let con = mysql.createConnection({
         "host": process.env.host,
