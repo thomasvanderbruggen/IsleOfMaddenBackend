@@ -681,6 +681,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         if (dataType === 'teamstats'){  
             let stats = json['teamStatInfoList'];
             for (const stat of stats) {
+                req.params.weekIndex++;
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23
                 } 
