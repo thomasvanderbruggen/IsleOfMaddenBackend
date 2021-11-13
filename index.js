@@ -197,6 +197,7 @@ app.get('/test', (req, res)=> {
 
 app.get('/api/team/:teamName', (req, res) => {
     const {params: {teamName},} = req;
+    let teamInfoDone = false, teamCoachDone = false, teamStatsDone = false, teamRosterDone = false, teamSchedules = false;
     let response = {};
     let con = mysql.createConnection({
         "host": process.env.host,
@@ -208,21 +209,37 @@ app.get('/api/team/:teamName', (req, res) => {
     con.query(sql, (err, sqlRes) => {
         if (err) res.send(404); 
         response['teamInfo'] = sqlRes;
+        teamInfoDone = true;
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+            res.send(response);
+        }
     })
     sql = SQL`select coachName from coaches where teamName = ${teamName}`;
     con.query(sql, (err, sqlRes) => { 
         if (err) res.send(500); 
         response['coach'] = sqlRes;
+        teamCoachDone = true;
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+            res.send(response);
+        }
     })
     sql = SQL`select * from team_stats where teamId = ${response.teamInfo.teamId}`; 
     con.query (sql, (err, sqlRes) => { 
         if (err) res.send(500); 
-        response['teamStats'] = sqlRes; 
+        response['teamStats'] = sqlRes;
+        teamStatsDone = true;
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+            res.send(response);
+        } 
     })
     sql = SQL`select * from players where teamId = ${response.teamInfo.teamId}`; 
     con.query(sql, (err, sqlRes) => { 
         if (err) res.sendStatus(500); 
         response['roster'] = sqlRes;
+        teamRosterDone = true; 
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+            res.send(response);
+        }
     })
     sql = SQL`select * from schedules where homeTeamId = ${response.teamInfo.teamId} or awayTeamId = ${response.teamInfo.teamId}`; 
     con.query(sql, (err, sqlRes) =>  {
@@ -240,8 +257,11 @@ app.get('/api/team/:teamName', (req, res) => {
             }
         }
         response['schedule'] = sqlRes;
+        teamSchedules = true;
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+            res.send(response);
+        }
     })
-    res.send(response);
     con.end();  
 })
 
