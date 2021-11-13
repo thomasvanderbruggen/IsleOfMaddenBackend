@@ -43,6 +43,41 @@ let teamNameToID = new Map([
     ['Vikings',980680770]
 ]);
 
+let teamIdToName = new Map([ 
+    [980680704,'49ers'],
+    [980680705,'Bears'],
+    [980680706, 'Bengals'],
+    [980680707, 'Bills'],
+    [980680708, 'Broncos'],
+    [980680709, 'Browns'],
+    [980680710, 'Buccaneers'],
+    [980680711, 'Cardinals'],
+    [980680744, 'Chargers'],
+    [980680745, 'Chiefs'],
+    [980680746, 'Colts'],
+    [980680747, 'Cowboys'],
+    [980680748, 'Dolphins'],
+    [980680749, 'Eagles'],
+    [980680750, 'Falcons'],
+    [980680751, 'Football Team'], 
+    [980680753, 'Giants'],
+    [980680755, 'Jaguars'],
+    [980680756, 'Jets'],
+    [980680757, 'Lions'],
+    [980680759, 'Packers'],
+    [980680760, 'Panthers'],
+    [980680761, 'Patriots'],
+    [980680762, 'Raiders'],
+    [980680763, 'Rams'],
+    [980680764, 'Ravens'],
+    [980680765, 'Saints'],
+    [980680766, 'Seahawks'],
+    [980680767, 'Steelers'],
+    [980680768, 'Texans'],
+    [980680769, 'Titans'],
+    [980680770, 'Vikings']
+])
+
 app.set('port', (process.env.PORT || 3001)); 
 app.use(cors());
 app.get('/', (req, res) => { 
@@ -161,7 +196,8 @@ app.get('/test', (req, res)=> {
 })
 
 app.get('/api/team/:teamName', (req, res) => {
-    const {params: {teamName},} = req; 
+    const {params: {teamName},} = req;
+    let response = {};
     let con = mysql.createConnection({
         "host": process.env.host,
         "user": process.env.user,
@@ -169,11 +205,43 @@ app.get('/api/team/:teamName', (req, res) => {
         "database": "tomvandy_isle_of_madden"
     });
     let sql = SQL`select * from teams where teamName = ${teamName}`;
-    let response = {}; 
     con.query(sql, (err, sqlRes) => {
         if (err) res.send(404); 
-        res.send(sqlRes); 
+        response['teamInfo'] = sqlRes;
     })
+    sql = SQL`select coachName from coaches where teamName = ${teamName}`;
+    con.query(sql, (err, sqlRes) => { 
+        if (err) res.send(500); 
+        response['coach'] = sqlRes;
+    })
+    sql = SQL`select * from team_stats where teamId = ${response.teamInfo.teamId}`; 
+    con.query (sql, (err, sqlRes) => { 
+        if (err) res.send(500); 
+        response['teamStats'] = sqlRes; 
+    })
+    sql = SQL`select * from players where teamId = ${response.teamInfo.teamId}`; 
+    con.query(sql, (err, sqlRes) => { 
+        if (err) res.sendStatus(500); 
+        response['roster'] = sqlRes;
+    })
+    sql = SQL`select * from schedules where homeTeamId = ${response.teamInfo.teamId} or awayTeamId = ${response.teamInfo.teamId}`; 
+    con.query(sql, (err, sqlRes) =>  {
+        if (err) res.sendStatus(500); 
+        for (const week of sqlRes) { 
+            if (week.awayTeamId === response.teamInfo.teamId) { 
+                week.awayTeam = teamName
+            }else { 
+                week.awayTeam = teamIdToName.get(awayTeamId);
+            }
+            if (week.homeTeamId === response.teamInfo.teamId) { 
+                week.homeTeam = teamName;
+            }else { 
+                week.homeTeam = teamIdToName.get(homeTeamId); 
+            }
+        }
+        response['schedule'] = sqlRes;
+    })
+    res.send(response);
     con.end();  
 })
 
@@ -215,7 +283,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         sql = SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
          p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName
         from passing_stats p left join rushing_stats r ON p.rosterId = r.rosterId and p.weekIndex = r.weekIndex where p.rosterId = ${playerId} and p.seasonIndex = ${year};`;
-        let response = {
+        let seasonStats = {
             "name": '', 
             "rushAttempts": 0, 
             "rushBTackles": 0, 
@@ -242,30 +310,35 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         }
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500);
+            let weeklyStats = []; 
 
             for (const week of sqlRes) { 
-                response.name = week.fullName;
-                response.rushAttempts += week.rushAtt; 
-                response.rushBTackles += week.rushBrokenTackles; 
-                response.fumbles += week.rushFum;
-                if (week.rushLongest > response.rushLongest) response.rushLongest = week.rushLongest; 
-                response.rushPts += week.rushPts; 
-                response.rushTDs += week.rushTDs; 
-                response.rushYdsPerGame = week.rushYdsPerGame; 
-                response.passAttempts += week.passAtt; 
-                response.passCompletions += week.passComp; 
-                response.ints += week.passInts; 
-                if (week.passLongest > response.passLongest) response.passLongest = week.passLongest; 
-                response.passPts += week.passPts; 
-                response.passSacks += week.passSacks;
-                response.passTDs += week.passTDs; 
-                response.passYds += week.passYds; 
-                response.passYdsPerGame = week.passYdsPerGame;
+                seasonStats.name = week.fullName;
+                seasonStats.rushAttempts += week.rushAtt; 
+                seasonStats.rushBTackles += week.rushBrokenTackles; 
+                seasonStats.fumbles += week.rushFum;
+                if (week.rushLongest > seasonStats.rushLongest) seasonStats.rushLongest = week.rushLongest; 
+                seasonStats.rushPts += week.rushPts; 
+                seasonStats.rushTDs += week.rushTDs; 
+                seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
+                seasonStats.passAttempts += week.passAtt; 
+                seasonStats.passCompletions += week.passComp; 
+                seasonStats.ints += week.passInts; 
+                if (week.passLongest > seasonStats.passLongest) seasonStats.passLongest = week.passLongest; 
+                seasonStats.passPts += week.passPts; 
+                seasonStats.passSacks += week.passSacks;
+                seasonStats.passTDs += week.passTDs; 
+                seasonStats.passYds += week.passYds; 
+                seasonStats.passYdsPerGame = week.passYdsPerGame;
+                weeklyStats.push(week);
             }
-            response.rushYdsPerAtt = response.rushYds / response.rushAttempts; 
-            response.passCompPct = response.passCompletions / response.passAttempts * 100; 
-            response.passYdsPerAtt = response.passYds / response.passAttempts;
-            response.passerRating = calculatePasserRating(response);
+            seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
+            seasonStats.passCompPct = seasonStats.passCompletions / seasonStats.passAttempts * 100; 
+            seasonStats.passYdsPerAtt = seasonStats.passYds / seasonStats.passAttempts;
+            seasonStats.passerRating = calculatePasserRating(seasonStats);
+            let response = {}; 
+            response.seasonStats = seasonStats; 
+            response.weeklyStats = weeklyStats; 
             res.send(response);
         })
 
@@ -277,7 +350,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
 
         con.query(sql, (err, sqlRes)=> { 
             if (err || sqlRes === []) res.sendStatus(500) 
-            let response = { 
+            let seasonStats = { 
                 "name": '',
                 "rushAttempts": 0, 
                 "rushBrokenTackles": 0, 
@@ -300,37 +373,41 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 "recYdsPerGame": 0, 
                 "recYdsPerCatch": 0
             }
-            
+            let weeklyStats = []; 
             for (const week of sqlRes){ 
-                response.name = week.fullName;
-                response.rushAttempts += week.rushAtt; 
-                response.rushBrokenTackles += week.rushBrokenTackles; 
-                response.fumbles += week.rushFum; 
-                if (response.rushLongest < week.rushLongest) response.rushLongest = week.rushLongest; 
-                response.rushPts += week.rushPts
-                response.rushTDs += week.rushTDs; 
-                response.rush20PlusYds += week.rush20PlusYds; 
-                response.rushYds += week.rushYds; 
-                response.rushYdsPerGame = week.rushYdsPerGame; 
-                response.recCatches += week.recCatches; 
-                response.recDrops += week.recDrops; 
-                if (response.recLongest < week.recLongest) response.recLongest = week.recLongest; 
-                response.recPts += week.recPts; 
-                response.recTDs += week.recTDs; 
-                response.recYds += week.recYds;
-                response.recYdsAfterCatch += week.recYdsAfterCatch; 
-                response.recYdsPerGame = week.recYdsPerGame;
+                seasonStats.name = week.fullName;
+                seasonStats.rushAttempts += week.rushAtt; 
+                seasonStats.rushBrokenTackles += week.rushBrokenTackles; 
+                seasonStats.fumbles += week.rushFum; 
+                if (seasonStats.rushLongest < week.rushLongest) seasonStats.rushLongest = week.rushLongest; 
+                seasonStats.rushPts += week.rushPts
+                seasonStats.rushTDs += week.rushTDs; 
+                seasonStats.rush20PlusYds += week.rush20PlusYds; 
+                seasonStats.rushYds += week.rushYds; 
+                seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
+                seasonStats.recCatches += week.recCatches; 
+                seasonStats.recDrops += week.recDrops; 
+                if (seasonStats.recLongest < week.recLongest) seasonStats.recLongest = week.recLongest; 
+                seasonStats.recPts += week.recPts; 
+                seasonStats.recTDs += week.recTDs; 
+                seasonStats.recYds += week.recYds;
+                seasonStats.recYdsAfterCatch += week.recYdsAfterCatch; 
+                seasonStats.recYdsPerGame = week.recYdsPerGame;
+                weeklyStats.push(week);
             }
-            response.rushToPct = response.fumbles / response.rushAttempts;
-            response.rushYdsPerAtt = response.rushYds / response.rushAttempts; 
-            if (response.recCatches > 0){ 
-                response.recYdsPerCatch = response.recYds / response.recCatches;
+            seasonStats.rushToPct = seasonStats.fumbles / seasonStats.rushAttempts;
+            seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
+            if (seasonStats.recCatches > 0){ 
+                seasonStats.recYdsPerCatch = seasonStats.recYds / seasonStats.recCatches;
             }
+            let response = {}; 
+            response.seasonStats = seasonStats; 
+            response.weeklyStats = weeklyStats; 
             res.send(response);
 
         })
     } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
-       let response = { 
+       let seasonStats = { 
             "name": '',
             "recCatches": 0,
             "recCatchPct": 0, 
@@ -347,26 +424,31 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${playerId} and seasonIndex = ${year}`;
         con.query(sql, (err, sqlRes) => { {
             if (err) {res.sendStatus(500);}
-            else{ 
+            else{
+                let weeklyStats = [];  
                 for (const week of sqlRes) {  
-                    response.recCatches += week.recCatches; 
-                    response.recDrops += week.recDrops; 
-                    if (week.recLongest > response.recLongest) response.recLongest = week.recLongest; 
-                    response.recPts += week.recPts;
-                    response.recTDs += week.recTDs; 
-                    response.recYdsAfterCatch += week.recYdsAfterCatch; 
-                    response.recYac += (week.recYacPerCatch * week.recCatches); 
-                    response.recYds += week.recYds;
+                    seasonStats.recCatches += week.recCatches; 
+                    seasonStats.recDrops += week.recDrops; 
+                    if (week.recLongest > seasonStats.recLongest) seasonStats.recLongest = week.recLongest; 
+                    seasonStats.recPts += week.recPts;
+                    seasonStats.recTDs += week.recTDs; 
+                    seasonStats.recYdsAfterCatch += week.recYdsAfterCatch; 
+                    seasonStats.recYac += (week.recYacPerCatch * week.recCatches); 
+                    seasonStats.recYds += week.recYds;
+                    weeklyStats.push(week);
                 }
-                response.recYdsPerGame = sqlRes[0].recYdsPerGame;
-                response.recYdsPerCatch = (response.recYds / response.recCatches); 
-                response.name = sqlRes[0].fullName;
+                seasonStats.recYdsPerGame = sqlRes[0].recYdsPerGame;
+                seasonStats.recYdsPerCatch = (seasonStats.recYds / seasonStats.recCatches); 
+                seasonStats.name = sqlRes[0].fullName;
+                let response = {};
+                response.weeklyStats = weeklyStats; 
+                response.seasonStats = seasonStats;  
                 res.send(response);
             }
 
         }})
     } else if (position === 'DT' || position === 'dt' || position === 'DE' || position === 'de' || position === 'LOLB' || position === 'lolb' || position === 'ROLB' || position === 'rolb' || position === 'MLB' || position === 'mlb' || position === 'FS'|| position === 'fs' || position === 'SS' || position === 'ss' || position === 'CB' || position === 'cb' || position === 'def'){
-        let response = {
+        let seasonStats = {
             "name": '', 
             "defCatchAllowed": 0, 
             "defDeflections": 0, 
@@ -384,25 +466,30 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500);
             else { 
+                let weeklyStats = []; 
                 for (const week of sqlRes) { 
-                    response.defCatchAllowed += week.defCatchAllowed; 
-                    response.defDeflections += week.defDeflections; 
-                    response.defForcedFum += week.defForcedFum;
-                    response.defFumRec += week.defFumRec;
-                    response.defInts += week.defInts;
-                    response.defIntReturnYds += week.defIntReturnYds;
-                    response.defPts += week.defPts;
-                    response.defSacks += week.defSacks;
-                    response.defSafeties += week.defSafeties;
-                    response.defTDs += week.defTDs; 
-                    response.defTotalTackles += week.defTotalTackles;
+                    seasonStats.defCatchAllowed += week.defCatchAllowed; 
+                    seasonStats.defDeflections += week.defDeflections; 
+                    seasonStats.defForcedFum += week.defForcedFum;
+                    seasonStats.defFumRec += week.defFumRec;
+                    seasonStats.defInts += week.defInts;
+                    seasonStats.defIntReturnYds += week.defIntReturnYds;
+                    seasonStats.defPts += week.defPts;
+                    seasonStats.defSacks += week.defSacks;
+                    seasonStats.defSafeties += week.defSafeties;
+                    seasonStats.defTDs += week.defTDs; 
+                    seasonStats.defTotalTackles += week.defTotalTackles;
+                    weeklyStats.push(week);
                 }
-                response.name = sqlRes[0].fullName;
+                seasonStats.name = sqlRes[0].fullName;
+                let response = {}; 
+                response.weeklyStats = weeklyStats; 
+                response.seasonStats = seasonStats;
                 res.send(response);
             }
         })
     } else if (position === 'P' || position === 'p'){ 
-        let response = { 
+        let seasonStats = { 
             "name": '',
             "puntsBlocked": 0, 
             "puntsIn20": 0, 
@@ -424,26 +511,31 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             }
                 
             else {
+                let weeklyStats = []; 
                 for (const week of sqlRes) { 
-                    response.puntsBlocked += week.puntsBlocked; 
-                    response.puntsIn20 += week.puntsIn20; 
-                    response.puntLongest += week.puntLongest; 
-                    response.puntTBs += week.puntTBs; 
-                    response.puntNetYds += week.puntNetYds;
-                    response.puntAtt += week.puntAtt;  
-                    response.puntYds += week.puntYds; 
-                    response.kickoffAtt += week.kickoffAtt; 
-                    response.kickoffTBs += week.kickoffTBs; 
+                    seasonStats.puntsBlocked += week.puntsBlocked; 
+                    seasonStats.puntsIn20 += week.puntsIn20; 
+                    seasonStats.puntLongest += week.puntLongest; 
+                    seasonStats.puntTBs += week.puntTBs; 
+                    seasonStats.puntNetYds += week.puntNetYds;
+                    seasonStats.puntAtt += week.puntAtt;  
+                    seasonStats.puntYds += week.puntYds; 
+                    seasonStats.kickoffAtt += week.kickoffAtt; 
+                    seasonStats.kickoffTBs += week.kickoffTBs;
+                    weeklyStats.push(week); 
                 }
-                response.puntNetYdsPerAtt = response.puntNetYds / response.puntAtt; 
-                response.puntYdsPerAtt = response.puntYds / response.puntAtt; 
-                response.name = sqlRes[0].fullName;
+                seasonStats.puntNetYdsPerAtt = seasonStats.puntNetYds / seasonStats.puntAtt; 
+                seasonStats.puntYdsPerAtt = seasonStats.puntYds / seasonStats.puntAtt; 
+                seasonStats.name = sqlRes[0].fullName;
+                let response = {}; 
+                response.seasonStats = seasonStats; 
+                response.weeklyStats = weeklyStats; 
                 res.send(response);
             }
         })
 
     } else if (position === 'K' || position === 'k') {
-        let response = { 
+        let seasonStats = { 
             "name": 0,
             "kickPts": 0, 
             "fgAtt": 0, 
@@ -461,22 +553,27 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct, fullName from kicking_stats where seasonIndex = ${year} and rosterId = ${playerId}`;
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500); 
-            else { 
+            else {
+                let weeklyStats = [];  
                 for (const week of sqlRes) { 
-                    response.kickPts += week.kickPts; 
-                    response.fgAtt += week.fGAtt; 
-                    response.fg50PlusAtt += week.fG50PlusAtt; 
-                    response.fg50PlusMade += week.fG50PlusMade; 
-                    if (week.fGlongest > response.fgLongest) response.fgLongest = week.fGLongest; 
-                    response.fgMade += week.fGMade; 
-                    response.kickoffAtt += week.kickoffAtt; 
-                    response.kickoffTBs += week.kickoffTBs; 
-                    response.xpAtt += week.xPAtt; 
-                    response.xpMade += week.xPMade;
+                    seasonStats.kickPts += week.kickPts; 
+                    seasonStats.fgAtt += week.fGAtt; 
+                    seasonStats.fg50PlusAtt += week.fG50PlusAtt; 
+                    seasonStats.fg50PlusMade += week.fG50PlusMade; 
+                    if (week.fGlongest > seasonStats.fgLongest) seasonStats.fgLongest = week.fGLongest; 
+                    seasonStats.fgMade += week.fGMade; 
+                    seasonStats.kickoffAtt += week.kickoffAtt; 
+                    seasonStats.kickoffTBs += week.kickoffTBs; 
+                    seasonStats.xpAtt += week.xPAtt; 
+                    seasonStats.xpMade += week.xPMade;
+                    weeklyStats.push(week);
                 }
-                response.fgCompPct = response.fgMade / response.fgAtt; 
-                response.xpCompPct = response.xpMade / response.xpAtt;
-                response.name = sqlRes[0].fullName;
+                seasonStats.fgCompPct = seasonStats.fgMade / seasonStats.fgAtt; 
+                seasonStats.xpCompPct = seasonStats.xpMade / seasonStats.xpAtt;
+                seasonStats.name = sqlRes[0].fullName;
+                let response = {}; 
+                response.weeklyStats = weeklyStats; 
+                response.seasonStats = seasonStats;
                 res.send(response); 
             }
         })
