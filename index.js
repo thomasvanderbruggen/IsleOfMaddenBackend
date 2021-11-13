@@ -223,7 +223,7 @@ app.get('/api/team/:teamName', (req, res) => {
             res.send(response);
         }
     })
-    sql = SQL`select * from team_stats where teamId = ${response.teamInfo.teamId}`; 
+    sql = SQL`select * from team_stats where teamId = ${teamNameToID.get(teamName)}`; 
     con.query (sql, (err, sqlRes) => { 
         if (err) res.send(500); 
         response['teamStats'] = sqlRes;
@@ -232,7 +232,7 @@ app.get('/api/team/:teamName', (req, res) => {
             res.send(response);
         } 
     })
-    sql = SQL`select * from players where teamId = ${response.teamInfo.teamId}`; 
+    sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)}`; 
     con.query(sql, (err, sqlRes) => { 
         if (err) res.sendStatus(500); 
         response['roster'] = sqlRes;
@@ -241,16 +241,16 @@ app.get('/api/team/:teamName', (req, res) => {
             res.send(response);
         }
     })
-    sql = SQL`select * from schedules where homeTeamId = ${response.teamInfo.teamId} or awayTeamId = ${response.teamInfo.teamId}`; 
+    sql = SQL`select * from schedules where homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}`; 
     con.query(sql, (err, sqlRes) =>  {
         if (err) res.sendStatus(500); 
         for (const week of sqlRes) { 
-            if (week.awayTeamId === response.teamInfo.teamId) { 
+            if (week.awayTeamId === teamNameToID.get(teamName)) { 
                 week.awayTeam = teamName
             }else { 
                 week.awayTeam = teamIdToName.get(awayTeamId);
             }
-            if (week.homeTeamId === response.teamInfo.teamId) { 
+            if (week.homeTeamId === teamNameToID.get(teamName)) { 
                 week.homeTeam = teamName;
             }else { 
                 week.homeTeam = teamIdToName.get(homeTeamId); 
