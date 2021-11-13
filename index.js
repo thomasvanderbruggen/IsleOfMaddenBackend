@@ -248,12 +248,12 @@ app.get('/api/team/:teamName', (req, res) => {
             if (week.awayTeamId === teamNameToID.get(teamName)) { 
                 week.awayTeam = teamName
             }else { 
-                week.awayTeam = teamIdToName.get(awayTeamId);
+                week.awayTeam = teamIdToName.get(week.awayTeamId);
             }
             if (week.homeTeamId === teamNameToID.get(teamName)) { 
                 week.homeTeam = teamName;
             }else { 
-                week.homeTeam = teamIdToName.get(homeTeamId); 
+                week.homeTeam = teamIdToName.get(week.homeTeamId); 
             }
         }
         response['schedule'] = sqlRes;
