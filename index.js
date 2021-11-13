@@ -209,18 +209,22 @@ app.get('/api/team/:teamName', (req, res) => {
         if (err) res.send(404); 
         response['teamInfo'] = sqlRes;
         sql = SQL`select coachName from coaches where teamName = ${teamName}`;
+        console.log('first Query done'); 
         con.query(sql, (err, sqlRes) => { 
             if (err) res.send(500); 
             response['coach'] = sqlRes;
             sql = SQL`select * from team_stats where teamId = ${response.teamInfo.teamId}`; 
+            console.log('second query done');
             con.query (sql, (err, sqlRes) => { 
                 if (err) res.send(500); 
                 response['teamStats'] = sqlRes; 
                 sql = SQL`select * from players where teamId = ${response.teamInfo.teamId}`; 
+                console.log('third query done');
                 con.query(sql, (err, sqlRes) => { 
                     if (err) res.sendStatus(500); 
                     response['roster'] = sqlRes;
                     sql = SQL`select * from schedules where homeTeamId = ${response.teamInfo.teamId} or awayTeamId = ${response.teamInfo.teamId}`; 
+                    console.log('4th query done');
                     con.query(sql, (err, sqlRes) =>  {
                         if (err) res.sendStatus(500); 
                         for (const week of sqlRes) { 
@@ -235,6 +239,7 @@ app.get('/api/team/:teamName', (req, res) => {
                                 week.homeTeam = teamIdToName.get(homeTeamId); 
                             }
                         }
+                        console.log('5th query done');
                         response['schedule'] = sqlRes;
                         res.send(response);
                     })
