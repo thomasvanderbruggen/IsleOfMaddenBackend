@@ -117,6 +117,59 @@ app.get('/api/coach/:teamName', (req, res) => {
     con.end();
 })
 
+app.get('/api/gamestats/:gameId', (req, res) => { 
+    const {params: {gameId}, } = req;
+    let schedulesDone = false, passingDone = false, rushingDone = false, defDone = false, receivingDone = false, sent = false; 
+    let con = mysql.createConnection({
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    })
+    let response = {}; 
+    let sql = SQL`select awayTeamId, homeTeamId, awayScore, homeScore, from schedules where scheduleId = ${gameId}`;
+    con.query(sql, (err, sqlRes) => {
+        if (err) throw err; 
+        response['game'] = sqlRes;
+        schedulesDone = true;
+        if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
+            sent = true;
+            res.send(response);
+        }
+    }) 
+    sql = SQL`select defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, teamId from defensive_stats where scheduleId = ${gameId} and (defSacks > 3 or defInts >= 1 or defTDs >= 1)`; 
+    con.query(sql, (err, sqlRes) => { 
+        if (err) throw err;
+        response['defenseNotables'] = sqlRes;
+        defDone = true;
+        if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
+            sent = true;
+            res.send(response);
+        }
+    })
+    sql = SQL`select passAtt, passComp, passInts, passLongest, passerRating, passTDs, passYds, fullName, teamId from passing_stats where scheduleId = ${gameId}`; 
+    con.query(sql, (err, sqlRes) => { 
+        if (err) throw err; 
+        response['passing'] = sqlRes;
+        passingDone = true;
+        if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
+            sent = true;
+            res.send(response);
+        }
+    })
+    sql = SQL`select recCatches, recLongest, recTDs, fullName, teamId from receiving_stats where scheduleId = ${gameId} and (recTds > 1 or recLongest >= 60 or recCatches > 7)`; 
+    con.query(sql, (err, sqlRes) => {
+        if (err) throw err;
+        response['receiving'] = sqlRes; 
+        receivingDone = true;
+        if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
+            sent = true;
+            res.send(response);
+        }
+    })
+    con.end();
+})
+
 let firstRun = true;
 app.get('/api/allPlayers', (req, res) => {
     if (firstRun) { 
