@@ -258,7 +258,8 @@ app.get('/api/team/:teamName', (req, res) => {
         response['schedule'] = sqlRes;
         teamSchedules = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) {
-            console.log(`sending: ${response}`);
+            console.log('sending');
+            console.log(response);
             sent = true; 
             res.send(response);
         }
