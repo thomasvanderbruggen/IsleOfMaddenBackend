@@ -166,23 +166,6 @@ app.get('/api/allPlayers', (req, res) => {
    
 })
 
-
-app.get('/api/teamroster/:teamName', (req, res) => { 
-    const {params: {teamName},} = req; 
-    let con = mysql.createConnection({
-        "host": process.env.host,
-        "user": process.env.user,
-        "password": process.env.pw,
-        "database": "tomvandy_isle_of_madden"
-    });
-    let sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)}`; 
-    con.query(sql, (err, resp) => { 
-        if (err) throw err; 
-        res.send(resp); 
-    })
-    con.end();
-})
-
 app.get('/test', (req, res)=> { 
     let con = mysql.createConnection({
         "host": process.env.host,
@@ -209,6 +192,7 @@ app.get('/api/team/:teamName', (req, res) => {
     });
     let sql = SQL`select * from teams where teamName = ${teamName}`;
     con.query(sql, (err, sqlRes) => {
+        console.log('in first');
         if (err) res.sendStatus(404); 
         response['teamInfo'] = sqlRes;
         teamInfoDone = true;
@@ -218,6 +202,7 @@ app.get('/api/team/:teamName', (req, res) => {
     })
     sql = SQL`select coachName from coaches where teamName = ${teamName}`;
     con.query(sql, (err, sqlRes) => { 
+        console.log('in second');
         if (err) res.sendStatus(500); 
         response['coach'] = sqlRes;
         teamCoachDone = true;
@@ -225,8 +210,9 @@ app.get('/api/team/:teamName', (req, res) => {
             res.send(response);
         }
     })
-    sql = SQL`select team_stats from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23 ORDER BY (weekIndex);`; 
+    sql = SQL`select team_stats from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23`; 
     con.query (sql, (err, sqlRes) => { 
+        console.log('in third');
         if (err) res.sendStatus(500); 
         response['teamStats'] = sqlRes;
         teamStatsDone = true;
@@ -236,6 +222,7 @@ app.get('/api/team/:teamName', (req, res) => {
     })
     sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)}`; 
     con.query(sql, (err, sqlRes) => { 
+        console.log('in fourth');
         if (err) res.sendStatus(500); 
         response['roster'] = sqlRes;
         teamRosterDone = true; 
@@ -245,6 +232,7 @@ app.get('/api/team/:teamName', (req, res) => {
     })
     sql = SQL`select * from schedules where homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}`; 
     con.query(sql, (err, sqlRes) =>  {
+        console.log('in 4th');
         if (err) res.sendStatus(500); 
         for (const week of sqlRes) { 
             if (week.awayTeamId === teamNameToID.get(teamName)) { 
