@@ -240,7 +240,7 @@ app.get('/api/team/:teamName', (req, res) => {
         }
         
     })
-    sql = SQL`select * from schedules where homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}`; 
+    sql = SQL`select * from schedules where weekIndex < 24 and (homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)})`; 
     con.query(sql, (err, sqlRes) =>  {
         console.log('in 4th');
         if (err) res.sendStatus(500); 
