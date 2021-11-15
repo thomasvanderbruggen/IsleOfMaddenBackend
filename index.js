@@ -224,6 +224,7 @@ app.get('/api/team/:teamName', (req, res) => {
             } 
     })
     sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)}`; 
+    */
     con.query(sql, (err, sqlRes) => { 
         console.log('in fourth');
         if (err) res.sendStatus(500); 
@@ -233,9 +234,9 @@ app.get('/api/team/:teamName', (req, res) => {
             console.log(`sending: ${response}`);
             sent = true;
         }
-    })*/
+    })
     sql = SQL`select * from schedules where homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}`; 
-    con.query(sql, (err, sqlRes) =>  {
+    /*con.query(sql, (err, sqlRes) =>  {
         console.log('in 4th');
         if (err) res.sendStatus(500); 
         for (const week of sqlRes) { 
@@ -256,10 +257,10 @@ app.get('/api/team/:teamName', (req, res) => {
             console.log('sending');
             console.log(response);
             sent = true; 
-            
+            res.send(response);
         }
-        res.send(response);
-    })
+        
+    })*/
     con.end();  
 })
 
