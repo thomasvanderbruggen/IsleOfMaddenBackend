@@ -198,7 +198,7 @@ app.get('/api/team/:teamName', (req, res) => {
         teamInfoDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             sent = true;
-            
+            res.send(response); 
         }
     })
     sql = SQL`select coachName from coaches where teamName = ${teamName}`;
@@ -210,6 +210,7 @@ app.get('/api/team/:teamName', (req, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             console.log(`sending: ${response}`);
             sent = true;
+            res.send(response); 
         }
     })
     
@@ -222,8 +223,9 @@ app.get('/api/team/:teamName', (req, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             console.log(`sending: ${response}`);
             sent = true;
+            res.send(response); 
         }
-        res.send(response); 
+        
     })
     sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)} ORDER BY (playerBestOvr)`;   
     con.query(sql, (err, sqlRes) => { 
@@ -234,7 +236,7 @@ app.get('/api/team/:teamName', (req, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             console.log(`sending: ${response}`);
             sent = true;
-            res.send(sqlRes);
+            res.send(response);
         }
         
     })
