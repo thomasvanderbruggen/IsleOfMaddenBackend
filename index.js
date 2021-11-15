@@ -175,7 +175,7 @@ app.get('/api/teamroster/:teamName', (req, res) => {
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     }); 
-    con.query(SQL`select * from players where teamId = ${teamNameToID.get(teamName)};`, (err, resp) => { 
+    con.query(SQL`select * from players where teamId = ${teamNameToID.get(teamName)} ORDER BY (playerBestOvr) desc;`, (err, resp) => { 
         res.send(resp); 
     })
     con.end();
@@ -223,7 +223,7 @@ app.get('/api/team/:teamName', (req, res) => {
             res.send(response);
         }
     })
-    sql = SQL`select * from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23 ORDER BY (weekIndex);`; 
+    sql = SQL`select team_stats.*, schedules. from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23 ORDER BY (weekIndex);`; 
     con.query (sql, (err, sqlRes) => { 
         if (err) res.send(500); 
         response['teamStats'] = sqlRes;
