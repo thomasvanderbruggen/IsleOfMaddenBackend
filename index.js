@@ -191,13 +191,12 @@ app.get('/api/team/:teamName', (req, res) => {
         "database": "tomvandy_isle_of_madden"
     });
     let sql = SQL`select * from teams where teamName = ${teamName}`;
-    con.query(sql, (err, sqlRes) => {
+    /*con.query(sql, (err, sqlRes) => {
         console.log('in first');
         if (err) res.sendStatus(404); 
         response['teamInfo'] = sqlRes;
         teamInfoDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
-            
             sent = true;
             
         }
@@ -234,7 +233,7 @@ app.get('/api/team/:teamName', (req, res) => {
             console.log(`sending: ${response}`);
             sent = true;
         }
-    })
+    })*/
     sql = SQL`select * from schedules where homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}`; 
     con.query(sql, (err, sqlRes) =>  {
         console.log('in 4th');
