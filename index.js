@@ -158,7 +158,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     })
-    sql = "select recCatches, recLongest, recTDs, fullName, teamId from receiving_stats where scheduleId = ? and (recTds > 1 or recLongest >= 60 or recCatches > 7)"; 
+    sql = "select recCatches, recLongest, recTDs, fullName, teamId from receiving_stats where scheduleId = ? and (recTds >= 1 or recLongest >= 60 or recCatches > 7)"; 
     con.query(sql, [gameId], (err, sqlRes) => {
         if (err) throw err;
         response['receiving'] = sqlRes; 
