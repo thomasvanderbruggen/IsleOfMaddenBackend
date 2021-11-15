@@ -175,7 +175,7 @@ app.get('/api/teamroster/:teamName', (req, res) => {
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     }); 
-    con.query(SQL`select * from players where teamId = ${teamNameToID.get(teamName)} ORDER BY playerBestOvr;`, (err, resp) => { 
+    con.query(SQL`select * from players where teamId = ${teamNameToID.get(teamName)};`, (err, resp) => { 
         res.send(resp); 
     })
     con.end();
