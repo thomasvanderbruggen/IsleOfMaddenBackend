@@ -209,7 +209,7 @@ app.get('/api/team/:teamName', (req, res) => {
     });
     let sql = SQL`select * from teams where teamName = ${teamName}`;
     con.query(sql, (err, sqlRes) => {
-        if (err) res.send(404); 
+        if (err) res.sendStatus(404); 
         response['teamInfo'] = sqlRes;
         teamInfoDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
@@ -218,7 +218,7 @@ app.get('/api/team/:teamName', (req, res) => {
     })
     sql = SQL`select coachName from coaches where teamName = ${teamName}`;
     con.query(sql, (err, sqlRes) => { 
-        if (err) res.send(500); 
+        if (err) res.sendStatus(500); 
         response['coach'] = sqlRes;
         teamCoachDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
@@ -227,7 +227,7 @@ app.get('/api/team/:teamName', (req, res) => {
     })
     sql = SQL`select team_stats from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23 ORDER BY (weekIndex);`; 
     con.query (sql, (err, sqlRes) => { 
-        if (err) res.send(500); 
+        if (err) res.sendStatus(500); 
         response['teamStats'] = sqlRes;
         teamStatsDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
