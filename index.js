@@ -128,7 +128,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
         "database": "tomvandy_isle_of_madden"
     })
     let response = {}; 
-    let sql = "select awayTeamId, homeTeamId, awayScore, homeScore, from schedules where scheduleId = ?";
+    let sql = "select awayTeamId, homeTeamId, awayScore, homeScore from schedules where scheduleId = ?";
     con.query(sql, [gameId], (err, sqlRes) => {
         if (err) throw err; 
         response['game'] = sqlRes;
