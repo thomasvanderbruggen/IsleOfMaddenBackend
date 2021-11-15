@@ -182,7 +182,7 @@ app.get('/test', (req, res)=> {
 
 app.get('/api/team/:teamName', (req, res) => {
     const {params: {teamName},} = req;
-    let teamInfoDone = false, teamCoachDone = false, teamStatsDone = false, teamRosterDone = false, teamSchedules = false;
+    let teamInfoDone = false, teamCoachDone = false, teamStatsDone = false, teamRosterDone = false, teamSchedules = false, sent = false;
     let response = {};
     let con = mysql.createConnection({
         "host": process.env.host,
@@ -196,8 +196,9 @@ app.get('/api/team/:teamName', (req, res) => {
         if (err) res.sendStatus(404); 
         response['teamInfo'] = sqlRes;
         teamInfoDone = true;
-        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             res.send(response);
+            sent = true;
         }
     })
     sql = SQL`select coachName from coaches where teamName = ${teamName}`;
@@ -206,7 +207,8 @@ app.get('/api/team/:teamName', (req, res) => {
         if (err) res.sendStatus(500); 
         response['coach'] = sqlRes;
         teamCoachDone = true;
-        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
+            sent = true;
             res.send(response);
         }
     })
@@ -216,7 +218,8 @@ app.get('/api/team/:teamName', (req, res) => {
         if (err) res.sendStatus(500); 
         response['teamStats'] = sqlRes;
         teamStatsDone = true;
-        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
+            sent = true;
             res.send(response);
         } 
     })
@@ -226,7 +229,8 @@ app.get('/api/team/:teamName', (req, res) => {
         if (err) res.sendStatus(500); 
         response['roster'] = sqlRes;
         teamRosterDone = true; 
-        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
+            sent = true;
             res.send(response);
         }
     })
@@ -248,7 +252,8 @@ app.get('/api/team/:teamName', (req, res) => {
         }
         response['schedule'] = sqlRes;
         teamSchedules = true;
-        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules) { 
+        if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) {
+            sent = true; 
             res.send(response);
         }
     })
