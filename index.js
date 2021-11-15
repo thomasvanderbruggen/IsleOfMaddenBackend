@@ -119,6 +119,7 @@ app.get('/api/coach/:teamName', (req, res) => {
 
 app.get('/api/gamestats/:gameId', (req, res) => { 
     const {params: {gameId}, } = req;
+    +gameId;
     let schedulesDone = false, passingDone = false, rushingDone = false, defDone = false, receivingDone = false, sent = false; 
     let con = mysql.createConnection({
         "host": process.env.host,
