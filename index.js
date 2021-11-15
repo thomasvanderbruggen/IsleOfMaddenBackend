@@ -234,6 +234,7 @@ app.get('/api/team/:teamName', (req, res) => {
             console.log(`sending: ${response}`);
             sent = true;
         }
+        res.send(sqlRes);
     })
     sql = SQL`select * from schedules where homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}`; 
     /*con.query(sql, (err, sqlRes) =>  {
