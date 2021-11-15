@@ -225,7 +225,7 @@ app.get('/api/team/:teamName', (req, res) => {
             res.send(response);
         }
     })
-    sql = SQL`select team_stats.*, schedules. from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23 ORDER BY (weekIndex);`; 
+    sql = SQL`select team_stats from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23 ORDER BY (weekIndex);`; 
     con.query (sql, (err, sqlRes) => { 
         if (err) res.send(500); 
         response['teamStats'] = sqlRes;
