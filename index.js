@@ -199,7 +199,6 @@ app.get('/api/team/:teamName', (req, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             
             sent = true;
-            res.send(response);
             
         }
     })
@@ -212,7 +211,6 @@ app.get('/api/team/:teamName', (req, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             console.log(`sending: ${response}`);
             sent = true;
-            res.send(response);
         }
     })
     sql = SQL`select team_stats from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23`; 
@@ -224,8 +222,7 @@ app.get('/api/team/:teamName', (req, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             console.log(`sending: ${response}`);
             sent = true;
-            res.send(response);
-        } 
+            } 
     })
     sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)}`; 
     con.query(sql, (err, sqlRes) => { 
@@ -236,7 +233,6 @@ app.get('/api/team/:teamName', (req, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             console.log(`sending: ${response}`);
             sent = true;
-            res.send(response);
         }
     })
     sql = SQL`select * from schedules where homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}`; 
