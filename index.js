@@ -168,6 +168,16 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     })
+    sql = "select rushAtt, rushLongest, rushFum, rushYds, rushTDs, fullName, teamId from rushing_stats where scheduleId = ? and (rushTDs >= 1 or rushYds > 100 or rushFum > 1)"; 
+    con.query(sql, [gameId], (err, sqlRes) => { 
+        if (err) throw err; 
+        response['rushing'] = sqlRes; 
+        rushingDone = true; 
+        if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
+            sent = true;
+            res.send(response);
+        }
+    })
     con.end();
 })
 
