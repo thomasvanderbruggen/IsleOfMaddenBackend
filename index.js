@@ -227,7 +227,7 @@ app.get('/api/team/:teamName', (req, res) => {
         }
         
     })
-    sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)} ORDER BY (playerBestOvr)`;   
+    sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)} ORDER BY playerBestOvr desc`;   
     con.query(sql, (err, sqlRes) => { 
         console.log('in fourth');
         if (err) res.sendStatus(500); 
