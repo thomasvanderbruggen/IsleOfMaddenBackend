@@ -197,8 +197,10 @@ app.get('/api/team/:teamName', (req, res) => {
         response['teamInfo'] = sqlRes;
         teamInfoDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
-            res.send(response);
+            
             sent = true;
+            res.send(response);
+            
         }
     })
     sql = SQL`select coachName from coaches where teamName = ${teamName}`;
@@ -208,6 +210,7 @@ app.get('/api/team/:teamName', (req, res) => {
         response['coach'] = sqlRes;
         teamCoachDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
+            console.log(`sending: ${response}`);
             sent = true;
             res.send(response);
         }
@@ -219,6 +222,7 @@ app.get('/api/team/:teamName', (req, res) => {
         response['teamStats'] = sqlRes;
         teamStatsDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
+            console.log(`sending: ${response}`);
             sent = true;
             res.send(response);
         } 
@@ -230,6 +234,7 @@ app.get('/api/team/:teamName', (req, res) => {
         response['roster'] = sqlRes;
         teamRosterDone = true; 
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
+            console.log(`sending: ${response}`);
             sent = true;
             res.send(response);
         }
@@ -253,6 +258,7 @@ app.get('/api/team/:teamName', (req, res) => {
         response['schedule'] = sqlRes;
         teamSchedules = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) {
+            console.log(`sending: ${response}`);
             sent = true; 
             res.send(response);
         }
