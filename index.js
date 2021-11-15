@@ -138,7 +138,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     }) 
-    sql = "select defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, teamId from defensive_stats where scheduleId = ? and (defSacks > 3 or defInts >= 1 or defTDs >= 1)"; 
+    sql = "select defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, teamId from defensive_stats where scheduleId = ? and (defSacks > 1 or defInts >= 1 or defTDs >= 1)"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
         if (err) throw err;
         response['defenseNotables'] = sqlRes;
