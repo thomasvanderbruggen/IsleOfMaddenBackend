@@ -176,6 +176,7 @@ app.get('/api/teamroster/:teamName', (req, res) => {
         "database": "tomvandy_isle_of_madden"
     }); 
     con.query(SQL`select * from players where teamId = ${teamNameToID.get(teamName)};`, (err, resp) => { 
+        if (err) throw err; 
         res.send(resp); 
     })
     con.end();
