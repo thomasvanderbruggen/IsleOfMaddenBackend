@@ -127,7 +127,7 @@ app.get('/api/allPlayers', (req, res) => {
             "password": process.env.pw,
             "database": "tomvandy_isle_of_madden"
         }); 
-        let sql = SQL`select firstName, lastName, devTrait, age, height, weight, playerBestOvr, speedRating, awareRating from players order by concat(firstName, lastName) asc;`; 
+        let sql = SQL`select firstName, lastName, devTrait, age, height, weight, playerBestOvr, speedRating, awareRating, position from players order by concat(firstName, lastName) asc;`; 
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500); 
             else { 
