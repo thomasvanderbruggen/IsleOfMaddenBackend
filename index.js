@@ -223,7 +223,7 @@ app.get('/api/team/:teamName', (req, res) => {
             res.send(response);
         }
     })
-    sql = SQL`select * from team_stats where teamId = ${teamNameToID.get(teamName)}`; 
+    sql = SQL`select * from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23;`; 
     con.query (sql, (err, sqlRes) => { 
         if (err) res.send(500); 
         response['teamStats'] = sqlRes;
