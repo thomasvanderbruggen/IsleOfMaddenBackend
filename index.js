@@ -212,6 +212,7 @@ app.get('/api/team/:teamName', (req, res) => {
             sent = true;
         }
     })
+    */
     sql = SQL`select team_stats from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23`; 
     con.query (sql, (err, sqlRes) => { 
         console.log('in third');
@@ -221,10 +222,12 @@ app.get('/api/team/:teamName', (req, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             console.log(`sending: ${response}`);
             sent = true;
-            } 
+        }
+        res.send(response); 
     })
     sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)}`; 
-    */
+    
+   /*
     con.query(sql, (err, sqlRes) => { 
         console.log('in fourth');
         if (err) res.sendStatus(500); 
@@ -233,9 +236,10 @@ app.get('/api/team/:teamName', (req, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             console.log(`sending: ${response}`);
             sent = true;
+            res.send(sqlRes);
         }
-        res.send(sqlRes);
-    })
+        
+    })*/
     sql = SQL`select * from schedules where homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}`; 
     /*con.query(sql, (err, sqlRes) =>  {
         console.log('in 4th');
