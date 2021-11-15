@@ -256,8 +256,9 @@ app.get('/api/team/:teamName', (req, res) => {
             console.log('sending');
             console.log(response);
             sent = true; 
-            res.send(response);
+            
         }
+        res.send(response);
     })
     con.end();  
 })
