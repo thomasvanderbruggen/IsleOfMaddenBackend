@@ -130,7 +130,22 @@ app.get('/api/gamestats/:gameId', (req, res) => {
     let response = {}; 
     let sql = "select awayTeamId, homeTeamId, awayScore, homeScore from schedules where scheduleId = ?";
     con.query(sql, [gameId], (err, sqlRes) => {
-        if (err) throw err; 
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        }
+        for (const week of sqlRes) { 
+            if (week.awayTeamId === teamNameToID.get(teamName)) { 
+                week.awayTeam = teamName
+            }else { 
+                week.awayTeam = teamIdToName.get(week.awayTeamId);
+            }
+            if (week.homeTeamId === teamNameToID.get(teamName)) { 
+                week.homeTeam = teamName;
+            }else { 
+                week.homeTeam = teamIdToName.get(week.homeTeamId); 
+            }
+        }
         response['game'] = sqlRes;
         schedulesDone = true;
         if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
@@ -140,7 +155,10 @@ app.get('/api/gamestats/:gameId', (req, res) => {
     }) 
     sql = "select defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, teamId from defensive_stats where scheduleId = ? and (defSacks > 1 or defInts >= 1 or defTDs >= 1)"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
-        if (err) throw err;
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        }
         response['defenseNotables'] = sqlRes;
         defDone = true;
         if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
@@ -150,7 +168,10 @@ app.get('/api/gamestats/:gameId', (req, res) => {
     })
     sql = "select passAtt, passComp, passInts, passLongest, passerRating, passTDs, passYds, fullName, teamId from passing_stats where scheduleId = ?"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
-        if (err) throw err; 
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        }
         response['passing'] = sqlRes;
         passingDone = true;
         if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
@@ -160,7 +181,10 @@ app.get('/api/gamestats/:gameId', (req, res) => {
     })
     sql = "select recCatches, recLongest, recTDs, fullName, teamId from receiving_stats where scheduleId = ? and (recTds >= 1 or recLongest >= 60 or recCatches > 7)"; 
     con.query(sql, [gameId], (err, sqlRes) => {
-        if (err) throw err;
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        }
         response['receiving'] = sqlRes; 
         receivingDone = true;
         if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
@@ -170,7 +194,10 @@ app.get('/api/gamestats/:gameId', (req, res) => {
     })
     sql = "select rushAtt, rushLongest, rushFum, rushYds, rushTDs, fullName, teamId from rushing_stats where scheduleId = ? and (rushTDs >= 1 or rushYds > 100 or rushFum > 1)"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
-        if (err) throw err; 
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        }
         response['rushing'] = sqlRes; 
         rushingDone = true; 
         if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
@@ -256,8 +283,10 @@ app.get('/api/team/:teamName', (req, res) => {
     });
     let sql = SQL`select * from teams where teamName = ${teamName}`;
     con.query(sql, (err, sqlRes) => {
-        console.log('in first');
-        if (err) res.sendStatus(404); 
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        }
         response['teamInfo'] = sqlRes;
         teamInfoDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
@@ -267,8 +296,10 @@ app.get('/api/team/:teamName', (req, res) => {
     })
     sql = SQL`select coachName from coaches where teamName = ${teamName}`;
     con.query(sql, (err, sqlRes) => { 
-        console.log('in second');
-        if (err) res.sendStatus(500); 
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        }
         response['coach'] = sqlRes;
         teamCoachDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
@@ -280,8 +311,10 @@ app.get('/api/team/:teamName', (req, res) => {
     
     sql = SQL`select * from team_stats where teamId = ${teamNameToID.get(teamName)} and weekIndex < 23 ORDER BY (weekIndex)`; 
     con.query (sql, (err, sqlRes) => { 
-        console.log('in third');
-        if (err) res.sendStatus(500); 
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        }
         response['teamStats'] = sqlRes;
         teamStatsDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
@@ -293,8 +326,10 @@ app.get('/api/team/:teamName', (req, res) => {
     })
     sql = SQL`select * from players where teamId = ${teamNameToID.get(teamName)} ORDER BY playerBestOvr desc`;   
     con.query(sql, (err, sqlRes) => { 
-        console.log('in fourth');
-        if (err) res.sendStatus(500); 
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        } 
         response['roster'] = sqlRes;
         teamRosterDone = true; 
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
@@ -306,8 +341,10 @@ app.get('/api/team/:teamName', (req, res) => {
     })
     sql = SQL`select * from schedules where weekIndex < 24 and (homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)})`; 
     con.query(sql, (err, sqlRes) =>  {
-        console.log('in 4th');
-        if (err) res.sendStatus(500); 
+        if (err) {
+            sent = true;
+            res.sendStatus(500); 
+        }
         for (const week of sqlRes) { 
             if (week.awayTeamId === teamNameToID.get(teamName)) { 
                 week.awayTeam = teamName
