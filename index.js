@@ -146,6 +146,8 @@ app.get('/api/gamestats/:gameId', (req, res) => {
                 week.homeTeam = teamIdToName.get(week.homeTeamId); 
             }
         }
+        sqlRes[0].awayTeam = teamIdToName.get(sqlRes[0].awayTeamId); 
+        sqlRes[0].homeTeam = teamIdToName.get(sqlRes[0].homeTeamId);
         response['game'] = sqlRes;
         schedulesDone = true;
         if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
