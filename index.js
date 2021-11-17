@@ -134,18 +134,6 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             sent = true;
             res.sendStatus(500); 
         }
-        for (const week of sqlRes) { 
-            if (week.awayTeamId === teamNameToID.get(teamName)) { 
-                week.awayTeam = teamName
-            }else { 
-                week.awayTeam = teamIdToName.get(week.awayTeamId);
-            }
-            if (week.homeTeamId === teamNameToID.get(teamName)) { 
-                week.homeTeam = teamName;
-            }else { 
-                week.homeTeam = teamIdToName.get(week.homeTeamId); 
-            }
-        }
         sqlRes[0].awayTeam = teamIdToName.get(sqlRes[0].awayTeamId); 
         sqlRes[0].homeTeam = teamIdToName.get(sqlRes[0].homeTeamId);
         response['game'] = sqlRes;
