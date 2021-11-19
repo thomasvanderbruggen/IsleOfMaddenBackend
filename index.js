@@ -770,8 +770,9 @@ app.get('/api/playerSearch?', (req, res) => {
          
     }else { 
         let haveFirstParam = false; 
-        sql += " WHERE"; 
+         
         if (req.query.position && req.query.position != "Any"){ 
+            sql += " WHERE";
             sql += ` position='${req.query.position}'`; 
                 haveFirstParam = true;
             
@@ -780,6 +781,7 @@ app.get('/api/playerSearch?', (req, res) => {
             if (haveFirstParam) { 
                 sql += ` and teamId=${req.query.team}`; 
             }else { 
+                sql += " WHERE";
                 sql += ` teamId=${req.query.team}`; 
                 haveFirstParam = true;
             }
