@@ -75,7 +75,8 @@ let teamIdToName = new Map([
     [980680767, 'Steelers'],
     [980680768, 'Texans'],
     [980680769, 'Titans'],
-    [980680770, 'Vikings']
+    [980680770, 'Vikings'],
+    [1, 'FA']
 ])
 
 app.set('port', (process.env.PORT || 3001)); 
@@ -208,10 +209,13 @@ app.get('/api/allPlayers', (req, res) => {
             "password": process.env.pw,
             "database": "tomvandy_isle_of_madden"
         }); 
-        let sql = SQL`select firstName, lastName, devTrait, age, height, weight, playerBestOvr, speedRating, awareRating, position from players order by concat(firstName, lastName) asc;`; 
+        let sql = SQL`select firstName, lastName, devTrait, age, height, weight, playerBestOvr, speedRating, awareRating, position, teamId from players order by concat(firstName, lastName) asc;`; 
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500); 
-            else { 
+            else {
+                for (let player of sqlRes) { 
+                    player['teamName'] = teamIdToName.get(player.teamId);
+                }
                 res.send(sqlRes);
                 players = sqlRes; 
             }
@@ -229,10 +233,13 @@ app.get('/api/allPlayers', (req, res) => {
                 "password": process.env.pw,
                 "database": "tomvandy_isle_of_madden"
             }); 
-            let sql = SQL`select firstName, lastName, devTrait, age, height, weight, playerBestOvr, speedRating, awareRating from players order by concat(firstName, lastName) asc;`; 
+            let sql = SQL`select firstName, lastName, devTrait, age, height, weight, playerBestOvr, speedRating, awareRating, teamId from players order by concat(firstName, lastName) asc;`; 
             con.query(sql, (err, sqlRes) => { 
                 if (err) res.sendStatus(500); 
-                else { 
+                else {
+                    for (let player of sqlRes) { 
+                        player['teamName'] = teamIdToName.get(player.teamId);
+                    } 
                     res.send(sqlRes); 
                     players = sqlRes;
                 }
@@ -731,7 +738,7 @@ app.get('/api/powerranking/', (req, res) => {
 
 app.get('/api/playerSearch?', (req, res) => { 
     let sql; 
-    let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr"; 
+    let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr, teamId"; 
     console.log(req.query);
     if (!req.query.position) { 
         sql = `SELECT ${commonCols}, speedRating, awareRating `; 
@@ -797,6 +804,9 @@ app.get('/api/playerSearch?', (req, res) => {
         console.log(err);
         if (err) {res.send(500);} 
         else {
+            for (let player of sqlRes){  
+                player['teamName'] = teamIdToName.get(player.teamId);
+            }
             res.send(sqlRes); 
         }
     })
