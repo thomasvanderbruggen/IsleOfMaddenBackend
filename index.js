@@ -738,7 +738,7 @@ app.get('/api/powerranking/', (req, res) => {
 
 app.get('/api/playerSearch?', (req, res) => { 
     let sql; 
-    let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr, teamId"; 
+    let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr, teamId, position"; 
     console.log(req.query);
     if (!req.query.position) { 
         sql = `SELECT ${commonCols}, speedRating, awareRating `; 
