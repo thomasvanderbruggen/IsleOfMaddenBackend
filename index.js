@@ -771,17 +771,19 @@ app.get('/api/playerSearch?', (req, res) => {
     }else { 
         let haveFirstParam = false; 
         sql += " WHERE"; 
-        if (req.query.position){ 
+        if (req.query.position && req.query.position != "Any"){ 
             sql += ` position='${req.query.position}'`; 
-            haveFirstParam = true;
+                haveFirstParam = true;
+            
         } 
-        if (req.query.team) { 
+        if (req.query.team && req.query.team != "Any") {
             if (haveFirstParam) { 
                 sql += ` and teamId=${req.query.team}`; 
             }else { 
                 sql += ` teamId=${req.query.team}`; 
                 haveFirstParam = true;
             }
+            
         }
         if(req.query.name) { 
             req.query.name.toUpperCase();
