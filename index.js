@@ -750,7 +750,7 @@ app.get('/api/playerSearch?', (req, res) => {
         }else if (req.query.position === "FB"){ 
             sql = `SELECT ${commonCols}, carryRating, impactBlockRating, leadBlockRating, runBlockRating, strengthRating, speedRating, truckRating, accelRating, agilityRating, catchRating, stiffArmRating, passBlockRating, breakTackleRating`; 
         }else if(req.query.position === "TE"){ 
-            sql = `SELECT ${commonCols}, speedRating, catchRating, cITRating, specCatchRating, routeRunShortRating, routeRunMedRating, routeRunDeepRating, jumpRating, runBlockRating, impactBlockRating, passBlockRating, leadBlockRating, awareRating, tackleRating`; 
+            sql = `SELECT ${commonCols}, speedRating, catchRating, cITRating, specCatchRating, routeRunShortRating, routeRunMedRating, routeRunDeepRating, jumpRating, runBlockRating, impactBlockRating, passBlockRating, leadBlockRating, awareRating, breakTackleRating`; 
         }else if (req.query.position === "WR"){
             sql = `SELECT ${commonCols}, speedRating, accelRating, routeRunShortRating, routeRunMedRating, routeRunDeepRating, catchRating, cITRating,  specCatchRating, jumpRating, releaseRating, agilityRating`; 
         }else if(req.query.position === "LT" || req.query.position === "LG" || req.query.position === "C" || req.query.position === "RG" || req.query.position === "RT") { 
@@ -760,15 +760,15 @@ app.get('/api/playerSearch?', (req, res) => {
         }else if (req.query.position == "DT") {
             sql = `SELECT ${commonCols}, blockShedRating, powerMovesRating, finesseMovesRating, playRecRating, pursuitRating, hitPowerRating, strengthRating, tackleRating, awareRating, speedRating, accelRating`;
         }else if (req.query.position === "LOLB"  || req.query.position === "ROLB"){ 
-            sql = `SELECT ${commonCols}, speedRating, tackleRating, powerMovesRating, finesseMovesRating, playRecRating, zoneCoverRating, manCoverRating, pursuitRating, agilityRating, hitPowerRating, blockShedRating, awareRating, strengthRating`; 
+            sql = `SELECT ${commonCols}, speedRating, tackleRating, powerMovesRating, finesseMovesRating, playRecRating, zoneCoverRating, manCoverRating, pursuitRating, agilityRating, accelRating, hitPowerRating, blockShedRating, awareRating, strengthRating`; 
         }else if (req.query.position === "MLB") { 
-            sql = `SELECT ${commonCols}, speedRating, tackleRating, hitPowerRating, strengthRating, powerMoveRating, finesseMoveRating, playRecRating, zoneCoverRating, manCoverRating, pursuitRating, agilityRating, accelRating, blockShedRating, awareRating`
+            sql = `SELECT ${commonCols}, speedRating, tackleRating, hitPowerRating, strengthRating, powerMovesRating, finesseMovesRating, playRecRating, zoneCoverRating, manCoverRating, pursuitRating, agilityRating, accelRating, blockShedRating, awareRating`
         }else if (req.query.position === "CB") { 
             sql = `SELECT ${commonCols}, speedRating, accelRating, zoneCoverRating, manCoverRating, playRecRating, awareRating, pressRating, hitPowerRating, catchRating, agilityRating, jumpRating, tackleRating`; 
         }else if (req.query.position === "SS"  || req.query.position === "FS"){
             sql = `SELECT ${commonCols}, speedRating, accelRating, zoneCoverRating, manCoverRating, playRecRating, awareRating, pursuitRating, tackleRating, hitPowerRating, catchRating, agilityRating, blockShedRating`;
         }else if (req.query.position === "K"  || req.query.position === "P") { 
-            sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating, accelRating, strengthRating, throwPowerRating, throwShortAccRating`; 
+            sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating, accelRating, strengthRating, throwPowerRating, throwAccShortRating`; 
         }
     }
     sql += " FROM players"
