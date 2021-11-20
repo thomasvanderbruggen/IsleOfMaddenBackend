@@ -744,25 +744,31 @@ app.get('/api/playerSearch?', (req, res) => {
         sql = `SELECT ${commonCols}, speedRating, awareRating `; 
     }else { 
         if (req.query.position === "QB"){ 
-            sql = `SELECT ${commonCols}, throwPowerRating, throwAccRating, throwOnRunRating, throwAccShortRating, throwAccMedRating, throwAccDeepRating, speedRating`; 
+            sql = `SELECT ${commonCols}, throwPowerRating, throwAccRating, throwOnRunRating, throwAccShortRating, throwAccMedRating, throwAccDeepRating, speedRating, awareRating, playActionRating, breakSackRating, throwUnderPressureRating`; 
         }else if (req.query.position === "HB"){ 
-            sql = `SELECT ${commonCols}, awareRating, speedRating, strengthRating, agilityRating, truckRating, jukeMoveRating, changeOfDirectionRating, spinMoveRating, stiffArmRating, carryRating`; 
+            sql = `SELECT ${commonCols}, awareRating, speedRating, strengthRating, agilityRating, truckRating, jukeMoveRating, changeOfDirectionRating, spinMoveRating, stiffArmRating, carryRating, breakTackleRating, accelRating, bCVRating`; 
         }else if (req.query.position === "FB"){ 
-            sql = `SELECT ${commonCols}, carryRating, impactBlockRating, leadBlockRating, runBlockRating, strengthRating, speedRating, truckRating, accelRating, agilityRating, catchRating`; 
+            sql = `SELECT ${commonCols}, carryRating, impactBlockRating, leadBlockRating, runBlockRating, strengthRating, speedRating, truckRating, accelRating, agilityRating, catchRating, stiffArmRating, passBlockRating, breakTackleRating`; 
         }else if(req.query.position === "TE"){ 
-            sql = `SELECT ${commonCols}, speedRating, catchRating, cITRating, specCatchRating, routeRunShortRating, routeRunMedRating, routeRunDeepRating, jumpRating, runBlockRating, impactBlockRating`; 
+            sql = `SELECT ${commonCols}, speedRating, catchRating, cITRating, specCatchRating, routeRunShortRating, routeRunMedRating, routeRunDeepRating, jumpRating, runBlockRating, impactBlockRating, passBlockRating, leadBlockRating, awareRating, tackleRating`; 
         }else if (req.query.position === "WR"){
-            sql = `SELECT ${commonCols}, speedRating, accelRating, routeRunShortRating, routeRunMedRating, routeRunDeepRating, catchRating, cITRating,  specCatchRating, jumpRating, releaseRating`; 
+            sql = `SELECT ${commonCols}, speedRating, accelRating, routeRunShortRating, routeRunMedRating, routeRunDeepRating, catchRating, cITRating,  specCatchRating, jumpRating, releaseRating, agilityRating`; 
         }else if(req.query.position === "LT" || req.query.position === "LG" || req.query.position === "C" || req.query.position === "RG" || req.query.position === "RT") { 
             sql = `SELECT ${commonCols}, strengthRating, runBlockRating, runBlockPowerRating, runBlockFinesseRating, runBlockRating, passBlockRating, passBlockPowerRating, passBlockFinesseRating, leadBlockRating, impactBlockRating, awareRating`; 
-        }else if (req.query.position === "LE" || req.query.position === "DT" || req.query.position === "RE"){ 
-            sql = `SELECT ${commonCols}, blockShedRating, powerMovesRating, finesseMovesRating, playRecRating, pursuitRating, hitPowerRating, strengthRating, tackleRating, awareRating, speedRating`; 
-        }else if (req.query.position === "LOLB"  || req.query.position === "ROLB"  || req.query.position === "MLB"){ 
-            sql = `SELECT ${commonCols}, speedRating, tackleRating, powerMovesRating, finesseMovesRating, playRecRating, zoneCoverRating, manCoverRating, pursuitRating, agilityRating, hitPowerRating`; 
-        }else if (req.query.position === "CB"  || req.query.position === "SS"  || req.query.position === "FS") { 
-            sql = `SELECT ${commonCols}, speedRating, accelRating, zoneCoverRating, manCoverRating, playRecRating, awareRating, pressRating, hitPowerRating, catchRating, agilityRating`; 
-        } else if (req.query.position === "K"  || req.query.position === "P") { 
-            sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating`; 
+        }else if (req.query.position === "LE" || req.query.position === "RE"){ 
+            sql = `SELECT ${commonCols}, blockShedRating, powerMovesRating, finesseMovesRating, playRecRating, pursuitRating, hitPowerRating, strengthRating, tackleRating, awareRating, speedRating, accelRating, agilityRating`; 
+        }else if (req.query.position == "DT") {
+            sql = `SELECT ${commonCols}, blockShedRating, powerMovesRating, finesseMovesRating, playRecRating, pursuitRating, hitPowerRating, strengthRating, tackleRating, awareRating, speedRating, accelRating`;
+        }else if (req.query.position === "LOLB"  || req.query.position === "ROLB"){ 
+            sql = `SELECT ${commonCols}, speedRating, tackleRating, powerMovesRating, finesseMovesRating, playRecRating, zoneCoverRating, manCoverRating, pursuitRating, agilityRating, hitPowerRating, blockShedRating, awareRating, strengthRating`; 
+        }else if (req.query.position === "MLB") { 
+            sql = `SELECT ${commonCols}, speedRating, tackleRating, hitPowerRating, strengthRating, powerMoveRating, finesseMoveRating, playRecRating, zoneCoverRating, manCoverRating, pursuitRating, agilityRating, accelRating, blockShedRating, awareRating`
+        }else if (req.query.position === "CB") { 
+            sql = `SELECT ${commonCols}, speedRating, accelRating, zoneCoverRating, manCoverRating, playRecRating, awareRating, pressRating, hitPowerRating, catchRating, agilityRating, jumpRating, tackleRating`; 
+        }else if (req.query.position === "SS"  || req.query.position === "FS"){
+            sql = `SELECT ${commonCols}, speedRating, accelRating, zoneCoverRating, manCoverRating, playRecRating, awareRating, pursuitRating, tackleRating, hitPowerRating, catchRating, agilityRating, blockShedRating`;
+        }else if (req.query.position === "K"  || req.query.position === "P") { 
+            sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating, accelRating, strengthRating, throwPowerRating, throwShortAccRating`; 
         }
     }
     sql += " FROM players"
