@@ -768,7 +768,7 @@ app.get('/api/playerSearch?', (req, res) => {
         }else if (req.query.position === "SS"  || req.query.position === "FS"){
             sql = `SELECT ${commonCols}, speedRating, accelRating, zoneCoverRating, manCoverRating, playRecRating, awareRating, pursuitRating, tackleRating, hitPowerRating, catchRating, agilityRating, blockShedRating`;
         }else if (req.query.position === "K"  || req.query.position === "P") { 
-            sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating, accelRating, strengthRating, throwPowerRating, throwAccShortRating`; 
+            sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating, accelRating, strengthRating, throwPowerRating, throwAccShortRating, agilityRating`; 
         }
     }
     sql += " FROM players"
