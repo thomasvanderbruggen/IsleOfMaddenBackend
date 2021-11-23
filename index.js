@@ -211,7 +211,8 @@ app.get('/api/leagueschedule/:seasonIndex', (req, res) => {
         "database": "tomvandy_isle_of_madden"
     }); 
     let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus from schedules where homeTeamId != 0 and awayTeamId != 0 and weekIndex < 24 and seasonIndex = ${seasonIndex}`;
-    con.query(sql, (err, sqlRes) => { 
+    con.query(sql, (err, sqlRes) => {
+        let response = {};  
         if (err) res.sendStatus(500); 
         else {
             let maxWeekIndex = 0; 
@@ -228,8 +229,9 @@ app.get('/api/leagueschedule/:seasonIndex', (req, res) => {
                     }
                 }
             }
-            sqlRes['currentWeek'] = currentWeek; 
-            res.send(sqlRes); 
+            response['currentWeek'] = currentWeek;
+            response['games'] = sqlRes; 
+            res.send(response); 
         }
     })
     con.end();
