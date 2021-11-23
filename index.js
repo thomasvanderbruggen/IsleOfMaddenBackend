@@ -210,7 +210,7 @@ app.get('/api/leagueschedule/:seasonIndex', (req, res) => {
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     }); 
-    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore from schedules where homeTeamId != 0 and awayTeamId != 0 and weekIndex < 24 and seasonIndex = ${seasonIndex}`;
+    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex from schedules where homeTeamId != 0 and awayTeamId != 0 and weekIndex < 24 and seasonIndex = ${seasonIndex}`;
     con.query(sql, (err, sqlRes) => { 
         if (err) res.sendStatus(500); 
         else {
