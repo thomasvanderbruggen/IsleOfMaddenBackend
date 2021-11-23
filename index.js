@@ -8,6 +8,42 @@ let teamStandingsKeys = [];
 let teamsWithInfo = []; 
 let players = [];
 let playerDate;
+let teamIdToName = new Map([ 
+    [980680704,'49ers'],
+    [980680705,'Bears'],
+    [980680706, 'Bengals'],
+    [980680707, 'Bills'],
+    [980680708, 'Broncos'],
+    [980680709, 'Browns'],
+    [980680710, 'Buccaneers'],
+    [980680711, 'Cardinals'],
+    [980680744, 'Chargers'],
+    [980680745, 'Chiefs'],
+    [980680746, 'Colts'],
+    [980680747, 'Cowboys'],
+    [980680748, 'Dolphins'],
+    [980680749, 'Eagles'],
+    [980680750, 'Falcons'],
+    [980680751, 'Football Team'], 
+    [980680753, 'Giants'],
+    [980680755, 'Jaguars'],
+    [980680756, 'Jets'],
+    [980680757, 'Lions'],
+    [980680759, 'Packers'],
+    [980680760, 'Panthers'],
+    [980680761, 'Patriots'],
+    [980680762, 'Raiders'],
+    [980680763, 'Rams'],
+    [980680764, 'Ravens'],
+    [980680765, 'Saints'],
+    [980680766, 'Seahawks'],
+    [980680767, 'Steelers'],
+    [980680768, 'Texans'],
+    [980680769, 'Titans'],
+    [980680770, 'Vikings'],
+    [1, 'FA']
+]);
+
 let teamNameToID = new Map([
     ['49ers', 980680704],
     ['Bears', 980680705],
@@ -43,46 +79,12 @@ let teamNameToID = new Map([
     ['Vikings',980680770]
 ]);
 
-let teamIdToName = new Map([ 
-    [980680704,'49ers'],
-    [980680705,'Bears'],
-    [980680706, 'Bengals'],
-    [980680707, 'Bills'],
-    [980680708, 'Broncos'],
-    [980680709, 'Browns'],
-    [980680710, 'Buccaneers'],
-    [980680711, 'Cardinals'],
-    [980680744, 'Chargers'],
-    [980680745, 'Chiefs'],
-    [980680746, 'Colts'],
-    [980680747, 'Cowboys'],
-    [980680748, 'Dolphins'],
-    [980680749, 'Eagles'],
-    [980680750, 'Falcons'],
-    [980680751, 'Football Team'], 
-    [980680753, 'Giants'],
-    [980680755, 'Jaguars'],
-    [980680756, 'Jets'],
-    [980680757, 'Lions'],
-    [980680759, 'Packers'],
-    [980680760, 'Panthers'],
-    [980680761, 'Patriots'],
-    [980680762, 'Raiders'],
-    [980680763, 'Rams'],
-    [980680764, 'Ravens'],
-    [980680765, 'Saints'],
-    [980680766, 'Seahawks'],
-    [980680767, 'Steelers'],
-    [980680768, 'Texans'],
-    [980680769, 'Titans'],
-    [980680770, 'Vikings'],
-    [1, 'FA']
-])
-
 app.set('port', (process.env.PORT || 3001)); 
+
 app.use(cors());
+
 app.get('/', (req, res) => { 
-    res.send('Testing'); 
+    res.send('Backend for isleofmadden.com'); 
 });
 app.get('/api/coaches', (req, res) => { 
     let con = mysql.createConnection({
@@ -198,6 +200,35 @@ app.get('/api/gamestats/:gameId', (req, res) => {
     })
     con.end();
 })
+
+
+app.get('/api/leagueschedule/:seasonIndex', (req, res) => { 
+    const {params: {seasonIndex}, } = req;
+    let con = mysql.createConnection({
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    }); 
+    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore from schedules where homeTeamId != 0 and awayTeamId != 0 and weekIndex < 24 and seasonIndex = ${seasonIndex}`;
+    con.query(sql, (err, sqlRes) => { 
+        if (err) res.sendStatus(500); 
+        else {
+            let maxWeekIndex = 0; 
+            for (const game of sqlRes) { 
+                game['homeTeam'] = teamIdToName.get(game.homeTeamId); 
+                game['awayTeam'] = teamIdToName.get(game.awayTeamId); 
+                if (game.weekIndex > maxWeekIndex) maxWeekIndex = game.weekIndex; 
+            }
+            res.send(sqlRes); 
+        }
+    })
+    con.end();
+})  
+   
+
+
+
 
 let firstRun = true;
 app.get('/api/allPlayers', (req, res) => {
