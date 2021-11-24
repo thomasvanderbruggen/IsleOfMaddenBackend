@@ -202,7 +202,37 @@ app.get('/api/gamestats/:gameId', (req, res) => {
 })
 
 
-app.get('/api/leagueschedule/:seasonIndex', (req, res) => { 
+app.get('/api/currentweek/:seasonIndex', (req, res) => { 
+    const {params: {seasonIndex}, } = req;
+    let con = mysql.createConnection({
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    }); 
+    let sql = SQL`select weekIndex, weekStatus from schedules where seasonIndex = ${seasonIndex}`; 
+    con.query(sql, (err, sqlRes) => { 
+        if (err) res.sendStatus(500); 
+        else {
+            let response = {}; 
+            let setDefaultWeek = false; 
+            let currentWeek = 1; 
+            for (const game of sqlRes) { 
+                if (!setDefaultWeek) { 
+                    if (game.weekStatus === 1){ 
+                        currentWeek = game.weekIndex; 
+                        setDefaultWeek = true;
+                    }
+                }
+            }
+            response['currentWeek'] = currentWeek; 
+            res.send(response);
+        }
+        
+    })
+})
+
+app.get('/api/leagueschedule/:seasonIndex/:weekIndex', (req, res) => { 
     const {params: {seasonIndex}, } = req;
     let con = mysql.createConnection({
         "host": process.env.host,
