@@ -233,14 +233,14 @@ app.get('/api/currentweek/:seasonIndex', (req, res) => {
 })
 
 app.get('/api/leagueschedule/:seasonIndex/:weekIndex', (req, res) => { 
-    const {params: {seasonIndex}, } = req;
+    const {params: {seasonIndex, weekIndex}, } = req;
     let con = mysql.createConnection({
         "host": process.env.host,
         "user": process.env.user,
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     }); 
-    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus from schedules where homeTeamId != 0 and awayTeamId != 0 and weekIndex < 24 and seasonIndex = ${seasonIndex}`;
+    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus from schedules where homeTeamId != 0 and awayTeamId != 0 and weekIndex = ${weekIndex} and seasonIndex = ${seasonIndex}`;
     con.query(sql, (err, sqlRes) => {
         let response = {};  
         if (err) res.sendStatus(500); 
