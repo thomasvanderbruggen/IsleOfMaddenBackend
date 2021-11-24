@@ -245,8 +245,17 @@ app.get('/api/leagueschedule/:seasonIndex/:weekIndex', (req, res) => {
         if (err) res.sendStatus(500); 
         else {
             for (game of sqlRes) { 
-                game['homeTeam'] = teamIdToName.get(game.homeTeamId); 
-                game['awayTeam'] = teamIdToName.get(game.awayTeamId); 
+                if (game.homeTeamId === 0) { 
+                    game['homeTeam'] = 'TBD';
+                }else { 
+                    game['homeTeam'] = teamIdToName.get(game.homeTeamId);
+                }
+                if (game.awayTeamId === 0) { 
+                    game['awayTeam'] = 'TBD';
+                }else { 
+                    game['awayTeam'] = teamIdToName.get(game.awayTeamId);
+                }
+                
             }
             res.send(sqlRes); 
         }
