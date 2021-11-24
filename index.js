@@ -227,9 +227,9 @@ app.get('/api/currentweek/:seasonIndex', (req, res) => {
             }
             response['currentWeek'] = currentWeek; 
             res.send(response);
-        }
-        
+        }  
     })
+    con.end();
 })
 
 app.get('/api/leagueschedule/:seasonIndex/:weekIndex', (req, res) => { 
