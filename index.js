@@ -242,26 +242,13 @@ app.get('/api/leagueschedule/:seasonIndex/:weekIndex', (req, res) => {
     }); 
     let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus from schedules where homeTeamId != 0 and awayTeamId != 0 and weekIndex = ${weekIndex} and seasonIndex = ${seasonIndex}`;
     con.query(sql, (err, sqlRes) => {
-        let response = {};  
         if (err) res.sendStatus(500); 
         else {
-            let maxWeekIndex = 0; 
-            let setDefaultWeek = false;
-            let currentWeek = 1; 
-            for (const game of sqlRes) { 
+            for (game of sqlRes) { 
                 game['homeTeam'] = teamIdToName.get(game.homeTeamId); 
                 game['awayTeam'] = teamIdToName.get(game.awayTeamId); 
-                if (game.weekIndex > maxWeekIndex) maxWeekIndex = game.weekIndex;
-                if (!setDefaultWeek) { 
-                    if (game.weekStatus === 1) { 
-                       currentWeek = game.weekIndex; 
-                       setDefaultWeek = true; 
-                    }
-                }
             }
-            response['currentWeek'] = currentWeek;
-            response['games'] = sqlRes; 
-            res.send(response); 
+            res.send(sqlRes); 
         }
     })
     con.end();
