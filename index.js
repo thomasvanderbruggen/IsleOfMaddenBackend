@@ -866,7 +866,7 @@ app.get('/api/playerSearch?', (req, res) => {
             sql += " WHERE position = 'CB' or position = 'FS' or position = 'SS'"; 
             haveFirstParam = true;
         }else if (req.query.position === "ST") { 
-            sql += " WHERE position = 'K or position = 'P'"; 
+            sql += " WHERE position = 'K' or position = 'P'"; 
             haveFirstParam = true;
         }else if (req.query.position && req.query.position != "Any"){ 
             sql += " WHERE";
