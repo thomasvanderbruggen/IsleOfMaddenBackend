@@ -850,19 +850,19 @@ app.get('/api/playerSearch?', (req, res) => {
     }else { 
         let haveFirstParam = false; 
         if (req.query.position === "OL") { 
-            sql +=  " WHERE position = LT or position = LG or position = C or position = RG or position = RT"; 
+            sql +=  " WHERE position = 'LT' or position = 'LG' or position = 'C' or position = 'RG' or position = 'RT'"; 
             haveFirstParam = true;
         }else if (req.query.position === "DL") {
-            sql += " WHERE position = DE or position = DT"; 
+            sql += " WHERE position = 'DE' or position = 'DT'"; 
             haveFirstParam = true;
         }else if (req.query.position === "LB") { 
-            sql += " WHERE position = LOLB or position = MLB or position = ROLB"; 
+            sql += " WHERE position = 'LOLB' or position = 'MLB' or position = 'ROLB'"; 
             haveFirstParam = true;
         }else if (req.query.position === "DB"){ 
-            sql += " WHERE position = CB or position = FS or position = SS"; 
+            sql += " WHERE position = 'CB' or position = 'FS' or position = 'SS'"; 
             haveFirstParam = true;
         }else if (req.query.position === "ST") { 
-            sql += " WHERE position = K or position = P"; 
+            sql += " WHERE position = 'K or position = 'P'"; 
             haveFirstParam = true;
         }else if (req.query.position && req.query.position != "Any"){ 
             sql += " WHERE";
