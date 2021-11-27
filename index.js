@@ -93,12 +93,14 @@ app.get('/api/coaches', (req, res) => {
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     }); 
+    let result = {}; 
     con.query("select * from coaches", (err, sqlRes) => { 
         if (err) res.sendStatus(500); 
         else { 
-            res.send(sqlRes); 
+            res.send(sqlRes);
         }
     });
+
     con.end();
 })
 
@@ -110,6 +112,7 @@ app.get('/api/coach/:teamName', (req, res) => {
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     }); 
+    let result = {}; 
     let sql = SQL`select * from coaches where teamName = ${teamName}`; 
     con.query(sql, (err, sqlRes) => { 
         if (err) res.sendStatus(500); 
@@ -837,6 +840,8 @@ app.get('/api/playerSearch?', (req, res) => {
             sql = `SELECT ${commonCols}, speedRating, accelRating, zoneCoverRating, manCoverRating, playRecRating, awareRating, pursuitRating, tackleRating, hitPowerRating, catchRating, agilityRating, blockShedRating`;
         }else if (req.query.position === "K"  || req.query.position === "P") { 
             sql = `SELECT ${commonCols}, kickPowerRating, kickAccRating, awareRating, speedRating, accelRating, strengthRating, throwPowerRating, throwAccShortRating, agilityRating`; 
+        }else if (req.query.position === "OL") { 
+            sql = `SELECT `
         }
     }
     sql += " FROM players"
@@ -844,13 +849,27 @@ app.get('/api/playerSearch?', (req, res) => {
          
     }else { 
         let haveFirstParam = false; 
-         
-        if (req.query.position && req.query.position != "Any"){ 
+        if (req.query.position === "OL") { 
+            sql +=  " WHERE position = LT or position = LG or position = C or position = RG or position = RT"; 
+            haveFirstParam = true;
+        }else if (req.query.position === "DL") {
+            sql += " WHERE position = DE or position = DT"; 
+            haveFirstParam = true;
+        }else if (req.query.position === "LB") { 
+            sql += " WHERE position = LOLB or position = MLB or position = ROLB"; 
+            haveFirstParam = true;
+        }else if (req.query.position === "DB"){ 
+            sql += " WHERE position = CB or position = FS or position = SS"; 
+            haveFirstParam = true;
+        }else if (req.query.position === "ST") { 
+            sql += " WHERE position = K or position = P"; 
+            haveFirstParam = true;
+        }else if (req.query.position && req.query.position != "Any"){ 
             sql += " WHERE";
             sql += ` position='${req.query.position}'`; 
                 haveFirstParam = true;
             
-        } 
+        }
         if (req.query.team && req.query.team != "Any") {
             if (haveFirstParam) { 
                 sql += ` and teamId=${req.query.team}`; 
@@ -862,7 +881,6 @@ app.get('/api/playerSearch?', (req, res) => {
             
         }
         if(req.query.name) { 
-            req.query.name.toUpperCase();
             if (haveFirstParam) { 
                 sql += ` and CONCAT(UPPER(firstName),' ', UPPER(lastName)) LIKE '%${req.query.name}%'`; 
             } else { 
