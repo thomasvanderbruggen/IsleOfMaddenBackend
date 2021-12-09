@@ -779,7 +779,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
 app.get('/api/player/:rosterId', (req, res) => { 
     const {params: {rosterId}, } = req; 
     let response = {};
-    let sql = SQL`SELECT p.*, t.primaryColor, t.secondaryColor from players p, teams t where p.teamId = t.teamId and p.rosterId = ${rosterId};`; 
+    let sql = SQL`SELECT p.*, t.primaryColor, t.secondaryColor, t.teamName from players p, teams t where p.teamId = t.teamId and p.rosterId = ${rosterId};`; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
