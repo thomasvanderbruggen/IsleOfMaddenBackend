@@ -857,7 +857,7 @@ app.get('/api/playerSearch?', (req, res) => {
             sql +=  " WHERE position = 'LT' or position = 'LG' or position = 'C' or position = 'RG' or position = 'RT'"; 
             haveFirstParam = true;
         }else if (req.query.position === "DL") {
-            sql += " WHERE position = 'DE' or position = 'DT'"; 
+            sql += " WHERE position = 'RE' or position = 'DT' or position = 'LE'"; 
             haveFirstParam = true;
         }else if (req.query.position === "LB") { 
             sql += " WHERE position = 'LOLB' or position = 'MLB' or position = 'ROLB'"; 
@@ -913,6 +913,9 @@ app.get('/api/playerSearch?', (req, res) => {
     con.end(); 
     console.log(sql);
 })
+
+
+
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
     let body = ''; 
     req.on('data', chunk=>{ 
