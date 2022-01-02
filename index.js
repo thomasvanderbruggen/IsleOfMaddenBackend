@@ -3,6 +3,7 @@ const mysql = require('mysql');
 const app = express(); 
 const SQL = require('sql-template-strings');
 const cors = require('cors');
+const { Z_FIXED } = require('zlib');
 let teamInfoKeys = []; 
 let teamStandingsKeys = [];
 let teamsWithInfo = []; 
@@ -280,7 +281,7 @@ app.get('/api/allPlayers', (req, res) => {
             "password": process.env.pw,
             "database": "tomvandy_isle_of_madden"
         }); 
-        let sql = SQL`select firstName, lastName, devTrait, age, height, weight, playerBestOvr, speedRating, awareRating, position, teamId from players order by concat(firstName, lastName) asc;`; 
+        let sql = SQL`select firstName, lastName, devTrait, age, height, weight, playerBestOvr, speedRating, awareRating, position, teamId, rosterId from players order by concat(firstName, lastName) asc;`; 
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500); 
             else {
@@ -985,6 +986,13 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         res.sendStatus(200); 
     });
 })
+ /*  
+                *   the scheduleIds are re-used every season. add 10,000 to each scheduleId for each season that it is away from the start.
+                *   eg season 2 = 10,000; season 3 = 20,000; season 4 = 30,000; etc
+                */
+const adjustId = (scheduleId, seasonIndex) => { 
+    return scheduleId + ((seasonIndex - 0) * 10000); 
+}
 
 let counter = 0; 
 app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res) => { 
@@ -1005,13 +1013,16 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             "password": process.env.pw,
             "database": "tomvandy_isle_of_madden"
             });
+             
         if (dataType === 'teamstats'){  
             let stats = json['teamStatInfoList'];
             for (const stat of stats) {
-                stat.weekIndex++;
+                stat.weekIndex++;       
+                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);  
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23
-                } 
+                }
+
                 sql = SQL`INSERT INTO team_stats (defForcedFum, defFumRec, defIntsRec, defPtsPerGame, defPassYds, defRushYds,
                     defRedZoneFGs, defRedZones, defRedZonePct, defRedZoneTDs, defSacks, defTotalYds, off4thDownAtt, off4thDownConv,
                     off4thDownConvPct, offFumLost, offIntsLost, off1stDowns, offPtsPerGame, offPassTDs, offPassYds, offRushTDs, offRushYds,
@@ -1042,6 +1053,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats= json['gameScheduleInfoList']; 
             for (let stat of stats) {
                 stat.weekIndex++; 
+
+                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex); 
+
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
@@ -1056,6 +1070,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerPuntingStatInfoList'];
             for (let stat of stats) { 
                 stat.weekIndex++; 
+
+                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);
+
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
@@ -1070,6 +1087,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerPassingStatInfoList'];
             for (let stat of stats) {
                 stat.weekIndex++; 
+
+                stat.seasonIndex = adjustId(stat.scheduleId, stat.seasonIndex);
+
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
@@ -1085,6 +1105,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerDefensiveStatInfoList']; 
             for (let stat of stats) {
                 stat.weekIndex++; 
+
+                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);
+
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
@@ -1100,6 +1123,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerKickingStatInfoList'];
             for (let stat of stats) { 
                 stat.weekIndex++; 
+                
+                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);
+
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
@@ -1114,6 +1140,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerRushingStatInfoList']; 
             for (let stat of stats) { 
                 stat.weekIndex++; 
+
+                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);
+
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
@@ -1125,12 +1154,12 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                 })
             }
         }else if (dataType === 'receiving') { 
-            Object.keys(json).forEach(key => { 
-                console.log(`Receivng stats keys ${key}`)
-            })
             let stats = json['playerReceivingStatInfoList'];
             for (let stat of stats) {
                 console.log(stat);  
+
+                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex)
+
                 stat.weekIndex++; 
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
