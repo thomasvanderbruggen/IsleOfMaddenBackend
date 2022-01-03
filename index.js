@@ -533,7 +533,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             seasonStats.passerRating = calculatePasserRating(seasonStats);
             response.seasonStats = seasonStats; 
             response.weeklyStats = weeklyStats; 
-            res.send(response);
+            res.send(sqlRes);
 
         })
 
