@@ -530,7 +530,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
             seasonStats.passCompPct = seasonStats.passCompletions / seasonStats.passAttempts * 100; 
             seasonStats.passYdsPerAtt = seasonStats.passYds / seasonStats.passAttempts;
-            seasonStats.passerRating = calculatePasserRating(seasonStats);
+            seasonStats.passerRating = calculatePasserRating(seasonStats).toFixed(2);
             response.seasonStats = seasonStats; 
             response.weeklyStats = weeklyStats; 
             res.send(response);
