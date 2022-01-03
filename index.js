@@ -503,7 +503,6 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "passYdsPerGame": 0,
             "passYdsPerAtt": 0
         }
-        let response= {}; 
         response['sql'] = sql;
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500);
