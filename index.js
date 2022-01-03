@@ -473,8 +473,9 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         "database": "tomvandy_isle_of_madden"
     });
     let sql;
-    if (position === 'qb' || position === 'QB') { 
-        sql = SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
+    if (position === 'qb' || position === 'QB') {
+
+        sql =`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
          p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName
         from passing_stats p left join rushing_stats r ON p.rosterId = r.rosterId and p.weekIndex = r.weekIndex where p.rosterId = ${playerId} and p.seasonIndex = ${year};`;
         let seasonStats = {
