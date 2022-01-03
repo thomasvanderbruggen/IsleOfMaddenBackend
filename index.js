@@ -506,34 +506,36 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             if (err) res.sendStatus(500);
             let weeklyStats = []; 
 
-            for (const week of sqlRes) { 
-                seasonStats.name = week.fullName;
-                seasonStats.rushAttempts += week.rushAtt; 
-                seasonStats.rushBTackles += week.rushBrokenTackles; 
-                seasonStats.fumbles += week.rushFum;
-                if (week.rushLongest > seasonStats.rushLongest) seasonStats.rushLongest = week.rushLongest; 
-                seasonStats.rushPts += week.rushPts; 
-                seasonStats.rushTDs += week.rushTDs; 
-                seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
-                seasonStats.passAttempts += week.passAtt; 
-                seasonStats.passCompletions += week.passComp; 
-                seasonStats.ints += week.passInts; 
-                if (week.passLongest > seasonStats.passLongest) seasonStats.passLongest = week.passLongest; 
-                seasonStats.passPts += week.passPts; 
-                seasonStats.passSacks += week.passSacks;
-                seasonStats.passTDs += week.passTDs; 
-                seasonStats.passYds += week.passYds; 
-                seasonStats.passYdsPerGame = week.passYdsPerGame;
-                weeklyStats.push(week);
-            }
-            seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
-            seasonStats.passCompPct = seasonStats.passCompletions / seasonStats.passAttempts * 100; 
-            seasonStats.passYdsPerAtt = seasonStats.passYds / seasonStats.passAttempts;
-            seasonStats.passerRating = calculatePasserRating(seasonStats);
-            let response = {}; 
-            response.seasonStats = seasonStats; 
-            response.weeklyStats = weeklyStats; 
-            res.send(response);
+            // for (const week of sqlRes) { 
+            //     seasonStats.name = week.fullName;
+            //     seasonStats.rushAttempts += week.rushAtt; 
+            //     seasonStats.rushBTackles += week.rushBrokenTackles; 
+            //     seasonStats.fumbles += week.rushFum;
+            //     if (week.rushLongest > seasonStats.rushLongest) seasonStats.rushLongest = week.rushLongest; 
+            //     seasonStats.rushPts += week.rushPts; 
+            //     seasonStats.rushTDs += week.rushTDs; 
+            //     seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
+            //     seasonStats.passAttempts += week.passAtt; 
+            //     seasonStats.passCompletions += week.passComp; 
+            //     seasonStats.ints += week.passInts; 
+            //     if (week.passLongest > seasonStats.passLongest) seasonStats.passLongest = week.passLongest; 
+            //     seasonStats.passPts += week.passPts; 
+            //     seasonStats.passSacks += week.passSacks;
+            //     seasonStats.passTDs += week.passTDs; 
+            //     seasonStats.passYds += week.passYds; 
+            //     seasonStats.passYdsPerGame = week.passYdsPerGame;
+            //     weeklyStats.push(week);
+            // }
+            // seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
+            // seasonStats.passCompPct = seasonStats.passCompletions / seasonStats.passAttempts * 100; 
+            // seasonStats.passYdsPerAtt = seasonStats.passYds / seasonStats.passAttempts;
+            // seasonStats.passerRating = calculatePasserRating(seasonStats);
+            // let response = {}; 
+            // response.seasonStats = seasonStats; 
+            // response.weeklyStats = weeklyStats; 
+            //res.send(response);
+            res.send(sqlRes);
+
         })
 
 
@@ -641,7 +643,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             }
 
         }})
-    } else if (position === 'DT' || position === 'dt' || position === 'DE' || position === 'de' || position === 'LOLB' || position === 'lolb' || position === 'ROLB' || position === 'rolb' || position === 'MLB' || position === 'mlb' || position === 'FS'|| position === 'fs' || position === 'SS' || position === 'ss' || position === 'CB' || position === 'cb' || position === 'def'){
+    } else if (position === 'DT' || position === 'dt' || position === 'RE' || position === 're' || position === 'LE' || position === 'le' || position === 'LOLB' || position === 'lolb' || position === 'ROLB' || position === 'rolb' || position === 'MLB' || position === 'mlb' || position === 'FS'|| position === 'fs' || position === 'SS' || position === 'ss' || position === 'CB' || position === 'cb' || position === 'def'){
         let seasonStats = {
             "name": '', 
             "defCatchAllowed": 0, 
