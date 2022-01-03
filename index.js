@@ -505,7 +505,9 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         con.query(sql, (err, sqlRes) => { 
             if (err) res.sendStatus(500);
             let weeklyStats = []; 
-
+            let response = {}; 
+            response['sql'] = sql; 
+            response['sqlResponse'] = sqlRes; 
             // for (const week of sqlRes) { 
             //     seasonStats.name = week.fullName;
             //     seasonStats.rushAttempts += week.rushAtt; 
@@ -534,7 +536,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             // response.seasonStats = seasonStats; 
             // response.weeklyStats = weeklyStats; 
             //res.send(response);
-            res.send(sqlRes);
+            res.send(response);
 
         })
 
