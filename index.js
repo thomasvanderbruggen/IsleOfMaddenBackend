@@ -503,7 +503,8 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "passYdsPerGame": 0,
             "passYdsPerAtt": 0
         }
-        con.query(sql, (err, sqlRes) => { 
+        let test = SQL`${sql}`;
+        con.query(test, (err, sqlRes) => { 
             if (err) res.sendStatus(500);
             let weeklyStats = []; 
             let response = {}; 
