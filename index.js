@@ -544,6 +544,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
         //     res.send(response);
 
         // })
+        res.send(response);
 
 
     } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
