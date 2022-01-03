@@ -503,46 +503,47 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             "passYdsPerGame": 0,
             "passYdsPerAtt": 0
         }
-        let test = SQL`${sql}`;
-        con.query(test, (err, sqlRes) => { 
-            if (err) res.sendStatus(500);
-            let weeklyStats = []; 
-            let response = {}; 
-            response['sql'] = sql; 
-            response['sqlResponse'] = sqlRes; 
-            response['position'] = position; 
-            response['playerId'] = playerId; 
-            // for (const week of sqlRes) { 
-            //     seasonStats.name = week.fullName;
-            //     seasonStats.rushAttempts += week.rushAtt; 
-            //     seasonStats.rushBTackles += week.rushBrokenTackles; 
-            //     seasonStats.fumbles += week.rushFum;
-            //     if (week.rushLongest > seasonStats.rushLongest) seasonStats.rushLongest = week.rushLongest; 
-            //     seasonStats.rushPts += week.rushPts; 
-            //     seasonStats.rushTDs += week.rushTDs; 
-            //     seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
-            //     seasonStats.passAttempts += week.passAtt; 
-            //     seasonStats.passCompletions += week.passComp; 
-            //     seasonStats.ints += week.passInts; 
-            //     if (week.passLongest > seasonStats.passLongest) seasonStats.passLongest = week.passLongest; 
-            //     seasonStats.passPts += week.passPts; 
-            //     seasonStats.passSacks += week.passSacks;
-            //     seasonStats.passTDs += week.passTDs; 
-            //     seasonStats.passYds += week.passYds; 
-            //     seasonStats.passYdsPerGame = week.passYdsPerGame;
-            //     weeklyStats.push(week);
-            // }
-            // seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
-            // seasonStats.passCompPct = seasonStats.passCompletions / seasonStats.passAttempts * 100; 
-            // seasonStats.passYdsPerAtt = seasonStats.passYds / seasonStats.passAttempts;
-            // seasonStats.passerRating = calculatePasserRating(seasonStats);
-            // let response = {}; 
-            // response.seasonStats = seasonStats; 
-            // response.weeklyStats = weeklyStats; 
-            //res.send(response);
-            res.send(response);
+        let response= {}; 
+        response['sql'] = sql;
+        // con.query(sql, (err, sqlRes) => { 
+        //     if (err) res.sendStatus(500);
+        //     let weeklyStats = []; 
+        //     let response = {}; 
+        //     response['sql'] = sql; 
+        //     response['sqlResponse'] = sqlRes; 
+        //     response['position'] = position; 
+        //     response['playerId'] = playerId; 
+        //     // for (const week of sqlRes) { 
+        //     //     seasonStats.name = week.fullName;
+        //     //     seasonStats.rushAttempts += week.rushAtt; 
+        //     //     seasonStats.rushBTackles += week.rushBrokenTackles; 
+        //     //     seasonStats.fumbles += week.rushFum;
+        //     //     if (week.rushLongest > seasonStats.rushLongest) seasonStats.rushLongest = week.rushLongest; 
+        //     //     seasonStats.rushPts += week.rushPts; 
+        //     //     seasonStats.rushTDs += week.rushTDs; 
+        //     //     seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
+        //     //     seasonStats.passAttempts += week.passAtt; 
+        //     //     seasonStats.passCompletions += week.passComp; 
+        //     //     seasonStats.ints += week.passInts; 
+        //     //     if (week.passLongest > seasonStats.passLongest) seasonStats.passLongest = week.passLongest; 
+        //     //     seasonStats.passPts += week.passPts; 
+        //     //     seasonStats.passSacks += week.passSacks;
+        //     //     seasonStats.passTDs += week.passTDs; 
+        //     //     seasonStats.passYds += week.passYds; 
+        //     //     seasonStats.passYdsPerGame = week.passYdsPerGame;
+        //     //     weeklyStats.push(week);
+        //     // }
+        //     // seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
+        //     // seasonStats.passCompPct = seasonStats.passCompletions / seasonStats.passAttempts * 100; 
+        //     // seasonStats.passYdsPerAtt = seasonStats.passYds / seasonStats.passAttempts;
+        //     // seasonStats.passerRating = calculatePasserRating(seasonStats);
+        //     // let response = {}; 
+        //     // response.seasonStats = seasonStats; 
+        //     // response.weeklyStats = weeklyStats; 
+        //     //res.send(response);
+        //     res.send(response);
 
-        })
+        // })
 
 
     } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
