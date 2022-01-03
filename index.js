@@ -508,6 +508,8 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
             let response = {}; 
             response['sql'] = sql; 
             response['sqlResponse'] = sqlRes; 
+            response['position'] = position; 
+            response['playerId'] = playerId; 
             // for (const week of sqlRes) { 
             //     seasonStats.name = week.fullName;
             //     seasonStats.rushAttempts += week.rushAtt; 
