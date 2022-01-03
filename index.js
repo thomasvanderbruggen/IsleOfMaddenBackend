@@ -525,7 +525,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                 seasonStats.passTDs += week.passTDs; 
                 seasonStats.passYds += week.passYds; 
                 seasonStats.passYdsPerGame = week.passYdsPerGame;
-                week.passerRating = week.passerRating.toFixed(2);
+                week.passerRating = +week.passerRating.toFixed(2);
                 weeklyStats.push(week);
             }
             seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
