@@ -1018,7 +1018,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['teamStatInfoList'];
             for (const stat of stats) {
                 stat.weekIndex++;       
-                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);  
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23
                 }
@@ -1054,8 +1053,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             for (let stat of stats) {
                 stat.weekIndex++; 
 
-                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex); 
-
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
@@ -1071,7 +1068,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             for (let stat of stats) { 
                 stat.weekIndex++; 
 
-                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);
 
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
@@ -1087,9 +1083,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerPassingStatInfoList'];
             for (let stat of stats) {
                 stat.weekIndex++; 
-
-                stat.seasonIndex = adjustId(stat.scheduleId, stat.seasonIndex);
-
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
@@ -1106,7 +1099,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             for (let stat of stats) {
                 stat.weekIndex++; 
 
-                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);
 
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
@@ -1123,9 +1115,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerKickingStatInfoList'];
             for (let stat of stats) { 
                 stat.weekIndex++; 
-                
-                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);
-
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
                 }
@@ -1141,7 +1130,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             for (let stat of stats) { 
                 stat.weekIndex++; 
 
-                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex);
 
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
@@ -1158,7 +1146,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             for (let stat of stats) {
                 console.log(stat);  
 
-                stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex)
 
                 stat.weekIndex++; 
                 if (req.params.weekType === 'pre'){ 
