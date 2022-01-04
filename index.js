@@ -408,7 +408,7 @@ app.get('/api/team/:teamName', (req, res) => {
         }
         
     })
-    sql = SQL`select * from schedules where weekIndex < 24 and (homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}) and seasonIndex = 1`; 
+    sql = SQL`select * from schedules where weekIndex < 24 and (homeTeamId = ${teamNameToID.get(teamName)} or awayTeamId = ${teamNameToID.get(teamName)}) and seasonIndex = 1 order by (weekIndex) asc`; 
     con.query(sql, (err, sqlRes) =>  {
         if (err) {
             sent = true;
