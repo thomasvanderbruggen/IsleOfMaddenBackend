@@ -489,11 +489,8 @@ app.get('/api/player/:rosterId', (req, res) => {
     });
     con.query(sql, (err, sqlRes) => { 
         if (err) res.send(404); 
-        response['player'] = sqlRes;
+        response['player'] = sqlRes[0];
         let position = sqlRes[0].position;
-        console.log('in first query');
-        console.log(sqlRes);
-        console.log(`position: ${position}`);
         if (position === 'qb' || position === 'QB') {
             let secondSql =SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
              p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName, p.weekIndex
@@ -622,7 +619,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 response.seasonStats = seasonStats; 
                 response.weeklyStats = weeklyStats; 
                 res.send(response);
-    
+                con.end();
             })
         } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
            let seasonStats = { 
@@ -662,6 +659,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     response.weeklyStats = weeklyStats; 
                     response.seasonStats = seasonStats;  
                     res.send(response);
+                    con.end();
                 }
     
             }})
@@ -707,6 +705,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     response.weeklyStats = weeklyStats; 
                     response.seasonStats = seasonStats;
                     res.send(response);
+                    con.end();
                 }
             })
         } else if (position === 'P' || position === 'p'){ 
@@ -752,6 +751,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     response.seasonStats = seasonStats; 
                     response.weeklyStats = weeklyStats; 
                     res.send(response);
+                    con.end();
                 }
             })
     
@@ -795,6 +795,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     response.weeklyStats = weeklyStats; 
                     response.seasonStats = seasonStats;
                     res.send(response); 
+                    con.end();
                 }
             })
         }
