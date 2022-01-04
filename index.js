@@ -702,7 +702,6 @@ app.get('/api/player/:rosterId', (req, res) => {
                         weeklyStats.push(week);
                         seasonStats.name = sqlRes[0].fullName;
                     }
-                    let response = {}; 
                     response.weeklyStats = weeklyStats; 
                     response.seasonStats = seasonStats;
                     res.send(response);
