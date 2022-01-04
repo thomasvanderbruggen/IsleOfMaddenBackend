@@ -676,8 +676,8 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
                     seasonStats.defTDs += week.defTDs; 
                     seasonStats.defTotalTackles += week.defTotalTackles;
                     weeklyStats.push(week);
+                    seasonStats.name = sqlRes[0].fullName;
                 }
-                seasonStats.name = sqlRes[0].fullName;
                 let response = {}; 
                 response.weeklyStats = weeklyStats; 
                 response.seasonStats = seasonStats;
