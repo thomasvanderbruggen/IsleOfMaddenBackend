@@ -4,6 +4,7 @@ const app = express();
 const SQL = require('sql-template-strings');
 const cors = require('cors');
 const { Z_FIXED } = require('zlib');
+const { resolveSoa } = require('dns');
 let teamInfoKeys = []; 
 let teamStandingsKeys = [];
 let teamsWithInfo = []; 
@@ -798,6 +799,8 @@ app.get('/api/player/:rosterId', (req, res) => {
                     con.end();
                 }
             })
+        }else { 
+            res.send(response);
         }
     })
 
