@@ -492,7 +492,8 @@ app.get('/api/player/:rosterId', (req, res) => {
         response['player'] = sqlRes;
         let position = sqlRes.position;
         console.log('in first query');
-        console.log(sqlRes);
+        console.log(`sqlRes: ${sqlRes}`);
+        console.log(`position: ${position}`);
         if (response.player.position === 'qb' || response.player.position === 'QB') {
             console.log('past if statement');
             sql =SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
