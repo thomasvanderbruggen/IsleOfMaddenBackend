@@ -723,7 +723,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "kickoffAtt": 0, 
                 "kickoffTBs": 0
             }
-            sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId where p.seasonIndex = 1 and p.rosterId = ${rosterId}`; 
+            sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId and p.scheduleId = k.scheduleId and p.weekIndex = k.weekIndex where p.seasonIndex = 1 and p.rosterId = ${rosterId} order by (p.weekIndex) asc`; 
             con.query(sql, (err, secondQuery) => { 
                 if (err) {
                     res.sendStatus(500);
