@@ -564,7 +564,7 @@ app.get('/api/player/:rosterId', (req, res) => {
             ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
             re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1`; 
     
-            con.query(sql, (err, sqlRes)=> { 
+            con.query(sql, (err, secondQuery)=> { 
                 if (err || sqlRes === []) res.sendStatus(500) 
                 let seasonStats = { 
                     "name": '',
@@ -590,7 +590,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     "recYdsPerCatch": 0
                 }
                 let weeklyStats = []; 
-                for (const week of sqlRes){ 
+                for (const week of secondQuery){ 
                     seasonStats.name = week.fullName;
                     seasonStats.rushAttempts += week.rushAtt; 
                     seasonStats.rushBrokenTackles += week.rushBrokenTackles; 
@@ -638,11 +638,11 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "recYdsPerGame": 0
             }
             sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${rosterId} and seasonIndex = 1`;
-            con.query(sql, (err, sqlRes) => { {
+            con.query(sql, (err, secondQuery) => { {
                 if (err) {res.sendStatus(500);}
                 else{
                     let weeklyStats = [];  
-                    for (const week of sqlRes) {  
+                    for (const week of secondQuery) {  
                         seasonStats.recCatches += week.recCatches; 
                         seasonStats.recDrops += week.recDrops; 
                         if (week.recLongest > seasonStats.recLongest) seasonStats.recLongest = week.recLongest; 
@@ -683,11 +683,11 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "defTotalTackles": 0
             }
             sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName from defensive_stats where seasonIndex = 1 and rosterId = ${rosterId}`; 
-            con.query(sql, (err, sqlRes) => { 
+            con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500);
                 else { 
                     let weeklyStats = []; 
-                    for (const week of sqlRes) { 
+                    for (const week of secondQuery) { 
                         seasonStats.defCatchAllowed += week.defCatchAllowed; 
                         seasonStats.defDeflections += week.defDeflections; 
                         seasonStats.defForcedFum += week.defForcedFum;
@@ -724,7 +724,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "kickoffTBs": 0
             }
             sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId where p.seasonIndex = 1 and p.rosterId = ${rosterId}`; 
-            con.query(sql, (err, sqlRes) => { 
+            con.query(sql, (err, secondQuery) => { 
                 if (err) {
                     res.sendStatus(500);
                     console.log(err); 
@@ -732,7 +732,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     
                 else {
                     let weeklyStats = []; 
-                    for (const week of sqlRes) { 
+                    for (const week of secondQuery) { 
                         seasonStats.puntsBlocked += week.puntsBlocked; 
                         seasonStats.puntsIn20 += week.puntsIn20; 
                         seasonStats.puntLongest += week.puntLongest; 
@@ -771,12 +771,12 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "xpMade": 0,
                 "xpCompPct": 0
             } 
-            sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct, fullName from kicking_stats where seasonIndex = 1 and rosterId = ${rosterId}`;
-            con.query(sql, (err, sqlRes) => { 
+            sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct, fullName, weekIndex from kicking_stats where seasonIndex = 1 and rosterId = ${rosterId}`;
+            con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500); 
                 else {
                     let weeklyStats = [];  
-                    for (const week of sqlRes) { 
+                    for (const week of secondQuery) { 
                         seasonStats.kickPts += week.kickPts; 
                         seasonStats.fgAtt += week.fGAtt; 
                         seasonStats.fg50PlusAtt += week.fG50PlusAtt; 
