@@ -655,7 +655,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     }
                     seasonStats.recYdsPerGame = sqlRes[0].recYdsPerGame;
                     seasonStats.recYdsPerCatch = (seasonStats.recYds / seasonStats.recCatches); 
-                    seasonStats.name = sqlRes[0].fullName;
+                    seasonStats.name = secondQuery[0].fullName;
                     let response = {};
                     response.weeklyStats = weeklyStats; 
                     response.seasonStats = seasonStats;  
@@ -700,7 +700,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                         seasonStats.defTDs += week.defTDs; 
                         seasonStats.defTotalTackles += week.defTotalTackles;
                         weeklyStats.push(week);
-                        seasonStats.name = sqlRes[0].fullName;
+                        seasonStats.name = secondQuery[0].fullName;
                     }
                     response.weeklyStats = weeklyStats; 
                     response.seasonStats = seasonStats;
@@ -746,7 +746,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     }
                     seasonStats.puntNetYdsPerAtt = seasonStats.puntNetYds / seasonStats.puntAtt; 
                     seasonStats.puntYdsPerAtt = seasonStats.puntYds / seasonStats.puntAtt; 
-                    seasonStats.name = sqlRes[0].fullName;
+                    seasonStats.name = secondQuery[0].fullName;
                     let response = {}; 
                     response.seasonStats = seasonStats; 
                     response.weeklyStats = weeklyStats; 
@@ -791,7 +791,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     }
                     seasonStats.fgCompPct = seasonStats.fgMade / seasonStats.fgAtt; 
                     seasonStats.xpCompPct = seasonStats.xpMade / seasonStats.xpAtt;
-                    seasonStats.name = sqlRes[0].fullName;
+                    seasonStats.name = secondQuery[0].fullName;
                     response.weeklyStats = weeklyStats; 
                     response.seasonStats = seasonStats;
                     res.send(response); 
