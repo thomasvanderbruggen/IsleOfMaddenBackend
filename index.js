@@ -526,6 +526,7 @@ app.get('/api/player/:rosterId', (req, res) => {
             }
             con.query(sql, (err, secondQuery) => { 
                 console.log('in second query');
+                console.log(secondQuery);
                 if (err) res.sendStatus(500);
                 let weeklyStats = []; 
                 let response = {}; 
