@@ -747,7 +747,6 @@ app.get('/api/player/:rosterId', (req, res) => {
                     seasonStats.puntNetYdsPerAtt = seasonStats.puntNetYds / seasonStats.puntAtt; 
                     seasonStats.puntYdsPerAtt = seasonStats.puntYds / seasonStats.puntAtt; 
                     seasonStats.name = secondQuery[0].fullName;
-                    let response = {}; 
                     response.seasonStats = seasonStats; 
                     response.weeklyStats = weeklyStats; 
                     res.send(response);
