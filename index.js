@@ -490,6 +490,7 @@ app.get('/api/player/:rosterId', (req, res) => {
     con.query(sql, (err, sqlRes) => { 
         if (err) res.send(404); 
         response['player'] = sqlRes;
+        console.log('in first query');
         if (response.player.position === 'qb' || response.player.position === 'QB') {
 
             sql =SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
@@ -521,6 +522,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "passYdsPerAtt": 0
             }
             con.query(sql, (err, sqlRes) => { 
+                console.log('in second query');
                 if (err) res.sendStatus(500);
                 let weeklyStats = []; 
                 let response = {}; 
@@ -552,7 +554,6 @@ app.get('/api/player/:rosterId', (req, res) => {
                 response.seasonStats = seasonStats; 
                 response.weeklyStats = weeklyStats; 
                 res.send(response);
-    
             })
     
     
