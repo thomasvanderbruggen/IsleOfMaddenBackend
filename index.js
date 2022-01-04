@@ -616,7 +616,6 @@ app.get('/api/player/:rosterId', (req, res) => {
                 if (seasonStats.recCatches > 0){ 
                     seasonStats.recYdsPerCatch = seasonStats.recYds / seasonStats.recCatches;
                 }
-                let response = {}; 
                 response.seasonStats = seasonStats; 
                 response.weeklyStats = weeklyStats; 
                 res.send(response);
