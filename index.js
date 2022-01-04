@@ -490,9 +490,9 @@ app.get('/api/player/:rosterId', (req, res) => {
     con.query(sql, (err, sqlRes) => { 
         if (err) res.send(404); 
         response['player'] = sqlRes;
-        let position = sqlRes.position;
+        let position = sqlRes[0].position;
         console.log('in first query');
-        console.log(`sqlRes: ${sqlRes}`);
+        console.log(sqlRes);
         console.log(`position: ${position}`);
         if (response.player.position === 'qb' || response.player.position === 'QB') {
             console.log('past if statement');
