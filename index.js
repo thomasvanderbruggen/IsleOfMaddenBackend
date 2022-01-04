@@ -656,7 +656,6 @@ app.get('/api/player/:rosterId', (req, res) => {
                     seasonStats.recYdsPerGame = sqlRes[0].recYdsPerGame;
                     seasonStats.recYdsPerCatch = (seasonStats.recYds / seasonStats.recCatches); 
                     seasonStats.name = secondQuery[0].fullName;
-                    let response = {};
                     response.weeklyStats = weeklyStats; 
                     response.seasonStats = seasonStats;  
                     res.send(response);
