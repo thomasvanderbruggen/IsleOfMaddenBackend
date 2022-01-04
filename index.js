@@ -496,7 +496,7 @@ app.get('/api/player/:rosterId', (req, res) => {
         console.log(`position: ${position}`);
         if (position === 'qb' || position === 'QB') {
             console.log('past if statement');
-            sql =SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
+            let secondSql =SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
              p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName, p.weekIndex
             from passing_stats p left join rushing_stats r ON p.rosterId = r.rosterId and p.weekIndex = r.weekIndex and p.scheduleId = r.scheduleId where p.rosterId = ${rosterId} and p.seasonIndex = 1 order by (p.weekIndex) asc;`;
             let seasonStats = {
@@ -524,12 +524,12 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "passYdsPerGame": 0,
                 "passYdsPerAtt": 0
             }
-            con.query(sql, (err, secondQuery) => { 
+            con.query(secondSql, (err, secondQuery) => { 
                 console.log('in second query');
-                console.log(secondQuery);
+                console.log(err);
+                console.log(sql);
                 if (err) res.sendStatus(500);
                 let weeklyStats = []; 
-                let response = {}; 
                 for (const week of secondQuery) { 
                     seasonStats.name = week.fullName;
                     seasonStats.rushAttempts += week.rushAtt; 
