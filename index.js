@@ -494,7 +494,7 @@ app.get('/api/player/:rosterId', (req, res) => {
         console.log('in first query');
         console.log(sqlRes);
         console.log(`position: ${position}`);
-        if (response.player.position === 'qb' || response.player.position === 'QB') {
+        if (position === 'qb' || position === 'QB') {
             console.log('past if statement');
             sql =SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
              p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName, p.weekIndex
@@ -560,7 +560,7 @@ app.get('/api/player/:rosterId', (req, res) => {
             })
     
     
-        } else if (response.player.position === 'HB' || response.player.position === 'hb' || response.player.position === 'FB' || response.player.position === 'fb'){
+        } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
             sql = SQL`select ru.fullName, ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
             ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
             re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId where ru.rosterId = ${playerId} and re.seasonIndex = ${year}`; 
@@ -623,7 +623,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 res.send(response);
     
             })
-        } else if (response.player.position === 'WR' || response.player.position === 'wr' || response.player.position === 'TE' || response.player.position === 'te'){ 
+        } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
            let seasonStats = { 
                 "name": '',
                 "recCatches": 0,
@@ -664,10 +664,10 @@ app.get('/api/player/:rosterId', (req, res) => {
                 }
     
             }})
-        } else if (response.player.position === 'DT' || response.player.position === 'dt' || response.player.position === 'RE' || response.player.position === 're' || response.player.position === 'LE' || 
-        response.player.position === 'le' || response.player.position === 'LOLB' || response.player.position === 'lolb' || response.player.position === 'ROLB' || response.player.position === 'rolb' || 
-        response.player.position === 'MLB' || response.player.position === 'mlb' || response.player.position === 'FS'|| response.player.position === 'fs' || response.player.position === 'SS' || response.player.position === 'ss' || response.player.position === 'CB' || 
-        response.player.position === 'cb' || response.player.position === 'def'){
+        } else if (position === 'DT' || position === 'dt' || position === 'RE' || position === 're' || position === 'LE' || 
+        position === 'le' || position === 'LOLB' || position === 'lolb' || position === 'ROLB' || position === 'rolb' || 
+        position === 'MLB' || position === 'mlb' || position === 'FS'|| position === 'fs' || position === 'SS' || position === 'ss' || position === 'CB' || 
+        position === 'cb' || position === 'def'){
             let seasonStats = {
                 "name": '', 
                 "defCatchAllowed": 0, 
@@ -708,7 +708,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     res.send(response);
                 }
             })
-        } else if (response.player.position === 'P' || response.player.position === 'p'){ 
+        } else if (position === 'P' || position === 'p'){ 
             let seasonStats = { 
                 "name": '',
                 "puntsBlocked": 0, 
@@ -754,7 +754,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 }
             })
     
-        } else if (response.player.position === 'K' || response.player.position === 'k') {
+        } else if (position === 'K' || position === 'k') {
             let seasonStats = { 
                 "name": 0,
                 "kickPts": 0, 
