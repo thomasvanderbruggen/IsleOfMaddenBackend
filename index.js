@@ -495,7 +495,6 @@ app.get('/api/player/:rosterId', (req, res) => {
         console.log(sqlRes);
         console.log(`position: ${position}`);
         if (position === 'qb' || position === 'QB') {
-            console.log('past if statement');
             let secondSql =SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
              p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName, p.weekIndex
             from passing_stats p left join rushing_stats r ON p.rosterId = r.rosterId and p.weekIndex = r.weekIndex and p.scheduleId = r.scheduleId where p.rosterId = ${rosterId} and p.seasonIndex = 1 order by (p.weekIndex) asc;`;
@@ -558,6 +557,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 response.seasonStats = seasonStats; 
                 response.weeklyStats = weeklyStats; 
                 res.send(response);
+                con.end()
             })
     
     
@@ -801,7 +801,7 @@ app.get('/api/player/:rosterId', (req, res) => {
     })
 
 
-    con.end(); 
+    
 })
 
 app.get('/api/powerranking/', (req, res) => { 
