@@ -1308,7 +1308,7 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                 
             if (player.signatureSlotList){
                 for (const ability of player.signatureSlotList){
-                    if (typeof (abilities.find(element => element.signatureTitle == ability.signatureTitle)) == "undefined"){
+                    if ((typeof (abilities.find(element => element.signatureTitle == ability.signatureTitle))) == "undefined"){
                         let newAbility = {}; 
                         newAbility['signatureTitle'] = ability.signatureTitle; 
                         newAbility['logo'] = ability.signatureLogoId; 
