@@ -1308,6 +1308,9 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
 
             if (player.devTrait === 3){ 
                 console.log(signatureSlotList); 
+                for (const ability of signatureSlotList){ 
+                    console.log(ability);
+                }
             }
             // if (player.signatureSlotList !== undefined){
             //     console.log(player.signatureSlotList[0]);
