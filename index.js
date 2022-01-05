@@ -1185,10 +1185,11 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
             "password": process.env.pw,
             "database": "tomvandy_isle_of_madden"
             });
-        for (player of json) { 
+        for (const player of json) { 
             if (player.teamId == 0) { 
                 player.teamId = 1;
             }
+            console.log(`PosCatchTrait: ${player.posCatchTrait} Type: ${typeof player.posCatchTrait}`)
             // 118 values
             let sql = SQL`INSERT INTO players (accelRating, age, agilityRating, awareRating, bCVRating, bigHitTrait, birthDay, birthMonth, birthYear, blockShedRating, breakSackRating, breakTackleRating, cITRating, capHit,
                 capReleaseNetSavings, capReleasePenalty, carryRating, catchRating, changeOfDirectionRating, clutchTrait, college, confRating, contractBonus, contractLength, contractSalary, contractYearsLeft, coverBallTrait, dLBullRushTrait, 
