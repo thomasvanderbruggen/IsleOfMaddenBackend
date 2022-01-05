@@ -1259,7 +1259,7 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
             if (player.teamId == 0) { 
                 player.teamId = 1;
             }
-            if (player.rosterId = 553125248){
+            if (player.rosterId == 553125248){
                 console.log(player);
             }
             // 118 values
