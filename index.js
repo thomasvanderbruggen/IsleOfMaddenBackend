@@ -1236,7 +1236,8 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
                     if (err) throw err;
                 })
 
-            if (player.devTrait === 3){         
+            if (player.devTrait === 3){
+                console.log('XF');   
                 console.log(player.signatureSlotList);
             }
         }
