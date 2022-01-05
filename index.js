@@ -1236,14 +1236,9 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
                     if (err) throw err;
                 })
 
-                if (player.devTrait === 3){ 
-                    for (const ability of player.signatureSlotList){
-                        console.log(ability.signatureAbility); 
-                    }
-                }
-            
-
-                    
+            if (player.devTrait === 3){         
+                console.log(player.signatureSlotList);
+            }
         }
         console.log(sql);
         con.end();
