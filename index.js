@@ -1305,9 +1305,13 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                     if (err) throw err;
                 })
                 
-            if (player.signatureSlotList !== undefined){
-                console.log(player.signatureSlotList[0]);
+
+            if (player.devTrait === 3){ 
+                console.log(signatureSlotList); 
             }
+            // if (player.signatureSlotList !== undefined){
+            //     console.log(player.signatureSlotList[0]);
+            // }
         
             }
         con.end();
