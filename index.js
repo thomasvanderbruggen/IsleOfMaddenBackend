@@ -1307,7 +1307,6 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                 
             if (player.signatureSlotList){
                 for (const ability of player.signatureSlotList){
-                        console.log(ability.signatureAbility);
                         console.log(`Ability: ${ability.signatureAbility.signatureTitle} Logo: ${ability.signatureAbility.signatureLogoId}`);
                     
                 }
