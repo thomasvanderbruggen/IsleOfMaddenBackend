@@ -1257,6 +1257,7 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
             "password": process.env.pw,
             "database": "tomvandy_isle_of_madden"
             });
+        const abilities = []; 
         for (let player of json) { 
             if (player.teamId == 0) { 
                 player.teamId = 1;
@@ -1307,10 +1308,18 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                 
             if (player.signatureSlotList){
                 for (const ability of player.signatureSlotList){
-                    console.log(ability.signatureAbility);
+                    if (typeof (abilities.find(element => element.signatureTitle == ability.signatureTitle)) == "undefined"){
+                        let newAbility = {}; 
+                        newAbility['signatureTitle'] = ability.signatureTitle; 
+                        newAbility['logo'] = ability.signatureLogoId; 
+                        abilities.push(newAbility)
+                    }
                 }
             }
         
+            }
+            for (const ability of abilities){
+                console.log(`Ability: ${ability.signatureTitle} Logo: ${ability.logo}`)
             }
         con.end();
         res.sendStatus(200);
