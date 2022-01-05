@@ -1309,6 +1309,12 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
             if (player.signatureSlotList !== undefined){
                 for (const ability of player.signatureSlotList){
                     console.log(`Ability ${ability.signatureAbility.signatureTitle} Logo ${ability.signatureAbility.signatureLogoId}`)
+                    if (ability.signatureAbility.signatureLogoId !== 0){
+                        let sql = SQL`INSERT INTO temp_abilities (title, logo) VALUES (${ability.signatureAbility.signatureTitle}, ${ability.signatureAbility.signatureLogoId})`;
+                        con.query(sql, (err, res) => {
+                            if (err) throw err;
+                        })
+                    }
                 }
             }
         
