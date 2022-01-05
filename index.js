@@ -562,7 +562,7 @@ app.get('/api/player/:rosterId', (req, res) => {
         } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
             sql = SQL`select ru.fullName, ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
             ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
-            re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1`; 
+            re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1`; 
     
             con.query(sql, (err, secondQuery)=> { 
                 if (err || sqlRes === []) res.sendStatus(500) 
@@ -680,7 +680,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "defTDs": 0, 
                 "defTotalTackles": 0
             }
-            sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName from defensive_stats where seasonIndex = 1 and rosterId = ${rosterId}`; 
+            sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, weekIndex from defensive_stats where seasonIndex = 1 and rosterId = ${rosterId}`; 
             con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500);
                 else { 
@@ -721,7 +721,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "kickoffAtt": 0, 
                 "kickoffTBs": 0
             }
-            sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId and p.scheduleId = k.scheduleId and p.weekIndex = k.weekIndex where p.seasonIndex = 1 and p.rosterId = ${rosterId} order by (p.weekIndex) asc`; 
+            sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs, p.weekIndex from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId and p.scheduleId = k.scheduleId and p.weekIndex = k.weekIndex where p.seasonIndex = 1 and p.rosterId = ${rosterId} order by (p.weekIndex) asc`; 
             con.query(sql, (err, secondQuery) => { 
                 if (err) {
                     res.sendStatus(500);
