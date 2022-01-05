@@ -1307,14 +1307,10 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                 
 
             if (player.signatureSlotList !== undefined){
-                for (const ability of player.signatureSlotList){
-                    console.log(`Ability ${ability.signatureAbility.signatureTitle} Logo ${ability.signatureAbility.signatureLogoId}`)
-                    if (ability.signatureAbility.signatureLogoId !== 0){
-                        let sql = SQL`INSERT INTO temp_ablities (title, logo) VALUES (${ability.signatureAbility.signatureTitle}, ${ability.signatureAbility.signatureLogoId})`;
-                        con.query(sql, (err, res) => {
-                            if (err) throw err;
-                        })
-                    }
+                for (let ability of player.signatureSlotList){
+                    ability.abilityId = ability.signatureAbility.signatureLogoId + player.rosterId; 
+                    let sql = SQL`INSERT INTO player_abilities (abilityId, abilityTitle, abilityLogo, abilityDescription, rosterId) VALUES (${ability.abilityId}, ${ability.signatureAbility.signatureTitle}, ${ability.signatureAbility.abilityLogo}, ${ability.signatureAbility.signatureDescription}, ${player.rosterId}) ON DUPLICATE KEY UPDATE abilityId=abilityId)`;
+                    
                 }
             }
         
