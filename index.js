@@ -1306,12 +1306,11 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                 })
                 
 
-            if (player.devTrait === 3){ 
-                console.log(player);
+            if (player.signatureSlotList !== undefined){
+                for (const ability of player.signatureSlotList){
+                    console.log(`Ability ${ability.signatureAbility.signatureTitle} Logo ${ability.signatureAbility.signatureLogoId}`)
+                }
             }
-            // if (player.signatureSlotList !== undefined){
-            //     console.log(player.signatureSlotList[0]);
-            // }
         
             }
         con.end();
