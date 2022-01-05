@@ -1106,9 +1106,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerDefensiveStatInfoList']; 
             for (let stat of stats) {
                 stat.weekIndex++; 
-                if (stat.rosterId == 553125248){
-                    console.log(stat);
-                }
 
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
@@ -1196,7 +1193,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
             let sql = SQL`INSERT INTO players (accelRating, age, agilityRating, awareRating, bCVRating, bigHitTrait, birthDay, birthMonth, birthYear, blockShedRating, breakSackRating, breakTackleRating, cITRating, capHit,
                 capReleaseNetSavings, capReleasePenalty, carryRating, catchRating, changeOfDirectionRating, clutchTrait, college, confRating, contractBonus, contractLength, contractSalary, contractYearsLeft, coverBallTrait, dLBullRushTrait, 
                 dLSpinTrait, dLSwimTrait, desiredBonus, desiredLength, desiredSalary, devTrait, draftPick, draftRound, dropOpenPassTrait, durabilityGrade, experiencePoints, feetInBoundsTrait, fightForYardsTrait,
-                finesseMovesRating, firstName, forcePassTrait, hPCatchTrait, height, highMotorTrait, hitPowerRating, homeState, homeTown, impactBlockRating, injuryLength, injuryType,
+                finesseMovesRating, firstName, forcePassTrait, hPCatchTrait, height, highMotorTrait, hitPowerRating, homeState, homeTown, impactBlockRating, injuryRating, injuryLength, injuryType,
                 intangibleGrade, isActive, isFreeAgent, isOnIr, isOnPracticeSquad, jerseyNum, jukeMoveRating, jumpRating, kickAccRating, kickPowerRating, kickRetRating,
                 lBStyleTrait, lastName, leadBlockRating, legacyScore, manCoverRating, passBlockFinesseRating, passBlockPowerRating, passBlockRating, penaltyTrait, physicalGrade,
                 playActionRating, playBallTrait, playRecRating, playerBestOvr, playerSchemeOvr, portraitId, posCatchTrait, position, powerMovesRating, predictTrait, presentationId, pressRating, productionGrade, 
@@ -1209,7 +1206,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
                 ${player.contractBonus}, ${player.contractLength}, ${player.contractSalary}, ${player.contractYearsLeft}, ${player.coverBallTrait}, ${player.dLBullRushTrait}, ${player.dLSpinTrait}, ${player.dLSwimTrait},
                 ${player.desiredBonus}, ${player.desiredLength}, ${player.desiredSalary}, ${player.devTrait}, ${player.draftPick}, ${player.draftRound}, ${player.dropOpenPassTrait}, ${player.durabilityGrade}, ${player.experiencePoints},${player.feetInBoundsTrait},
                 ${player.fightForYardsTrait}, ${player.finesseMovesRating}, ${player.firstName}, ${player.forcePassTrait}, ${player.hPCatchTrait}, ${player.height}, ${player.highMotorTrait}, ${player.hitPowerRating}, ${player.homeState},
-                ${player.homeTown}, ${player.impactBlockRating}, ${player.injuryLength}, ${player.injuryType}, ${player.intangibleGrade}, ${player.isActive}, ${player.isFreeAgent}, ${player.isOnIr}, ${player.IsOnPracticeSquad}, ${player.jerseyNum}, ${player.jukeMoveRating}, ${player.jumpRating},
+                ${player.homeTown}, ${player.impactBlockRating},${player.injuryRating}, ${player.injuryLength}, ${player.injuryType}, ${player.intangibleGrade}, ${player.isActive}, ${player.isFreeAgent}, ${player.isOnIr}, ${player.IsOnPracticeSquad}, ${player.jerseyNum}, ${player.jukeMoveRating}, ${player.jumpRating},
                 ${player.kickAccRating}, ${player.kickPowerRating}, ${player.kickRetRating}, ${player.lBStyleTrait}, ${player.lastName}, ${player.leadBlockRating}, ${player.legacyScore}, ${player.manCoverRating}, ${player.passBlockFinesseRating},
                 ${player.passBlockPowerRating}, ${player.passBlockRating}, ${player.penaltyTrait}, ${player.physicalGrade}, ${player.playActionRating}, ${player.playBallTrait}, ${player.playRecRating}, ${player.playerBestOvr}, ${player.playerSchemeOvr},
                 ${player.portraitId}, ${player.posCatchTrait}, ${player.position}, ${player.powerMovesRating}, ${player.predictTrait}, ${player.presentationId}, ${player.pressRating}, ${player.productionGrade}, ${player.pursuitRating}, 
@@ -1220,7 +1217,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
                 ON DUPLICATE KEY UPDATE accelRating=VALUES(accelRating), age=VALUES(age), agilityRating=VALUES(agilityRating), awareRating=VALUES(awareRating), bCVRating=VALUES(bCVRating), blockShedrating=VALUES(blockShedRating), breakSackRating=VALUES(breakSackRating), 
                 breakTackleRating=VALUES(breakTackleRating), cITRating=VALUES(cITRating), capHit=VALUES(capHit), capReleaseNetSavings=VALUES(capReleaseNetSavings), carryRating=VALUES(carryRating), catchRating=VALUES(catchRating), changeOfDirectionRating=VALUES(changeOfDirectionRating), confRating=VALUES(confRating), 
                 contractBonus=VALUES(contractBonus), contractLength=VALUES(contractLength), contractSalary=VALUES(contractSalary), contractYearsLeft=VALUES(contractYearsLeft), desiredBonus=VALUES(desiredBonus), desiredLength=VALUES(desiredLength),
-                desiredSalary=VALUES(desiredSalary), devTrait=VALUES(devTrait), durabilityGrade=VALUES(durabilityGrade), experiencePoints=VALUES(experiencePoints), finesseMovesRating=VALUES(finesseMovesRating), impactBlockRating=VALUES(impactBlockRating), injuryLength=VALUES(injuryLength), 
+                desiredSalary=VALUES(desiredSalary), devTrait=VALUES(devTrait), durabilityGrade=VALUES(durabilityGrade), experiencePoints=VALUES(experiencePoints), finesseMovesRating=VALUES(finesseMovesRating), impactBlockRating=VALUES(impactBlockRating), injuryRating=VALUES(injuryRating), injuryLength=VALUES(injuryLength), 
                 injuryType=VALUES(injuryType), intangibleGrade=VALUES(intangibleGrade), isActive=VALUES(isActive), isFreeAgent=VALUES(isFreeAgent), isOnIr=VALUES(isOnIr), isOnPracticeSquad=VALUES(isOnPracticeSquad), jerseyNum=VALUES(jerseyNum),
                     jukeMoveRating=VALUES(jukeMoveRating), jumpRating=VALUES(jumpRating), kickAccRating=VALUES(kickAccRating), kickPowerRating=VALUES(kickPowerRating), kickRetRating=VALUES(kickRetRating), 
                     leadBlockRating=VALUES(leadBlockRating), legacyScore=VALUES(legacyScore), manCoverRating=VALUES(manCoverRating), passBlockFinesseRating=VALUES(passBlockFinesseRating), passBlockPowerRating=VALUES(passBlockPowerRating), 
