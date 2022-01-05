@@ -636,7 +636,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "recYdsPerCatch": 0, 
                 "recYdsPerGame": 0
             }
-            sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${rosterId} and seasonIndex = 1 order by (weekIndex) asc`;
+            sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName, weekIndex from receiving_stats where rosterId = ${rosterId} and seasonIndex = 1 order by (weekIndex) asc`;
             con.query(sql, (err, secondQuery) => { {
                 if (err) {res.sendStatus(500);}
                 else{
@@ -1107,7 +1107,9 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerDefensiveStatInfoList']; 
             for (let stat of stats) {
                 stat.weekIndex++; 
-
+                if (stat.scheduleId = 543424725){
+                    console.log(stat);
+                }
 
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23; 
