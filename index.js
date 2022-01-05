@@ -1305,7 +1305,11 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                     if (err) throw err;
                 })
                 
-
+            
+            if (player.rosterId = 77918237){ 
+                console.log(player.signatureSlotList);
+            }
+            
             if (player.signatureSlotList !== undefined){
                 for (let ability of player.signatureSlotList){
                     if (ability.signatureAbility.signatureLogoId !== 0){
