@@ -1259,6 +1259,9 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
             if (player.teamId == 0) { 
                 player.teamId = 1;
             }
+            if (player.rosterId = 553125248){
+                console.log(player);
+            }
             // 118 values
             let sql = SQL`INSERT INTO players (accelRating, age, agilityRating, awareRating, bCVRating, bigHitTrait, birthDay, birthMonth, birthYear, blockShedRating, breakSackRating, breakTackleRating, cITRating, capHit,
                 capReleaseNetSavings, capReleasePenalty, carryRating, catchRating, changeOfDirectionRating, clutchTrait, college, confRating, contractBonus, contractLength, contractSalary, contractYearsLeft, coverBallTrait, dLBullRushTrait, 
