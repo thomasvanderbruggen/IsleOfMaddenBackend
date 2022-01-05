@@ -1189,7 +1189,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
             if (player.teamId == 0) { 
                 player.teamId = 1;
             }
-            console.log(`PosCatchTrait: ${player.posCatchTrait} Type: ${typeof player.posCatchTrait}`)
+            
             // 118 values
             let sql = SQL`INSERT INTO players (accelRating, age, agilityRating, awareRating, bCVRating, bigHitTrait, birthDay, birthMonth, birthYear, blockShedRating, breakSackRating, breakTackleRating, cITRating, capHit,
                 capReleaseNetSavings, capReleasePenalty, carryRating, catchRating, changeOfDirectionRating, clutchTrait, college, confRating, contractBonus, contractLength, contractSalary, contractYearsLeft, coverBallTrait, dLBullRushTrait, 
@@ -1230,7 +1230,8 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
                     strengthRating=VALUES(strengthRating), tackleRating=VALUES(tackleRating), teamId=VALUES(teamId), teamSchemeOvr=VALUES(teamSchemeOvr), throwAccDeepRating=VALUES(throwAccDeepRating), throwAccMedRating=VALUES(throwAccMedRating),
                     throwAccRating=VALUES(throwAccRating), throwAccShortRating=VALUES(throwAccShortRating), throwOnRunRating=VALUES(throwOnRunRating), throwPowerRating=VALUES(throwPowerRating), throwUnderPressureRating=VALUES(throwUnderPressureRating), 
                     toughRating=VALUES(toughRating), truckRating=VALUES(truckRating), weight=VALUES(weight), yACCatchTrait=VALUES(yACCatchTrait), yearsPro=VALUES(yearsPro), zoneCoverRating=VALUES(zoneCoverRating)`;
-                con.query(sql, (err, res) => { 
+                    console.log(sql);
+                    con.query(sql, (err, res) => { 
                     if (err) throw err;
                 })
             
