@@ -1308,11 +1308,14 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
 
             if (player.signatureSlotList !== undefined){
                 for (let ability of player.signatureSlotList){
-                    ability.abilityId = ability.signatureAbility.signatureLogoId + player.rosterId; 
-                    let sql = SQL`INSERT INTO player_abilities (abilityId, abilityTitle, abilityLogo, abilityDescription, rosterId) VALUES (${ability.abilityId}, ${ability.signatureAbility.signatureTitle}, ${ability.signatureAbility.signatureLogoId}, ${ability.signatureAbility.signatureDescription}, ${player.rosterId}) ON DUPLICATE KEY UPDATE abilityId=${ability.abilityId}, abilityLogo=VALUES(abilityLogo)`;
-                    con.query(sql, (err, res) => {
-                        if (err) throw err;
-                    })
+                    if (ability.signatureAbility.signatureLogoId !== 0){
+                        ability.abilityId = ability.signatureAbility.signatureLogoId + player.rosterId; 
+                        let sql = SQL`INSERT INTO player_abilities (abilityId, abilityTitle, abilityLogo, abilityDescription, rosterId) VALUES (${ability.abilityId}, ${ability.signatureAbility.signatureTitle}, ${ability.signatureAbility.signatureLogoId}, ${ability.signatureAbility.signatureDescription}, ${player.rosterId}) ON DUPLICATE KEY UPDATE abilityId=${ability.abilityId}, abilityLogo=VALUES(abilityLogo)`;
+                        con.query(sql, (err, res) => {
+                            if (err) throw err;
+                     })
+                    }
+
                 }
             }
         
