@@ -1013,7 +1013,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
 
     req.on('end', () => {
         const {params: {dataType, weekType},} = req; 
-        console.log(`----${dataType}----`);
         let json = JSON.parse(body)
         let sql; 
         let con = mysql.createConnection({
@@ -1155,7 +1154,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
         }else if (dataType === 'receiving') { 
             let stats = json['playerReceivingStatInfoList'];
             for (let stat of stats) {
-                console.log(stat);  
 
 
                 stat.weekIndex++; 
