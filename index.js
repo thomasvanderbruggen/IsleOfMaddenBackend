@@ -1237,7 +1237,6 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
                 })
 
         }
-        console.log(sql);
         con.end();
         res.sendStatus(200); 
     })
@@ -1308,18 +1307,10 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                 
             if (player.signatureSlotList){
                 for (const ability of player.signatureSlotList){
-                    if ((typeof (abilities.find(element => element.signatureTitle == ability.signatureTitle))) == "undefined"){
-                        let newAbility = {}; 
-                        newAbility['signatureTitle'] = ability.signatureTitle; 
-                        newAbility['logo'] = ability.signatureLogoId; 
-                        abilities.push(newAbility)
-                    }
+                    console.log(ability.signatureAbility);
                 }
             }
         
-            }
-            for (const ability of abilities){
-                console.log(`Ability: ${ability.signatureTitle} Logo: ${ability.logo}`)
             }
         con.end();
         res.sendStatus(200);
