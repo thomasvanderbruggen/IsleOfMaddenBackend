@@ -1185,13 +1185,14 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
             "password": process.env.pw,
             "database": "tomvandy_isle_of_madden"
             });
+        let sql;
         for (const player of json) { 
             if (player.teamId == 0) { 
                 player.teamId = 1;
             }
             
             // 118 values
-            let sql = SQL`INSERT INTO players (accelRating, age, agilityRating, awareRating, bCVRating, bigHitTrait, birthDay, birthMonth, birthYear, blockShedRating, breakSackRating, breakTackleRating, cITRating, capHit,
+            sql = SQL`INSERT INTO players (accelRating, age, agilityRating, awareRating, bCVRating, bigHitTrait, birthDay, birthMonth, birthYear, blockShedRating, breakSackRating, breakTackleRating, cITRating, capHit,
                 capReleaseNetSavings, capReleasePenalty, carryRating, catchRating, changeOfDirectionRating, clutchTrait, college, confRating, contractBonus, contractLength, contractSalary, contractYearsLeft, coverBallTrait, dLBullRushTrait, 
                 dLSpinTrait, dLSwimTrait, desiredBonus, desiredLength, desiredSalary, devTrait, draftPick, draftRound, dropOpenPassTrait, durabilityGrade, experiencePoints, feetInBoundsTrait, fightForYardsTrait,
                 finesseMovesRating, firstName, forcePassTrait, hPCatchTrait, height, highMotorTrait, hitPowerRating, homeState, homeTown, impactBlockRating, injuryRating, injuryLength, injuryType,
@@ -1230,7 +1231,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
                     strengthRating=VALUES(strengthRating), tackleRating=VALUES(tackleRating), teamId=VALUES(teamId), teamSchemeOvr=VALUES(teamSchemeOvr), throwAccDeepRating=VALUES(throwAccDeepRating), throwAccMedRating=VALUES(throwAccMedRating),
                     throwAccRating=VALUES(throwAccRating), throwAccShortRating=VALUES(throwAccShortRating), throwOnRunRating=VALUES(throwOnRunRating), throwPowerRating=VALUES(throwPowerRating), throwUnderPressureRating=VALUES(throwUnderPressureRating), 
                     toughRating=VALUES(toughRating), truckRating=VALUES(truckRating), weight=VALUES(weight), yACCatchTrait=VALUES(yACCatchTrait), yearsPro=VALUES(yearsPro), zoneCoverRating=VALUES(zoneCoverRating)`;
-                    console.log(sql);
+                    
                     con.query(sql, (err, res) => { 
                     if (err) throw err;
                 })
@@ -1238,6 +1239,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
 
                     
         }
+        console.log(sql);
         con.end();
         res.sendStatus(200); 
     })
