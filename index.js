@@ -1305,7 +1305,7 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                     if (err) throw err;
                 })
                 
-            if (player.devTrait === 3){
+            if (player.signatureSlotList){
                 for (const ability of signatureSlotList){
                     console.log(ability.signatureAbility);
                 }
