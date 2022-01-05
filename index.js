@@ -1305,7 +1305,7 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                     if (err) throw err;
                 })
                 
-            if (player.signatureSlotList){
+            if (player.signatureSlotList !== undefined){
                 console.log(player.signatureSlotList[0]);
             }
         
