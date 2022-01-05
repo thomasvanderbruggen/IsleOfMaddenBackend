@@ -1107,7 +1107,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let stats = json['playerDefensiveStatInfoList']; 
             for (let stat of stats) {
                 stat.weekIndex++; 
-                if (stat.scheduleId = 543424725){
+                if (stat.scheduleId == 543424725){
                     console.log(stat);
                 }
 
