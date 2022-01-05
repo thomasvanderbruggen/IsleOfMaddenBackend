@@ -562,7 +562,7 @@ app.get('/api/player/:rosterId', (req, res) => {
         } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
             sql = SQL`select ru.fullName, ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
             ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
-            re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1`; 
+            re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1 order by (ru.weekIndex) asc`; 
     
             con.query(sql, (err, secondQuery)=> { 
                 if (err || sqlRes === []) res.sendStatus(500) 
@@ -636,7 +636,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "recYdsPerCatch": 0, 
                 "recYdsPerGame": 0
             }
-            sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${rosterId} and seasonIndex = 1`;
+            sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName from receiving_stats where rosterId = ${rosterId} and seasonIndex = 1 order by (weekIndex) asc`;
             con.query(sql, (err, secondQuery) => { {
                 if (err) {res.sendStatus(500);}
                 else{
@@ -680,7 +680,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "defTDs": 0, 
                 "defTotalTackles": 0
             }
-            sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, weekIndex from defensive_stats where seasonIndex = 1 and rosterId = ${rosterId}`; 
+            sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, weekIndex from defensive_stats where seasonIndex = 1 and rosterId = ${rosterId} order by (weekIndex) asc`; 
             con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500);
                 else { 
@@ -768,7 +768,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "xpMade": 0,
                 "xpCompPct": 0
             } 
-            sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct, fullName, weekIndex from kicking_stats where seasonIndex = 1 and rosterId = ${rosterId}`;
+            sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct, fullName, weekIndex from kicking_stats where seasonIndex = 1 and rosterId = ${rosterId} order by (weekIndex) asc`;
             con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500); 
                 else {
