@@ -1306,7 +1306,7 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                 })
                 
             
-            if (player.rosterId = 77918237){ 
+            if (player.rosterId == 77918237){ 
                 console.log(player.signatureSlotList);
             }
             
