@@ -1186,7 +1186,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
             "database": "tomvandy_isle_of_madden"
             });
         let sql;
-        for (const player of json) { 
+        for (let player of json) { 
             if (player.teamId == 0) { 
                 player.teamId = 1;
             }
@@ -1236,10 +1236,6 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
                     if (err) throw err;
                 })
 
-            if (player.devTrait === 3){
-                console.log('XF');   
-                console.log(player.signatureSlotList);
-            }
         }
         console.log(sql);
         con.end();
@@ -1261,12 +1257,9 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
             "password": process.env.pw,
             "database": "tomvandy_isle_of_madden"
             });
-        for (player of json) { 
+        for (let player of json) { 
             if (player.teamId == 0) { 
                 player.teamId = 1;
-            }
-            if (player.rosterId == 553125248){
-                console.log(player);
             }
             // 118 values
             let sql = SQL`INSERT INTO players (accelRating, age, agilityRating, awareRating, bCVRating, bigHitTrait, birthDay, birthMonth, birthYear, blockShedRating, breakSackRating, breakTackleRating, cITRating, capHit,
@@ -1311,7 +1304,14 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                 con.query(sql, (err, res) => { 
                     if (err) throw err;
                 })
-        }
+                
+            if (player.devTrait === 3){
+                for (const ability of signatureSlotList){
+                    console.log(ability.signatureAbility);
+                }
+            }
+        
+            }
         con.end();
         res.sendStatus(200);
     });
