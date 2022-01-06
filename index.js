@@ -549,10 +549,11 @@ app.get('/api/player/:rosterId', (req, res) => {
                     week.passerRating = +week.passerRating.toFixed(2);
                     console.log(`Away: ${week.awayTeamId} Home: ${week.homeTeamId}`); 
                     if (week.awayTeamId === week.teamId){
-                        
+                        console.log('in first if');
                         week['opponent'] = teamIdToName.get(week.hometeamId);
                     }
                     if (week.homeTeamId === week.teamId){
+                        console.log('in second if');
                         week['opponent'] = teamIdToName.get(week.awayTeamId);
                     }
                     console.log(`Opp: ${week.opponent}`);
