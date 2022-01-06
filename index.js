@@ -493,9 +493,10 @@ app.get('/api/player/:rosterId', (req, res) => {
         response['player'] = sqlRes[0];
         let position = sqlRes[0].position;
         if (position === 'qb' || position === 'QB') {
-            let secondSql =SQL`select r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
-             p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName, p.weekIndex
-            from passing_stats p left join rushing_stats r ON p.rosterId = r.rosterId and p.weekIndex = r.weekIndex and p.scheduleId = r.scheduleId where p.rosterId = ${rosterId} and p.seasonIndex = 1 order by (p.weekIndex) asc;`;
+            let secondSql =SQL`SELECT r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
+             p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName, p.weekIndex, 
+            FROM passing_stats p LEFT JOIN rushing_stats r ON p.rosterId = r.rosterId AND p.weekIndex = r.weekIndex AND p.scheduleId = r.scheduleId 
+            LEFT JOIN players pl ON pl.rosterID = p.rosterId LEFT JOIN schedules sch ON sch.scheduleId = p.scheduleId WHERE p.rosterId = ${rosterId} AND p.seasonIndex = 1 ORDER BY (p.weekIndex) ASC;`;
             let seasonStats = {
                 "name": '', 
                 "rushAttempts": 0, 
@@ -554,6 +555,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 seasonStats.passerRating = calculatePasserRating(seasonStats).toFixed(2);
                 response.seasonStats = seasonStats; 
                 response.weeklyStats = weeklyStats; 
+
                 res.send(response);
                 con.end()
             })
