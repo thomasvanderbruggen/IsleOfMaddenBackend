@@ -547,16 +547,12 @@ app.get('/api/player/:rosterId', (req, res) => {
                     seasonStats.passYds += week.passYds; 
                     seasonStats.passYdsPerGame = week.passYdsPerGame;
                     week.passerRating = +week.passerRating.toFixed(2);
-                    console.log(`Away: ${week.awayTeamId} Home: ${week.homeTeamId}`); 
                     if (week.awayTeamId === week.teamId){
-                        console.log('in first if');
                         week['opponent'] = teamIdToName.get(week.homeTeamId);
                     }
                     if (week.homeTeamId === week.teamId){
-                        console.log('in second if');
                         week['opponent'] = teamIdToName.get(week.awayTeamId);
                     }
-                    console.log(`Opp: ${week.opponent}`);
                     delete week.awayTeamId; 
                     delete week.homeTeamId;
                     weeklyStats.push(week);
@@ -577,7 +573,7 @@ app.get('/api/player/:rosterId', (req, res) => {
         } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
             sql = SQL`select ru.fullName, ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
             ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
-            re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1 order by (ru.weekIndex) asc`; 
+            re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex, pl.teamId, sch.homeTeamId, sch.awayTeamId from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId left join players pl ON pl.rosterId = ru.rosterId left join schedules sch on sch.scheduleId = ru.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1 order by (ru.weekIndex) asc`; 
     
             con.query(sql, (err, secondQuery)=> { 
                 if (err || sqlRes === []) res.sendStatus(500) 
@@ -624,6 +620,14 @@ app.get('/api/player/:rosterId', (req, res) => {
                     seasonStats.recYds += week.recYds;
                     seasonStats.recYdsAfterCatch += week.recYdsAfterCatch; 
                     seasonStats.recYdsPerGame = week.recYdsPerGame;
+                    if (week.awayTeamId === week.teamId){
+                        week['opponent'] = teamIdToName.get(week.homeTeamId);
+                    }
+                    if (week.homeTeamId === week.teamId){
+                        week['opponent'] = teamIdToName.get(week.awayTeamId);
+                    }
+                    delete week.awayTeamId; 
+                    delete week.homeTeamId;
                     weeklyStats.push(week);
                 }
                 seasonStats.rushToPct = seasonStats.fumbles / seasonStats.rushAttempts;
@@ -651,7 +655,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "recYdsPerCatch": 0, 
                 "recYdsPerGame": 0
             }
-            sql = SQL`select recCatches, recCatchPct, recDrops, recLongest, recPts, recTDs, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, fullName, weekIndex from receiving_stats where rosterId = ${rosterId} and seasonIndex = 1 order by (weekIndex) asc`;
+            sql = SQL`select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.rosterId = re.rosterId left join schedules sch on sch.scheduleId = re.scheduleId where re.rosterId = ${rosterId} and re.seasonIndex = 1 order by (re.weekIndex) asc`;
             con.query(sql, (err, secondQuery) => { {
                 if (err) {res.sendStatus(500);}
                 else{
@@ -665,6 +669,14 @@ app.get('/api/player/:rosterId', (req, res) => {
                         seasonStats.recYdsAfterCatch += week.recYdsAfterCatch; 
                         seasonStats.recYac += (week.recYacPerCatch * week.recCatches); 
                         seasonStats.recYds += week.recYds;
+                        if (week.awayTeamId === week.teamId){
+                            week['opponent'] = teamIdToName.get(week.homeTeamId);
+                        }
+                        if (week.homeTeamId === week.teamId){
+                            week['opponent'] = teamIdToName.get(week.awayTeamId);
+                        }
+                        delete week.awayTeamId; 
+                        delete week.homeTeamId;
                         weeklyStats.push(week);
                     }
                     seasonStats.recYdsPerGame = sqlRes[0].recYdsPerGame;
@@ -695,7 +707,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "defTDs": 0, 
                 "defTotalTackles": 0
             }
-            sql = SQL`select defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, weekIndex from defensive_stats where seasonIndex = 1 and rosterId = ${rosterId} order by (weekIndex) asc`; 
+            sql = SQL`select def.defCatchAllowed, def.defDeflections, def.defForcedFum, def.defFumRec, def.defInts, def.defIntReturnYds, def.defPts, def.defSacks, def.defSafeties, def.defTDs, def.defTotalTackles, def.fullName, def.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from defensive_stats def left join players pl on pl.rosterId = def.rosterId left join schedules sch on sch.scheduleId = def.scheduleId where def.seasonIndex = 1 and def.rosterId = ${rosterId} order by (def.weekIndex) asc`; 
             con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500);
                 else { 
@@ -712,6 +724,14 @@ app.get('/api/player/:rosterId', (req, res) => {
                         seasonStats.defSafeties += week.defSafeties;
                         seasonStats.defTDs += week.defTDs; 
                         seasonStats.defTotalTackles += week.defTotalTackles;
+                        if (week.awayTeamId === week.teamId){
+                            week['opponent'] = teamIdToName.get(week.homeTeamId);
+                        }
+                        if (week.homeTeamId === week.teamId){
+                            week['opponent'] = teamIdToName.get(week.awayTeamId);
+                        }
+                        delete week.awayTeamId; 
+                        delete week.homeTeamId;
                         weeklyStats.push(week);
                         seasonStats.name = secondQuery[0].fullName;
                     }
@@ -736,7 +756,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "kickoffAtt": 0, 
                 "kickoffTBs": 0
             }
-            sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs, p.weekIndex from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId and p.scheduleId = k.scheduleId and p.weekIndex = k.weekIndex where p.seasonIndex = 1 and p.rosterId = ${rosterId} order by (p.weekIndex) asc`; 
+            sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs, p.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId and p.scheduleId = k.scheduleId and p.weekIndex = k.weekIndex left join players pl on pl.rosterId = p.rosterId left join schedules sch on sch.scheduleId = p.scheduleId where p.seasonIndex = 1 and p.rosterId = ${rosterId} order by (p.weekIndex) asc`; 
             con.query(sql, (err, secondQuery) => { 
                 if (err) {
                     res.sendStatus(500);
@@ -755,6 +775,14 @@ app.get('/api/player/:rosterId', (req, res) => {
                         seasonStats.puntYds += week.puntYds; 
                         seasonStats.kickoffAtt += week.kickoffAtt; 
                         seasonStats.kickoffTBs += week.kickoffTBs;
+                        if (week.awayTeamId === week.teamId){
+                            week['opponent'] = teamIdToName.get(week.homeTeamId);
+                        }
+                        if (week.homeTeamId === week.teamId){
+                            week['opponent'] = teamIdToName.get(week.awayTeamId);
+                        }
+                        delete week.awayTeamId; 
+                        delete week.homeTeamId;
                         weeklyStats.push(week); 
                     }
                     seasonStats.puntNetYdsPerAtt = seasonStats.puntNetYds / seasonStats.puntAtt; 
@@ -783,7 +811,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "xpMade": 0,
                 "xpCompPct": 0
             } 
-            sql = SQL`select kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, kickoffAtt, kickoffTBs, xPAtt, xPMade, xPCompPct, fullName, weekIndex from kicking_stats where seasonIndex = 1 and rosterId = ${rosterId} order by (weekIndex) asc`;
+            sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.rosterId = k.rosterId left join schedules sch on sch.scheduleId = k.scheduleId where seasonIndex = 1 and rosterId = ${rosterId} order by (weekIndex) asc`;
             con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500); 
                 else {
@@ -799,6 +827,14 @@ app.get('/api/player/:rosterId', (req, res) => {
                         seasonStats.kickoffTBs += week.kickoffTBs; 
                         seasonStats.xpAtt += week.xPAtt; 
                         seasonStats.xpMade += week.xPMade;
+                        if (week.awayTeamId === week.teamId){
+                            week['opponent'] = teamIdToName.get(week.homeTeamId);
+                        }
+                        if (week.homeTeamId === week.teamId){
+                            week['opponent'] = teamIdToName.get(week.awayTeamId);
+                        }
+                        delete week.awayTeamId; 
+                        delete week.homeTeamId;
                         weeklyStats.push(week);
                     }
                     seasonStats.fgCompPct = seasonStats.fgMade / seasonStats.fgAtt; 
