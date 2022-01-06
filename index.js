@@ -550,7 +550,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     console.log(`Away: ${week.awayTeamId} Home: ${week.homeTeamId}`); 
                     if (week.awayTeamId === week.teamId){
                         console.log('in first if');
-                        week['opponent'] = teamIdToName.get(week.hometeamId);
+                        week['opponent'] = teamIdToName.get(week.homeTeamId);
                     }
                     if (week.homeTeamId === week.teamId){
                         console.log('in second if');
