@@ -547,11 +547,14 @@ app.get('/api/player/:rosterId', (req, res) => {
                     seasonStats.passYds += week.passYds; 
                     seasonStats.passYdsPerGame = week.passYdsPerGame;
                     week.passerRating = +week.passerRating.toFixed(2);
+                    console.log(`Away: ${week.awayTeamId} Home: ${week.homeTeamId}`); 
                     if (week.awayTeamId === week.teamId){
+                        
                         week['opponent'] = teamIdToName.get(week.hometeamId);
                     }else { 
                         week['opponent'] = teamIdToName.get(week.awayTeamId); 
                     }
+                    console.log(`Opp: ${week.opponent}`);
                     delete week.awayTeamId; 
                     delete week.homeTeamId;
                     weeklyStats.push(week);
