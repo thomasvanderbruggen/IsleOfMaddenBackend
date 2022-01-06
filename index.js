@@ -547,7 +547,15 @@ app.get('/api/player/:rosterId', (req, res) => {
                     seasonStats.passYds += week.passYds; 
                     seasonStats.passYdsPerGame = week.passYdsPerGame;
                     week.passerRating = +week.passerRating.toFixed(2);
+                    if (week.awayTeamId === week.teamId){
+                        week['opponent'] = teamIdToName.get(week.awayTeamId);
+                    }else { 
+                        week['opponent'] = teamIdToName.get(week.homeTeamId); 
+                    }
+                    delete week.awayTeamId; 
+                    delete week.homeTeamId;
                     weeklyStats.push(week);
+
                 }
                 seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
                 seasonStats.passCompPct = seasonStats.passCompletions / seasonStats.passAttempts * 100; 
