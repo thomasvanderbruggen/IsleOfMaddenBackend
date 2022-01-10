@@ -811,7 +811,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                 "xpMade": 0,
                 "xpCompPct": 0
             } 
-            sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.rosterId = k.rosterId left join schedules sch on sch.scheduleId = k.scheduleId where seasonIndex = 1 and rosterId = ${rosterId} order by (weekIndex) asc`;
+            sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.rosterId = k.rosterId left join schedules sch on sch.scheduleId = k.scheduleId where k.seasonIndex = 1 and rosterId = ${rosterId} order by (weekIndex) asc`;
             con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500); 
                 else {
@@ -977,6 +977,50 @@ app.get('/api/playerSearch?', (req, res) => {
     console.log(sql);
 })
 
+app.get('/api/game/:scheduleId', (req, res) => {
+    const {params: {scheduleId}, } = req;
+    let sql = 'select fullName, recCatches, recTDs, recYds, teamId from receiving_stats where (recYds > 50 or recCatches > 5 or recTDs > 0) and scheduleId = ? and seasonIndex = 1 order by recTDs desc, recYds, desc, recCatches desc'; 
+    let response = {}; 
+    let con = mysql.createConnection({ 
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    });
+    con.query(sql, [scheduleId], (err, recRes) => {
+        if (err) {
+            res.send(500); 
+            throw err;
+        }
+        response['receiving_stats'] = recRes; 
+        sql = 'select fullName, defTotalTackles, defSacks, defSafeties, defInts, defForcedFum from defensive_stats where (defTotalTackles > 5 or defInts > 0 or defSacks > 1 or defSafeties > 0) and scheduleId = ? and seasonIndex = 1 order by defInts desc, defForcedFum desc, defSafeties desc, defTotalTackles desc';
+        con.query(sql, [scheduleId], (err, defRes) => {
+            if (err) {
+                res.send(500);
+                throw err; 
+            }
+            response['defensive_stats'] = defRes;
+            sql = 'select fullName, passAtt, passComp, passInts, passTDs, passYds from passing_stats where scheduleId = ? and seasonIndex = 1'; 
+            con.query(sql, [scheduleId], (err, passRes) => { 
+                if (err) {
+                    res.send(500); 
+                    throw err;
+                }
+                response['passing_stats'] = passRes; 
+                sql = 'select fullName, rushAtt, rushBrokenTackles, rushTDs, rushYds, rushFum from rushing_stats where scheduleId = ? and seasonIndex = 1'; 
+                con.query(sql, [scheduleId], (err, rushRes) => {
+                    if (err){
+                        res.send(500); 
+                        throw err; 
+                    }
+                    response['rushing_stats'] = rushRes;
+                    res.send(response);
+                })
+            })
+        })
+    })
+
+})
 
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
