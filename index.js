@@ -977,21 +977,6 @@ app.get('/api/playerSearch?', (req, res) => {
     console.log(sql);
 })
 
-app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
-    let body = ''; 
-    req.on('data', chunk=>{ 
-        body += chunk.toString();
-    })
-    req.on('end', () =>{ 
-        const teams = JSON.parse(body)['leagueTeamInfoList'];
-        console.log('----Teams----');
-        for (const team of teams) { 
-            teamsWithInfo.push(team); 
-        }
-        res.sendStatus(200);
-    })
-})
-
 app.get('/api/standings', (req, res) => {
     let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName from teams order by totalWins desc, totalTies desc, confWins desc, divWins desc'; 
     let con = mysql.createConnection({ 
@@ -1008,6 +993,56 @@ app.get('/api/standings', (req, res) => {
     })
     con.end();
 })
+
+app.get('/api/conferencestandings/:conference', (req, res) => {
+    const {params: {conference}, } = req; 
+    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName from teams where conferenceName = ? order by totalWins desc, totalTies desc, confWins desc, divWins desc'; 
+    let con = mysql.createConnection({ 
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    });
+    let response = {}; 
+    con.query(sql, [conference], (err, sqlRes) => {
+        if (err) throw err; 
+        response['standings'] = sqlRes; 
+        res.send(response);
+    })
+})
+
+app.get('/api/divisionstandings/:division', (req, res) => {
+    const {params: {division}, } = req; 
+    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName from teams where divisionName = ? order by totalWins desc, totalTies desc, confWins desc, divWins desc'; 
+    let con = mysql.createConnection({ 
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    });
+    let response = {}; 
+    con.query(sql, [division], (err, sqlRes) => {
+        if (err) throw err; 
+        response['standings'] = sqlRes; 
+        res.send(response);
+    })
+})
+
+app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
+    let body = ''; 
+    req.on('data', chunk=>{ 
+        body += chunk.toString();
+    })
+    req.on('end', () =>{ 
+        const teams = JSON.parse(body)['leagueTeamInfoList'];
+        console.log('----Teams----');
+        for (const team of teams) { 
+            teamsWithInfo.push(team); 
+        }
+        res.sendStatus(200);
+    })
+})
+
 
 app.post('/:platform/:leagueId/standings', (req, res) => { 
     let body = ''; 
