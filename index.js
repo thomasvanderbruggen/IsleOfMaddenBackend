@@ -177,7 +177,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     })
-    sql = "select re.recCatches, re.recLongest, re.recYds, re.recTDs, re.fullName, re.teamId, ru.rushFum from receiving_stats re left join rushing_stats ru on re.rosterId = ru.rosterId and re.scheduleId = ru.scheduleId where re.scheduleId = ? and re.seasonIndex = 1and (re.recCatches > 3 or re.recYds > 50 or re.recTDs >= 1)"; 
+    sql = "select re.recCatches, re.recLongest, re.recYds, re.recTDs, re.fullName, re.teamId, ru.rushFum from receiving_stats re left join rushing_stats ru on re.rosterId = ru.rosterId and re.scheduleId = ru.scheduleId where re.scheduleId = ? and re.seasonIndex = 1 and (re.recCatches > 3 or re.recYds > 50 or re.recTDs >= 1)"; 
     con.query(sql, [gameId], (err, sqlRes) => {
         if (err) {
             sent = true;
