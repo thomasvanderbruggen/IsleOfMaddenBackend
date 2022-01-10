@@ -136,7 +136,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
         "database": "tomvandy_isle_of_madden"
     })
     let response = {}; 
-    let sql = "select awayTeamId, homeTeamId, awayScore, homeScore from schedules where scheduleId = ?";
+    let sql = "select awayTeamId, homeTeamId, awayScore, homeScore from schedules where scheduleId = ? and seasonIndex = 1";
     con.query(sql, [gameId], (err, sqlRes) => {
         if (err) {
             sent = true;
@@ -151,7 +151,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     }) 
-    sql = "select defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, teamId from defensive_stats where scheduleId = ? and (defSacks > 1 or defInts >= 1 or defTDs >= 1)"; 
+    sql = "select defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, teamId from defensive_stats where scheduleId = ? and (defSacks > 1 or defInts >= 1 or defTDs >= 1) and seasonIndex = 1"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
         if (err) {
             sent = true;
@@ -164,7 +164,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     })
-    sql = "select passAtt, passComp, passInts, passLongest, passerRating, passTDs, passYds, fullName, teamId from passing_stats where scheduleId = ?"; 
+    sql = "select passAtt, passComp, passInts, passLongest, passerRating, passTDs, passYds, fullName, teamId from passing_stats where scheduleId = ? and seasonIndex = 1"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
         if (err) {
             sent = true;
@@ -177,7 +177,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     })
-    sql = "select recCatches, recLongest, recTDs, fullName, teamId from receiving_stats where scheduleId = ? and (recTds >= 1 or recLongest >= 60 or recCatches > 7)"; 
+    sql = "select recCatches, recLongest, recTDs, fullName, teamId from receiving_stats where scheduleId = ? and (recTds >= 1 or recLongest >= 60 or recCatches > 7) and seasonIndex = 1"; 
     con.query(sql, [gameId], (err, sqlRes) => {
         if (err) {
             sent = true;
@@ -190,7 +190,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     })
-    sql = "select rushAtt, rushLongest, rushFum, rushYds, rushTDs, fullName, teamId from rushing_stats where scheduleId = ? and (rushTDs >= 1 or rushYds > 100 or rushFum > 1)"; 
+    sql = "select rushAtt, rushLongest, rushFum, rushYds, rushTDs, fullName, teamId from rushing_stats where scheduleId = ? and (rushTDs >= 1 or rushYds > 100 or rushFum > 1) and seasonIndex = 1"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
         if (err) {
             sent = true;
@@ -976,52 +976,6 @@ app.get('/api/playerSearch?', (req, res) => {
     con.end(); 
     console.log(sql);
 })
-
-app.get('/api/game/:scheduleId', (req, res) => {
-    const {params: {scheduleId}, } = req;
-    let sql = 'select fullName, recCatches, recTDs, recYds, teamId from receiving_stats where (recYds > 50 or recCatches > 5 or recTDs > 0) and scheduleId = ? and seasonIndex = 1 order by recTDs desc, recYds, desc, recCatches desc'; 
-    let response = {}; 
-    let con = mysql.createConnection({ 
-        "host": process.env.host,
-        "user": process.env.user,
-        "password": process.env.pw,
-        "database": "tomvandy_isle_of_madden"
-    });
-    con.query(sql, [scheduleId], (err, recRes) => {
-        if (err) {
-            res.send(500); 
-            throw err;
-        }
-        response['receiving_stats'] = recRes; 
-        sql = 'select fullName, defTotalTackles, defSacks, defSafeties, defInts, defForcedFum from defensive_stats where (defTotalTackles > 5 or defInts > 0 or defSacks > 1 or defSafeties > 0) and scheduleId = ? and seasonIndex = 1 order by defInts desc, defForcedFum desc, defSafeties desc, defTotalTackles desc';
-        con.query(sql, [scheduleId], (err, defRes) => {
-            if (err) {
-                res.send(500);
-                throw err; 
-            }
-            response['defensive_stats'] = defRes;
-            sql = 'select fullName, passAtt, passComp, passInts, passTDs, passYds from passing_stats where scheduleId = ? and seasonIndex = 1'; 
-            con.query(sql, [scheduleId], (err, passRes) => { 
-                if (err) {
-                    res.send(500); 
-                    throw err;
-                }
-                response['passing_stats'] = passRes; 
-                sql = 'select fullName, rushAtt, rushBrokenTackles, rushTDs, rushYds, rushFum from rushing_stats where scheduleId = ? and seasonIndex = 1'; 
-                con.query(sql, [scheduleId], (err, rushRes) => {
-                    if (err){
-                        res.send(500); 
-                        throw err; 
-                    }
-                    response['rushing_stats'] = rushRes;
-                    res.send(response);
-                })
-            })
-        })
-    })
-
-})
-
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
     let body = ''; 
