@@ -676,6 +676,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                         if (week.homeTeamId === week.teamId){
                             week['opponent'] = teamIdToName.get(week.awayTeamId);
                         }
+                        console.log(week);
                         delete week.awayTeamId; 
                         delete week.homeTeamId;
                         weeklyStats.push(week);
