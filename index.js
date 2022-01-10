@@ -177,7 +177,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     })
-    sql = "select recCatches, recLongest, recTDs, fullName, teamId from receiving_stats where scheduleId = ? and seasonIndex = 1"; 
+    sql = "select re.recCatches, re.recLongest, re.recYds, re.recTDs, re.fullName, re.teamId, ru.rushFum from receiving_stats re, rushing_stats ru where re.scheduleId = ? and re.seasonIndex = 1 and re.rosterId = ru.rosterId and re.scheduleId = ru.scheduleId"; 
     con.query(sql, [gameId], (err, sqlRes) => {
         if (err) {
             sent = true;
