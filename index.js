@@ -992,7 +992,22 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
     })
 })
 
-
+app.get('/api/standings', (req, res) => {
+    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName from teams order by totalWins desc, totalTies desc, confWins desc, divWins desc'; 
+    let con = mysql.createConnection({ 
+        "host": process.env.host,
+        "user": process.env.user,
+        "password": process.env.pw,
+        "database": "tomvandy_isle_of_madden"
+    });
+    let response = {}; 
+    con.query(sql, (err, sqlRes) => {
+        if (err) throw err;
+        response['standings'] = sqlRes;
+        res.send(response); 
+    })
+    con.end();
+})
 
 app.post('/:platform/:leagueId/standings', (req, res) => { 
     let body = ''; 
