@@ -177,7 +177,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     })
-    sql = "select recCatches, recLongest, recTDs, fullName, teamId from receiving_stats where scheduleId = ? and (recTds >= 1 or recLongest >= 60 or recCatches > 7) and seasonIndex = 1"; 
+    sql = "select recCatches, recLongest, recTDs, fullName, teamId from receiving_stats where scheduleId = ? and seasonIndex = 1"; 
     con.query(sql, [gameId], (err, sqlRes) => {
         if (err) {
             sent = true;
@@ -190,7 +190,7 @@ app.get('/api/gamestats/:gameId', (req, res) => {
             res.send(response);
         }
     })
-    sql = "select rushAtt, rushLongest, rushFum, rushYds, rushTDs, fullName, teamId from rushing_stats where scheduleId = ? and (rushTDs >= 1 or rushYds > 100) and seasonIndex = 1"; 
+    sql = "select rushAtt, rushLongest, rushFum, rushYds, rushTDs, fullName, teamId from rushing_stats where scheduleId = ? and seasonIndex = 1"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
         if (err) {
             sent = true;
