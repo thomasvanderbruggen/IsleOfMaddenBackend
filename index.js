@@ -626,6 +626,7 @@ app.get('/api/player/:rosterId', (req, res) => {
                     if (week.homeTeamId === week.teamId){
                         week['opponent'] = teamIdToName.get(week.awayTeamId);
                     }
+                    console.log(week);
                     delete week.awayTeamId; 
                     delete week.homeTeamId;
                     weeklyStats.push(week);
@@ -1009,6 +1010,7 @@ app.get('/api/conferencestandings/:conference', (req, res) => {
         response['standings'] = sqlRes; 
         res.send(response);
     })
+    con.end();
 })
 
 app.get('/api/divisionstandings/:division', (req, res) => {
@@ -1026,6 +1028,7 @@ app.get('/api/divisionstandings/:division', (req, res) => {
         response['standings'] = sqlRes; 
         res.send(response);
     })
+    con.end();
 })
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
