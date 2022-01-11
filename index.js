@@ -991,6 +991,7 @@ app.get('/api/standings', (req, res) => {
         response['standings'] = sqlRes;
         sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 1 and (awayScore > 0 and homeScore > 0)'; 
         con.query(sql, (err, scheduleRes) => {
+            if (err) throw err;
             let results = {}; 
             console.log(scheduleRes);
             // for (const game of scheduleRes) { 
