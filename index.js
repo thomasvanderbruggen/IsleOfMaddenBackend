@@ -1010,7 +1010,7 @@ app.get('/api/standings', (req, res) => {
                     results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
                 }else{
                     results[game.awayTeamId]['ptsFor'] += game.awayScore;
-                    results[game.homeTeamId]['ptsAgainst'] += game.homeScore;
+                    results[game.awayTeamId]['ptsAgainst'] += game.homeScore;
                 }
             }
             for (const team of response.standings){
