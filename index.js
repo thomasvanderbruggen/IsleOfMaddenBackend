@@ -1016,10 +1016,11 @@ app.get('/api/standings', (req, res) => {
             //     team['ptsAgainst'] = results[team.teamId]['ptsAgainst']
             // }
             res.send(response); 
+            con.end();
         })
         
     })
-    con.end();
+    
 })
 
 app.get('/api/conferencestandings/:conference', (req, res) => {
