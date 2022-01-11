@@ -5,6 +5,7 @@ const SQL = require('sql-template-strings');
 const cors = require('cors');
 const { Z_FIXED } = require('zlib');
 const { resolveSoa } = require('dns');
+const { consumers } = require('stream');
 let teamInfoKeys = []; 
 let teamStandingsKeys = [];
 let teamsWithInfo = []; 
@@ -1132,16 +1133,25 @@ app.get('/api/divisionstandings/:division', (req, res) => {
 })
 
 app.get('/api/leagueleaders', (req, res) => {
-    let sql = 'select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 1 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10; select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10;'
+    /* 
+select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 1 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10;
+select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10; 
+select fullName, sum(recCatches) "recCatches", sum(recYds) "recYds", sum(recTDs) "recTDs", max(recLongest) "recLongest" from receiving_stats where seasonIndex = 1 group by rosterId order by sum(recYds) desc, sum(recTDs) desc LIMIT 10; 
+select fullName, sum(defInts) "defInts", sum(defDeflections) "defDeflections", sum(defCatchAllowed) "defCatchAllowed", sum(defTDs) "defTDs" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defInts) desc, sum(defDeflections) desc, sum(defCatchAllowed) asc LIMIT 10;
+select fullName, sum(defForcedFum) "defForcedFum", sum(defTotalTackles) "defTackles", sum(defFumRec) "defFumRec", sum(defInts) "defInts" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defForcedFum) desc, sum(defTotalTackles) desc LIMIT 10;
+*/
+    let sql = 'select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 1 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10; select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10; select fullName, sum(recCatches) "recCatches", sum(recYds) "recYds", sum(recTDs) "recTDs", max(recLongest) "recLongest" from receiving_stats where seasonIndex = 1 group by rosterId order by sum(recYds) desc, sum(recTDs) desc LIMIT 10; select fullName, sum(defInts) "defInts", sum(defDeflections) "defDeflections", sum(defCatchAllowed) "defCatchAllowed", sum(defTDs) "defTDs" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defInts) desc, sum(defDeflections) desc, sum(defCatchAllowed) asc LIMIT 10; select fullName, sum(defForcedFum) "defForcedFum", sum(defTotalTackles) "defTackles", sum(defFumRec) "defFumRec", sum(defInts) "defInts" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defForcedFum) desc, sum(defTotalTackles) desc LIMIT 10; select fullName, sum(fGMade) "fgMade", sum(fGAtt) "fgAtt", sum(xpMade) "xpMade" from kicking_stats where seasonIndex = 1 group by rosterId order by sum(fGMade) desc, sum(fgAtt) asc LIMIT 10;'
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
         "password": process.env.pw,
-        "database": "tomvandy_isle_of_madden"
+        "database": "tomvandy_isle_of_madden",
+        multipleStatements: true
     });
-    con.query(sql, (err, sqlRes) => {
+    response = {}; 
+    con.query(sql, (err, passingRes) => {
         if (err) throw err; 
-        res.send(sqlRes);
+        res.send(passingRes);    
     })
     con.end();
 
