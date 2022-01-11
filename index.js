@@ -1150,7 +1150,7 @@ select fullName, sum(fGMade) "fgMade", sum(fGAtt) "fgAtt", sum(xpMade) "xpMade" 
         "database": "tomvandy_isle_of_madden",
         multipleStatements: true
     });
-    response = {}; 
+    let response = {}; 
     con.query(sql, (err, sqlRes) => {
         if (err) throw err; 
         response['passing'] = sqlRes[0]; 
