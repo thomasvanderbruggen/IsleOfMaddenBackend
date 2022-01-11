@@ -978,7 +978,7 @@ app.get('/api/playerSearch?', (req, res) => {
 })
 
 app.get('/api/standings', (req, res) => {
-    let sql = 'select teamId, teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "Place" from teams'; 
+    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "Place" from teams'; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
