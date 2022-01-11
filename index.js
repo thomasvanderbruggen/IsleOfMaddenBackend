@@ -978,7 +978,7 @@ app.get('/api/playerSearch?', (req, res) => {
 })
 
 app.get('/api/standings', (req, res) => {
-    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "Place" from teams'; 
+    let sql = 'select teamId, teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "Place" from teams'; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
@@ -1067,6 +1067,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
             "database": "tomvandy_isle_of_madden"
         });
         for (const team of teams) {
+            console.log(team);
                 let sql = SQL`INSERT INTO teams (awayLosses, awayTies, calendarYear, conferenceId, confLosses, conferenceName, confTies, confWins, 
                     capRoom, capAvailable, capSpent, defPassYds, defPassYdsRank, defRushYds, defRushYdsRank, defTotalYds, defTotalYdsRank, divisionId,
                     divLosses, divisionName, divTies, divWins, homeLosses, homeTies, homeWins, netPts, offPassYds, offPassYdsRank, offRushYds, offRushYdsRank, 
