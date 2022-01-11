@@ -1031,7 +1031,7 @@ app.get('/api/standings', (req, res) => {
 
 app.get('/api/conferencestandings/:conference', (req, res) => {
     const {params: {conference}, } = req; 
-    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1 and conferenceName = ?'; 
+    let sql = 'select teamName, teamId, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1 and conferenceName = ?'; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
@@ -1082,7 +1082,7 @@ app.get('/api/conferencestandings/:conference', (req, res) => {
 
 app.get('/api/divisionstandings/:division', (req, res) => {
     const {params: {division}, } = req; 
-    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1 and divisionName = ?'; 
+    let sql = 'select teamName, teamId, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1 and divisionName = ?'; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
