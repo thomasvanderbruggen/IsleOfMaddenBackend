@@ -996,6 +996,7 @@ app.get('/api/standings', (req, res) => {
             console.log(scheduleRes);
             for (const game of scheduleRes) { 
                 if (results[game.homeTeamId] === undefined){
+                    results[game.homeTeamId] = {}; 
                     results[game.homeTeamId]['ptsFor'] = game.homeScore;
                     results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
                 }else { 
@@ -1004,6 +1005,7 @@ app.get('/api/standings', (req, res) => {
                 }
 
                 if (results[game.awayTeamId] === undefined){
+                    results[game.awayTeamId] = {};
                     results[game.awayTeamId]['ptsFor'] = game.awayScore;
                     results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
                 }else{
