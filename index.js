@@ -978,7 +978,7 @@ app.get('/api/playerSearch?', (req, res) => {
 })
 
 app.get('/api/standings', (req, res) => {
-    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "Place" from teams'; 
+    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1'; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
@@ -996,7 +996,7 @@ app.get('/api/standings', (req, res) => {
 
 app.get('/api/conferencestandings/:conference', (req, res) => {
     const {params: {conference}, } = req; 
-    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1'; 
+    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1 and conferenceName = ?'; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
@@ -1014,7 +1014,7 @@ app.get('/api/conferencestandings/:conference', (req, res) => {
 
 app.get('/api/divisionstandings/:division', (req, res) => {
     const {params: {division}, } = req; 
-    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName from teams where divisionName = ? order by totalWins desc, totalTies desc, confWins desc, divWins desc'; 
+    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1 and divisionName = ?'; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
