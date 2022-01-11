@@ -626,7 +626,6 @@ app.get('/api/player/:rosterId', (req, res) => {
                     if (week.homeTeamId === week.teamId){
                         week['opponent'] = teamIdToName.get(week.awayTeamId);
                     }
-                    console.log(week);
                     delete week.awayTeamId; 
                     delete week.homeTeamId;
                     weeklyStats.push(week);
@@ -676,7 +675,6 @@ app.get('/api/player/:rosterId', (req, res) => {
                         if (week.homeTeamId === week.teamId){
                             week['opponent'] = teamIdToName.get(week.awayTeamId);
                         }
-                        console.log(week);
                         delete week.awayTeamId; 
                         delete week.homeTeamId;
                         weeklyStats.push(week);
@@ -980,7 +978,7 @@ app.get('/api/playerSearch?', (req, res) => {
 })
 
 app.get('/api/standings', (req, res) => {
-    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName from teams order by totalWins desc, totalTies desc, confWins desc, divWins desc'; 
+    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "Place" from teams'; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
