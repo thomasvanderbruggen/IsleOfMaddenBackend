@@ -989,7 +989,33 @@ app.get('/api/standings', (req, res) => {
     con.query(sql, (err, sqlRes) => {
         if (err) throw err;
         response['standings'] = sqlRes;
-        res.send(response); 
+        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 1 and (awayScore > 0 and homeScore > 0)'; 
+        con.query(sql, (err, scheduleRes) => {
+            let results = {}; 
+            for (const game of scheduleRes) { 
+                if (results[game.homeTeamId] === undefined){
+                    results[game.homeTeamId]['ptsFor'] = game.homeScore;
+                    results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                }else { 
+                    results[game.homeTeamId]['ptsFor'] += game.homeScore;
+                    results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                }
+
+                if (results[game.awayTeamId] === undefined){
+                    results[game.awayTeamId]['ptsFor'] = game.awayScore;
+                    results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
+                }else{
+                    results[game.awayTeamId]['ptsFor'] += game.awayScore;
+                    results[game.homeTeamId]['ptsAgainst'] += game.homeScore;
+                }
+            }
+            for (const team of response.standings){
+                team['ptsFor'] = results[team.teamId]['ptsFor']
+                team['ptsAgainst'] = results[team.teamId]['ptsAgainst']
+            }
+            res.send(response); 
+        })
+        
     })
     con.end();
 })
