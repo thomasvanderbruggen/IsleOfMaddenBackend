@@ -1018,9 +1018,8 @@ app.get('/api/standings', (req, res) => {
                 }
             }
             for (const team of response.standings){
-                console.log(team);
-                // team['ptsFor'] = results[team.teamId]['ptsFor']
-                // team['ptsAgainst'] = results[team.teamId]['ptsAgainst']
+                team['ptsFor'] = results[team.teamId]['ptsFor']
+                team['ptsAgainst'] = results[team.teamId]['ptsAgainst']
             }
             res.send(response); 
             con.end();
