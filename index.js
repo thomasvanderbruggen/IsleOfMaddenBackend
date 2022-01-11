@@ -1132,7 +1132,7 @@ app.get('/api/divisionstandings/:division', (req, res) => {
 })
 
 app.get('/api/leagueleaders', (req, res) => {
-    let sql = 'select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 1 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10;select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10;'
+    let sql = 'select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 1 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10; select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10;'
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
