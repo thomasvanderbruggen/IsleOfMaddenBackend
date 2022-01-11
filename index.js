@@ -996,7 +996,7 @@ app.get('/api/standings', (req, res) => {
 
 app.get('/api/conferencestandings/:conference', (req, res) => {
     const {params: {conference}, } = req; 
-    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, confWins, confLosses, conferenceName, divisionName from teams where conferenceName = ? order by totalWins desc, totalTies desc, confWins desc, divWins desc'; 
+    let sql = 'select teamName, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, winLossStreak from teams where conferenceName = ? order by totalWins desc, totalTies desc, confWins desc, divWins desc'; 
     let con = mysql.createConnection({ 
         "host": process.env.host,
         "user": process.env.user,
