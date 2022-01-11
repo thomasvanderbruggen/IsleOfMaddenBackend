@@ -993,7 +993,6 @@ app.get('/api/standings', (req, res) => {
         con.query(sql, (err, scheduleRes) => {
             if (err) throw err;
             let results = {}; 
-            console.log(scheduleRes);
             for (const game of scheduleRes) { 
                 if (results[game.homeTeamId] === undefined){
                     results[game.homeTeamId] = {}; 
