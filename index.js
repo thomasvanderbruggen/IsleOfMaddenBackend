@@ -1003,7 +1003,7 @@ app.get('/api/standings', (req, res) => {
                     console.log(results[game.homeTeamId]);
                 }else { 
                     results[game.homeTeamId]['ptsFor'] += game.homeScore;
-                    results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                    results[game.homeTeamId]['ptsAgainst'] += game.awayScore;
                  }
 
                 if (results[game.awayTeamId] === undefined){
