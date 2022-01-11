@@ -999,6 +999,7 @@ app.get('/api/standings', (req, res) => {
                     results[game.homeTeamId] = {}; 
                     results[game.homeTeamId]['ptsFor'] = game.homeScore;
                     results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                    results[game.homeTeamId]['id'] = game.homeTeamId;
                     console.log(results[game.homeTeamId]);
                 }else { 
                     // results[game.homeTeamId]['ptsFor'] += game.homeScore;
@@ -1009,7 +1010,8 @@ app.get('/api/standings', (req, res) => {
                     results[game.awayTeamId] = {};
                     results[game.awayTeamId]['ptsFor'] = game.awayScore;
                     results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
-                    console.log(results[game.awayTeamId]);
+                    results[game.awayTeamId]['id'] = game.awayTeamId;
+                    console.log(results[game.awayTeamId]);  
                 }else{
                     // results[game.awayTeamId]['ptsFor'] += game.awayScore;
                     // results[game.awayTeamId]['ptsAgainst'] += game.homeScore;
