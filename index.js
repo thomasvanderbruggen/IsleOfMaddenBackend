@@ -1006,7 +1006,12 @@ app.get('/api/conferencestandings/:conference', (req, res) => {
     let response = {}; 
     con.query(sql, [conference], (err, sqlRes) => {
         if (err) throw err; 
-        response['standings'] = sqlRes; 
+        response['standings'] = sqlRes;
+        sql = 'select sum(' 
+        for (const team of sqlRes.standings){
+
+        }
+        con.query()
         res.send(response);
     })
     con.end();
@@ -1131,7 +1136,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                 if (req.params.weekType === 'pre'){ 
                     stat.weekIndex += 23
                 }
-
+                console.log(stat);
                 sql = SQL`INSERT INTO team_stats (defForcedFum, defFumRec, defIntsRec, defPtsPerGame, defPassYds, defRushYds,
                     defRedZoneFGs, defRedZones, defRedZonePct, defRedZoneTDs, defSacks, defTotalYds, off4thDownAtt, off4thDownConv,
                     off4thDownConvPct, offFumLost, offIntsLost, off1stDowns, offPtsPerGame, offPassTDs, offPassYds, offRushTDs, offRushYds,
