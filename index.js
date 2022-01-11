@@ -997,22 +997,22 @@ app.get('/api/standings', (req, res) => {
             for (const game of scheduleRes) { 
                 if (results[game.homeTeamId] === undefined){
                     results[game.homeTeamId] = {}; 
-                    console.log(results[game.homeTeamId]);
                     results[game.homeTeamId]['ptsFor'] = game.homeScore;
                     results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                    console.log(results[game.homeTeamId]);
                 }else { 
-                    results[game.homeTeamId]['ptsFor'] += game.homeScore;
-                    results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                    // results[game.homeTeamId]['ptsFor'] += game.homeScore;
+                    // results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
                  }
 
                 if (results[game.awayTeamId] === undefined){
                     results[game.awayTeamId] = {};
-                    console.log(results[game.awayTeamId]);
                     results[game.awayTeamId]['ptsFor'] = game.awayScore;
                     results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
+                    console.log(results[game.awayTeamId]);
                 }else{
-                    results[game.awayTeamId]['ptsFor'] += game.awayScore;
-                    results[game.awayTeamId]['ptsAgainst'] += game.homeScore;
+                    // results[game.awayTeamId]['ptsFor'] += game.awayScore;
+                    // results[game.awayTeamId]['ptsAgainst'] += game.homeScore;
                 }
             }
             for (const team of response.standings){
