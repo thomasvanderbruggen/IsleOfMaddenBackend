@@ -989,7 +989,8 @@ app.get('/api/standings', (req, res) => {
     con.query(sql, (err, sqlRes) => {
         if (err) throw err;
         response['standings'] = sqlRes;
-        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 1 and (awayScore > 0 and homeScore > 0) and teamId > 1'; 
+        console.log(response.standings);
+        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 1 and (awayScore > 0 and homeScore > 0)'; 
         con.query(sql, (err, scheduleRes) => {
             if (err) throw err;
             let results = {}; 
