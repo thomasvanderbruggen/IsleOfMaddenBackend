@@ -994,27 +994,27 @@ app.get('/api/standings', (req, res) => {
             if (err) throw err;
             let results = {}; 
             console.log(scheduleRes);
-            // for (const game of scheduleRes) { 
-            //     if (results[game.homeTeamId] === undefined){
-            //         results[game.homeTeamId]['ptsFor'] = game.homeScore;
-            //         results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
-            //     }else { 
-            //         results[game.homeTeamId]['ptsFor'] += game.homeScore;
-            //         results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
-            //     }
+            for (const game of scheduleRes) { 
+                if (results[game.homeTeamId] === undefined){
+                    results[game.homeTeamId]['ptsFor'] = game.homeScore;
+                    results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                }else { 
+                    results[game.homeTeamId]['ptsFor'] += game.homeScore;
+                    results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                }
 
-            //     if (results[game.awayTeamId] === undefined){
-            //         results[game.awayTeamId]['ptsFor'] = game.awayScore;
-            //         results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
-            //     }else{
-            //         results[game.awayTeamId]['ptsFor'] += game.awayScore;
-            //         results[game.homeTeamId]['ptsAgainst'] += game.homeScore;
-            //     }
-            // }
-            // for (const team of response.standings){
-            //     team['ptsFor'] = results[team.teamId]['ptsFor']
-            //     team['ptsAgainst'] = results[team.teamId]['ptsAgainst']
-            // }
+                if (results[game.awayTeamId] === undefined){
+                    results[game.awayTeamId]['ptsFor'] = game.awayScore;
+                    results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
+                }else{
+                    results[game.awayTeamId]['ptsFor'] += game.awayScore;
+                    results[game.homeTeamId]['ptsAgainst'] += game.homeScore;
+                }
+            }
+            for (const team of response.standings){
+                team['ptsFor'] = results[team.teamId]['ptsFor']
+                team['ptsAgainst'] = results[team.teamId]['ptsAgainst']
+            }
             res.send(response); 
             con.end();
         })
