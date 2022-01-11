@@ -1042,14 +1042,42 @@ app.get('/api/conferencestandings/:conference', (req, res) => {
     con.query(sql, [conference], (err, sqlRes) => {
         if (err) throw err; 
         response['standings'] = sqlRes;
-        sql = 'select sum(' 
-        for (const team of sqlRes.standings){
+        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 1 and (awayScore > 0 and homeScore > 0)'; 
+        con.query(sql, (err, scheduleRes) => {
+            if (err) throw err;
+            let results = {}; 
+            console.log(response.standings.length);
+            for (const game of scheduleRes) { 
+                if (results[game.homeTeamId] === undefined){
+                    results[game.homeTeamId] = {}; 
+                    results[game.homeTeamId]['ptsFor'] = game.homeScore;
+                    results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                    results[game.homeTeamId]['id'] = game.homeTeamId;
+                    console.log(results[game.homeTeamId]);
+                }else { 
+                    results[game.homeTeamId]['ptsFor'] += game.homeScore;
+                    results[game.homeTeamId]['ptsAgainst'] += game.awayScore;
+                 }
 
-        }
-        con.query()
-        res.send(response);
+                if (results[game.awayTeamId] === undefined){
+                    results[game.awayTeamId] = {};
+                    results[game.awayTeamId]['ptsFor'] = game.awayScore;
+                    results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
+                    results[game.awayTeamId]['id'] = game.awayTeamId;
+                    console.log(results[game.awayTeamId]);  
+                }else{
+                    results[game.awayTeamId]['ptsFor'] += game.awayScore;
+                    results[game.awayTeamId]['ptsAgainst'] += game.homeScore;
+                }
+            }
+            for (const team of response.standings){
+                team['ptsFor'] = results[team.teamId]['ptsFor']
+                team['ptsAgainst'] = results[team.teamId]['ptsAgainst']
+            }
+            res.send(response); 
+            con.end();
+        })
     })
-    con.end();
 })
 
 app.get('/api/divisionstandings/:division', (req, res) => {
@@ -1065,9 +1093,42 @@ app.get('/api/divisionstandings/:division', (req, res) => {
     con.query(sql, [division], (err, sqlRes) => {
         if (err) throw err; 
         response['standings'] = sqlRes; 
-        res.send(response);
+        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 1 and (awayScore > 0 and homeScore > 0)'; 
+        con.query(sql, (err, scheduleRes) => {
+            if (err) throw err;
+            let results = {}; 
+            console.log(response.standings.length);
+            for (const game of scheduleRes) { 
+                if (results[game.homeTeamId] === undefined){
+                    results[game.homeTeamId] = {}; 
+                    results[game.homeTeamId]['ptsFor'] = game.homeScore;
+                    results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
+                    results[game.homeTeamId]['id'] = game.homeTeamId;
+                    console.log(results[game.homeTeamId]);
+                }else { 
+                    results[game.homeTeamId]['ptsFor'] += game.homeScore;
+                    results[game.homeTeamId]['ptsAgainst'] += game.awayScore;
+                 }
+
+                if (results[game.awayTeamId] === undefined){
+                    results[game.awayTeamId] = {};
+                    results[game.awayTeamId]['ptsFor'] = game.awayScore;
+                    results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
+                    results[game.awayTeamId]['id'] = game.awayTeamId;
+                    console.log(results[game.awayTeamId]);  
+                }else{
+                    results[game.awayTeamId]['ptsFor'] += game.awayScore;
+                    results[game.awayTeamId]['ptsAgainst'] += game.homeScore;
+                }
+            }
+            for (const team of response.standings){
+                team['ptsFor'] = results[team.teamId]['ptsFor']
+                team['ptsAgainst'] = results[team.teamId]['ptsAgainst']
+            }
+            res.send(response); 
+            con.end();
+        })
     })
-    con.end();
 })
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
