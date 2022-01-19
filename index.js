@@ -1193,7 +1193,8 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
     req.on('end', () => { 
         console.log('----Standings----');
         const teams = JSON.parse(body)['teamStandingInfoList'];
-        Object.keys(JSON.parse(body).forEach(key => {
+        const json = JSON.parse(body);
+        Object.keys(json.forEach(key => {
             console.log(key);
         }))
         Object.keys(teams[0]).forEach(key => { 
@@ -1422,7 +1423,8 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
     req.on('end', () => { 
         //console.log('----Free Agents----'); 
         const json = JSON.parse(body)['rosterInfoList']; 
-        Object.keys(JSON.parse(body).forEach(key => {
+        const test = JSON.parse(body);
+        Object.keys(test.forEach(key => {
             console.log(key);
         }))
         let con = mysql.createConnection({
