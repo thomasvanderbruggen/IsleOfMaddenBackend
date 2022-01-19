@@ -1138,6 +1138,7 @@ app.get('/api/leagueleaders', (req, res) => {
 select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 1 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10;
 select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10; 
 select fullName, sum(recCatches) "recCatches", sum(recYds) "recYds", sum(recTDs) "recTDs", max(recLongest) "recLongest" from receiving_stats where seasonIndex = 1 group by rosterId order by sum(recYds) desc, sum(recTDs) desc LIMIT 10; 
+select fullName, sum(defTotalTackles) "defTotalTackles", sum(defForcedFum) "defForcedFum", sum(defSacks) "defSacks" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defTotalTackles) desc, sum(defForcedFum) desc LIMIT 10;
 select fullName, sum(defInts) "defInts", sum(defDeflections) "defDeflections", sum(defCatchAllowed) "defCatchAllowed", sum(defTDs) "defTDs" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defInts) desc, sum(defDeflections) desc, sum(defCatchAllowed) asc LIMIT 10;
 select fullName, sum(defForcedFum) "defForcedFum", sum(defTotalTackles) "defTackles", sum(defFumRec) "defFumRec", sum(defInts) "defInts" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defForcedFum) desc, sum(defTotalTackles) desc LIMIT 10;
 select fullName, sum(fGMade) "fgMade", sum(fGAtt) "fgAtt", sum(xpMade) "xpMade" from kicking_stats where seasonIndex = 1 group by rosterId order by sum(fGMade) desc, sum(fgAtt) asc LIMIT 10;
@@ -1151,6 +1152,7 @@ select fullName, sum(fGMade) "fgMade", sum(fGAtt) "fgAtt", sum(xpMade) "xpMade" 
         multipleStatements: true
     });
     let response = {}; 
+    
     con.query(sql, (err, sqlRes) => {
         if (err) throw err; 
         response['passing'] = sqlRes[0]; 
@@ -1174,6 +1176,10 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
     })
     req.on('end', () =>{ 
         const teams = JSON.parse(body)['leagueTeamInfoList'];
+        const json = JSON.parse(body); 
+        Object.keys(json).forEach(key => {
+            console.log(key);
+        })
         console.log('----Teams----');
         for (const team of teams) { 
             teamsWithInfo.push(team); 
@@ -1204,7 +1210,6 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
             "database": "tomvandy_isle_of_madden"
         });
         for (const team of teams) {
-            console.log(team);
                 let sql = SQL`INSERT INTO teams (awayWins, awayLosses, awayTies, calendarYear, conferenceId, confLosses, conferenceName, confTies, confWins, 
                     capRoom, capAvailable, capSpent, defPassYds, defPassYdsRank, defRushYds, defRushYdsRank, defTotalYds, defTotalYdsRank, divisionId,
                     divLosses, divisionName, divTies, divWins, homeLosses, homeTies, homeWins, netPts, offPassYds, offPassYdsRank, offRushYds, offRushYdsRank, 
