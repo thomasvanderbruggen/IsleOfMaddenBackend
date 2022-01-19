@@ -1194,9 +1194,9 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
         console.log('----Standings----');
         const teams = JSON.parse(body)['teamStandingInfoList'];
         const json = JSON.parse(body);
-        Object.keys(json.forEach(key => {
+        Object.keys(json).forEach(key => {
             console.log(key);
-        }))
+        })
         Object.keys(teams[0]).forEach(key => { 
             teamStandingsKeys.push(key);
         })
@@ -1424,9 +1424,9 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
         //console.log('----Free Agents----'); 
         const json = JSON.parse(body)['rosterInfoList']; 
         const test = JSON.parse(body);
-        Object.keys(test.forEach(key => {
+        Object.keys(test).forEach(key => {
             console.log(key);
-        }))
+        })
         let con = mysql.createConnection({
             "host": process.env.host,
             "user": process.env.user,
