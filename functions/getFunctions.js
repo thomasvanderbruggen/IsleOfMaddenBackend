@@ -35,8 +35,6 @@ const teamCoach = (teamName, res) => {
 }
 
 const gameStats = (gameId, res) => {
-    const {params: {gameId}, } = req;
-    +gameId;
     let schedulesDone = false, passingDone = false, rushingDone = false, defDone = false, receivingDone = false, sent = false; 
     let con = connectionGenerator();
     let response = {}; 
