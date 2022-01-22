@@ -159,7 +159,7 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
 
 
 app.post('/:platform/:leagueId/standings', (req, res) => { 
-    const {params: {leagueId}, } = req;
+    let {params: {leagueId}, } = req;
     leagueId = parseInt(leagueId);
     let body = ''; 
     req.on('data', chunk => { 
@@ -180,7 +180,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
 
 
 app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res) => { 
-    const {params: {dataType, weekType, leagueId},} = req; 
+    let {params: {dataType, weekType, leagueId},} = req; 
     leagueId = parseInt(leagueId);
     let body = ''; 
     req.on('data', chunk => { 
@@ -226,7 +226,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
 });
 
 app.post('/:platform/:leagueId/freeagents/roster', (req, res) => { 
-    const {params: {leagueId}, } = req;
+    let {params: {leagueId}, } = req;
     leagueId = parseInt(leagueId);    
     let body =''; 
     req.on('data', chunk => { 
@@ -247,7 +247,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
 });
 
 app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => { 
-    const {params: {leagueId}, } = req;
+    let {params: {leagueId}, } = req;
     leagueId = parseInt(leagueId);
     let body = '';
     req.on('data', chunk => { 
