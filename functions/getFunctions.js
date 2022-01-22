@@ -12,7 +12,7 @@ const connectionGenerator = () => {
     return con; 
 }
 
-export const coaches = (res) =>{
+const coaches = (res) =>{
     let con = connectionGenerator();
     con.query('select coachName, teamName from coaches', (err, sqlRes) => {
         if (err) res.sendStatus(500); 
@@ -23,7 +23,7 @@ export const coaches = (res) =>{
     con.end();
 }
 
-export const teamCoach = (teamName, res) => {
+const teamCoach = (teamName, res) => {
     let con = connectionGenerator();
     con.query('select coachName, teamName from coaches where teamName = ?', [teamName], (err, res) => {
         if (err) res.sendStatus(500); 
@@ -34,7 +34,7 @@ export const teamCoach = (teamName, res) => {
     con.end();
 }
 
-export const gameStats = (gameId, res) => {
+const gameStats = (gameId, res) => {
     let schedulesDone = false, passingDone = false, rushingDone = false, defDone = false, receivingDone = false, sent = false; 
     let con = connectionGenerator();
     let response = {}; 
@@ -115,7 +115,7 @@ export const gameStats = (gameId, res) => {
 
 }
 
-export const leagueSchedule = (seasonIndex, weekIndex, res) => {
+const leagueSchedule = (seasonIndex, weekIndex, res) => {
     let con = connectionGenerator();
     let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus from schedules where weekIndex = ${weekIndex} and seasonIndex = ${seasonIndex}`;
     con.query(sql, (err, sqlRes) => {
@@ -140,7 +140,7 @@ export const leagueSchedule = (seasonIndex, weekIndex, res) => {
     con.end(); 
 }
 
-export const allPlayers = (res) => {
+const allPlayers = (res) => {
     let con = connectionGenerator();
 
     let sql = 'select pl.firstName, pl.lastName, pl.devTrait, pl.age, pl.height, pl.weight, pl.playerBestOvr, pl.speedRating, pl.awareRating, pl.position, pl.teamId, pl.rosterId, t.teamName from players pl, teams t where pl.teamId = t.teamId order by concat(firstName, lastName) asc;'; 
@@ -156,7 +156,7 @@ export const allPlayers = (res) => {
     con.end();
 }
 
-export const teamByTeamName = (teamName, res) => {
+const teamByTeamName = (teamName, res) => {
     let teamInfoDone = false, teamCoachDone = false, teamStatsDone = false, teamRosterDone = false, teamSchedules = false, sent = false;
     let response = {};
     let con = mysql.createConnection({
@@ -256,7 +256,7 @@ export const teamByTeamName = (teamName, res) => {
 }
 
 
-export const teamRoster = (teamId, res) => {
+const teamRoster = (teamId, res) => {
     let con = connectionGenerator();
     let sql = 'select * from players where teamId = ?'; 
     con.query(sql, [teamId], (err, res) => {
@@ -269,13 +269,13 @@ export const teamRoster = (teamId, res) => {
 }
 
 
-export const seasonStats = (year, position, playerId, res) => {
+const seasonStats = (year, position, playerId, res) => {
     // TODO
     //  let con = connectionGenerator();
     
  }
 
- export const playerInfo = (rosterId, res) => {
+const playerInfo = (rosterId, res) => {
      let con = connectionGenerator();
      let response = {};
      let sql = 'SELECT p.*, t.primaryColor, t.secondaryColor, t.teamName from players p, teams t where p.teamId = t.teamId and p.rosterId = ?;'; 
@@ -644,7 +644,7 @@ export const seasonStats = (year, position, playerId, res) => {
 
  }
 
- export const powerRank = (res) => {
+const powerRank = (res) => {
     let con = connectionGenerator();
     let sql = "select cityName, teamName, totalWins, totalLosses, totalTies, primaryColor, secondaryColor from teams where teamId <> 1 order by teamRank ASC;"
     con.query(sql, (err,sqlRes) => {
@@ -655,7 +655,7 @@ export const seasonStats = (year, position, playerId, res) => {
     })
 }
 
-export const playerSearch = (position, team, name) => {
+const playerSearch = (position, team, name) => {
     let sql;
     let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr, teamId, position, rosterId"; 
     if (!position || position == "Any") { 
@@ -754,7 +754,7 @@ export const playerSearch = (position, team, name) => {
     con.end(); 
 }
 
-export const standings = (res) => {
+const standings = (res) => {
     let sql = 'select teamName, teamId, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1';
     let con = connectionGenerator();
 
@@ -803,7 +803,7 @@ export const standings = (res) => {
 
 }
 
-export const conferenceStandings = (conference, res) => {
+const conferenceStandings = (conference, res) => {
     let sql = 'select teamName, teamId, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1 and conferenceName = ?'; 
     let con = connectionGenerator();    
     let response = {}; 
@@ -848,7 +848,7 @@ export const conferenceStandings = (conference, res) => {
     })
 }
 
-export const divisionStandings = (division, res) => {
+const divisionStandings = (division, res) => {
     let sql = 'select teamName, teamId, totalWins, totalLosses, totalTies, divWins, divLosses, divTies, confWins, confLosses, confTies, conferenceName, divisionName, ptsFor, ptsAgainst, homeWins, homeLosses, homeTies, awayWins, awayTies, awayLosses, winLossStreak, ROW_NUMBER() OVER (ORDER BY totalWins desc, totalTies desc, confWins desc, divWins desc) as "place" from teams where teamId > 1 and divisionName = ?'; 
     let con = connectionGenerator();
     let response = {}; 
@@ -893,7 +893,7 @@ export const divisionStandings = (division, res) => {
     })
 }
 
-export const leagueLeaders = (res) => {
+const leagueLeaders = (res) => {
         /* 
 select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 1 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10;
 select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10; 
@@ -927,3 +927,19 @@ con.query(sql, (err, sqlRes) => {
 con.end();
 
 }
+
+exports.coaches = coaches;
+exports.teamCoach = teamCoach;
+exports.gameStats = gameStats;
+exports.leagueSchedule = leagueSchedule;
+exports.allPlayers = allPlayers;
+exports.teamByTeamName = teamByTeamName; 
+exports.teamRoster = teamRoster; 
+exports.seasonStats = seasonStats;
+exports.playerInfo = playerInfo;
+exports.powerRank = powerRank;
+exports.playerSearch = playerSearch; 
+exports.standings = standings;
+exports.conferenceStandings = conferenceStandings;
+exports.divisionStandings = divisionStandings;
+exports.leagueLeaders = leagueLeaders;

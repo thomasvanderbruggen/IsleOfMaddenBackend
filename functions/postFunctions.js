@@ -50,7 +50,7 @@ function generatePlayerIdWithFullName(fullName, rosterId) {
 }
 
 
-export const leagueInfo = (teams, teamsWithInfo) => {
+const leagueInfo = (teams, teamsWithInfo) => {
     for (let i = 0; i < teamsWithInfo.length; i++){
         teams[i] = {...teams[i], ...teamsWithInfo[i]};
     }
@@ -83,7 +83,7 @@ export const leagueInfo = (teams, teamsWithInfo) => {
     con.end();
 }
 
-export const teamWeeklyStats = (stats, weekType) => {
+const teamWeeklyStats = (stats, weekType) => {
     let con = connectionGenerator();
     let sql; 
     for (const stat of stats) {
@@ -120,7 +120,7 @@ export const teamWeeklyStats = (stats, weekType) => {
     con.end(); 
 }
 
-export const schedule = (games, weekType) => {
+const schedule = (games, weekType) => {
     let con = connectionGenerator();
     let sql; 
     for (let game of games) {
@@ -139,7 +139,7 @@ export const schedule = (games, weekType) => {
     con.end();
 }
 
-export const puntingWeeklyStats = (stats, weekType) => {
+const puntingWeeklyStats = (stats, weekType) => {
     let con = connectionGenerator();
     let sql;
     
@@ -159,7 +159,7 @@ export const puntingWeeklyStats = (stats, weekType) => {
     con.end();
 }
 
-export const passingWeeklyStats = (stats, weekType) => {
+const passingWeeklyStats = (stats, weekType) => {
     let con = connectionGenerator();
     let sql;
     for (let stat of stats) {
@@ -179,7 +179,7 @@ export const passingWeeklyStats = (stats, weekType) => {
     con.end();
 }
 
-export const defensiveWeeklyStats = (stats, weekType) => {
+const defensiveWeeklyStats = (stats, weekType) => {
     let con = connectionGenerator();
     let sql;
     for (let stat of stats) {
@@ -202,7 +202,7 @@ export const defensiveWeeklyStats = (stats, weekType) => {
  
 }
 
-export const kickingWeeklyStats = (stats, weekType) => {
+const kickingWeeklyStats = (stats, weekType) => {
     let con = connectionGenerator();
     let sql;
     for (let stat of stats) { 
@@ -222,7 +222,7 @@ export const kickingWeeklyStats = (stats, weekType) => {
     con.end();
 }
 
-export const rushingWeeklyStats = (stats, weekType) => {
+const rushingWeeklyStats = (stats, weekType) => {
     let con = connectionGenerator();
     let sql;
     for (let stat of stats) { 
@@ -242,7 +242,7 @@ export const rushingWeeklyStats = (stats, weekType) => {
     con.end();
 }
 
-export const receivingWeeklyStats = (stats, weekType) => {
+const receivingWeeklyStats = (stats, weekType) => {
     let con = connectionGenerator();
     let sql;
     for (let stat of stats) {
@@ -263,7 +263,7 @@ export const receivingWeeklyStats = (stats, weekType) => {
     con.end();
 }
 
-export const freeAgents = (players) => {
+const freeAgents = (players) => {
     let con = connectionGenerator();
     let sql;
     for (let player of players) { 
@@ -321,7 +321,7 @@ export const freeAgents = (players) => {
     con.end();
 }
 
-export const teamRosters = (players) => {
+const teamRosters = (players) => {
     for (let player of players) { 
         if (player.teamId == 0) { 
             player.teamId = 1;
@@ -388,3 +388,15 @@ export const teamRosters = (players) => {
     
         }
 }
+
+exports.leagueInfo = leagueInfo;
+exports.teamWeeklyStats = teamWeeklyStats;
+exports.schedule = schedule;
+exports.passingWeeklyStats = passingWeeklyStats;
+exports.defensiveWeeklyStats = defensiveWeeklyStats; 
+exports.puntingWeeklyStats = puntingWeeklyStats; 
+exports.kickingWeeklyStats = kickingWeeklyStats;
+exports.rushingWeeklyStats = rushingWeeklyStats; 
+exports.receivingWeeklyStats = receivingWeeklyStats;
+exports.freeAgents = freeAgents;
+exports.teamRosters = teamRosters;
