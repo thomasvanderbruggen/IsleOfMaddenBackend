@@ -216,7 +216,6 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                 let stats = json['playerReceivingStatInfoList'];
                 receivingWeeklyStats(stats, weekType);
             }
-            con.end();
             res.sendStatus(200);
         }else{
             res.sendStatus(500);
@@ -237,7 +236,6 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
         if (leagueId === realLeagueId){
             const json = JSON.parse(body)['rosterInfoList'];        
             freeAgents(json);
-            con.end();
             res.sendStatus(200); 
         }else{
             res.sendStatus(500);
@@ -258,7 +256,6 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
         if (leagueId === realLeagueId){
             const json = JSON.parse(body)['rosterInfoList'];
             teamRosters(json);
-            con.end();
             res.sendStatus(200);
         }else{
             res.sendStatus(500);
