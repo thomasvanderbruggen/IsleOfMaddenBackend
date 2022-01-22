@@ -9,6 +9,13 @@ const { leagueInfo, teamWeeklyStats, schedule, puntingWeeklyStats, passingWeekly
 let teamsWithInfo = []; 
 
 
+const pool = mysql.createPool({
+    "host": process.env.host,
+    "user": process.env.user,
+    "password": process.env.pw,
+    "database": "tomvandy_isle_of_madden"
+})
+
 app.set('port', (process.env.PORT || 3001)); 
 
 app.use(cors());
@@ -168,7 +175,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
     req.on('end', () => { 
         if (leagueId === realLeagueId){
             const teams = JSON.parse(body)['teamStandingInfoList'];
-            leagueInfo(teams, teamsWithInfo);
+            leagueInfo(teams, teamsWithInfo, pool);
             teamsWithInfo = []; 
             res.sendStatus(200); 
         }else{
@@ -192,29 +199,29 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
             let json = JSON.parse(body)
             if (dataType === 'teamstats'){  
                 let stats = json['teamStatInfoList'];
-                teamWeeklyStats(stats, weekType);
+                teamWeeklyStats(stats, weekType, pool);
     
             }else if (dataType === 'schedules'){ 
                 let games = json['gameScheduleInfoList']; 
-                schedule(games, weekType);
+                schedule(games, weekType, pool);
             }else if (dataType === 'punting'){ 
                 let stats = json['playerPuntingStatInfoList'];
-                puntingWeeklyStats(stats, weekType);
+                puntingWeeklyStats(stats, weekType, pool);
             }else if (dataType === 'passing'){ 
                 let stats = json['playerPassingStatInfoList'];
-                passingWeeklyStats(stats, weekType);
+                passingWeeklyStats(stats, weekType, pool);
             }else if (dataType === 'defense'){ 
                 let stats = json['playerDefensiveStatInfoList']; 
-                defensiveWeeklyStats(stats, weekType);
+                defensiveWeeklyStats(stats, weekType, pool);
             }else if (dataType === 'kicking'){ 
                 let stats = json['playerKickingStatInfoList'];
-                kickingWeeklyStats(stats, weekType);
+                kickingWeeklyStats(stats, weekType, pool);
             }else if (dataType === 'rushing') {
                 let stats = json['playerRushingStatInfoList']; 
-                rushingWeeklyStats(stats, weekType);
+                rushingWeeklyStats(stats, weekType, pool);
             }else if (dataType === 'receiving') { 
                 let stats = json['playerReceivingStatInfoList'];
-                receivingWeeklyStats(stats, weekType);
+                receivingWeeklyStats(stats, weekType, pool);
             }
             res.sendStatus(200);
         }else{
@@ -235,7 +242,7 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
         //console.log('----Free Agents----'); 
         if (leagueId === realLeagueId){
             const json = JSON.parse(body)['rosterInfoList'];        
-            freeAgents(json);
+            freeAgents(json, pool);
             res.sendStatus(200); 
         }else{
             res.sendStatus(500);
@@ -255,7 +262,7 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
        // console.log('---Team Rosters----'); 
         if (leagueId === realLeagueId){
             const json = JSON.parse(body)['rosterInfoList'];
-            teamRosters(json);
+            teamRosters(json, pool);
             res.sendStatus(200);
         }else{
             res.sendStatus(500);
