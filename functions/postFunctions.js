@@ -1,4 +1,5 @@
 const SQL = require('sql-template-strings');
+const mysql = require('mysql');
 const { leagueId } = require('../resources/leagueId.json');
 
 const connectionGenerator = () => {
