@@ -277,7 +277,6 @@ const teamRoster = (teamId, res) => {
 
  const playerInfo = (rosterId, res) => {
      let con = connectionGenerator();
-     const {params: {rosterId}, } = req; 
      let response = {};
      let sql = 'SELECT p.*, t.primaryColor, t.secondaryColor, t.teamName from players p, teams t where p.teamId = t.teamId and p.rosterId = ?;'; 
      con.query(sql, [rosterId], (err, sqlRes) => { 
