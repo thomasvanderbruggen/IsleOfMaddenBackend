@@ -137,7 +137,7 @@ app.get('/api/leagueleaders', (req, res) => {
 
 app.post('/:platform/:leagueId/leagueTeams', (req, res) => { 
     let {params: {leagueId}, } = req;
-    leagueId = parseInt(leagueId);s
+    leagueId = parseInt(leagueId);
     let body = ''; 
     req.on('data', chunk=>{ 
         body += chunk.toString();
