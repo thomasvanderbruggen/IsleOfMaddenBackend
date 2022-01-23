@@ -14,7 +14,7 @@ const connectionGenerator = () => {
     return con; 
 }
 
-const adjustScheduleId = (scheduleId) => {
+const adjustScheduleId = (scheduleId, seasonIndex) => {
     return scheduleId + (10000 * (1 - seasonIndex));
 }
 
@@ -93,7 +93,7 @@ const teamWeeklyStats = (stats, weekType, pool) => {
         let sql; 
         for (const stat of stats) {
             stat.weekIndex++; 
-            stat.scheduleId = adjustScheduleId(stat.scheduleId);      
+            stat.scheduleId = adjustScheduleId(stat.scheduleId, stat.seasonIndex);      
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23
             }
@@ -132,7 +132,7 @@ const schedule = (games, weekType, pool) => {
         let sql; 
         for (let game of games) {
             game.weekIndex++; 
-            game.scheduleId = adjustScheduleId(game.scheduleId);
+            stat.scheduleId = adjustScheduleId(stat.scheduleId, stat.seasonIndex);    
             if (weekType === 'pre'){ 
                 game.weekIndex += 23; 
             }
@@ -152,7 +152,7 @@ const puntingWeeklyStats = (stats, weekType, pool) => {
         console.log('punting');
         for (let stat of stats) { 
             stat.weekIndex++; 
-            stat.scheduleId = adjustScheduleId(stat.scheduleId);
+            stat.scheduleId = adjustScheduleId(stat.scheduleId, stat.seasonIndex);      
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
@@ -172,7 +172,7 @@ const passingWeeklyStats = (stats, weekType,pool) => {
         let sql;
         for (let stat of stats) {
             stat.weekIndex++;
-            stat.scheduleId = adjustScheduleId(stat.scheduleId); 
+            stat.scheduleId = adjustScheduleId(stat.scheduleId, stat.seasonIndex); 
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
@@ -193,7 +193,7 @@ const defensiveWeeklyStats = (stats, weekType, pool) => {
         let sql;
         for (let stat of stats) {
             stat.weekIndex++; 
-            stat.scheduleId = adjustScheduleId(stat.scheduleId);
+            stat.scheduleId = adjustScheduleId(stat.scheduleId, stat.seasonIndex);
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
@@ -218,7 +218,7 @@ const kickingWeeklyStats = (stats, weekType, pool) => {
         let sql;
         for (let stat of stats) { 
             stat.weekIndex++; 
-            stat.scheduleId = adjustScheduleId(stat.scheduleId);
+            stat.scheduleId = adjustScheduleId(stat.scheduleId, stat.seasonIndex);
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
@@ -239,7 +239,7 @@ const rushingWeeklyStats = (stats, weekType, pool) => {
         let sql;
         for (let stat of stats) { 
             stat.weekIndex++; 
-            stat.scheduleId = adjustScheduleId(stat.scheduleId);
+            stat.scheduleId = adjustScheduleId(stat.scheduleId, stat.seasonIndex);
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
@@ -260,7 +260,7 @@ const receivingWeeklyStats = (stats, weekType, pool) => {
         let sql;
         for (let stat of stats) {
             stat.weekIndex++; 
-            stat.scheduleId = adjustScheduleId(stat.scheduleId);
+            stat.scheduleId = adjustScheduleId(stat.scheduleId, stat.seasonIndex);
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
