@@ -89,6 +89,7 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
 
 const teamWeeklyStats = (stats, weekType, pool) => {
     pool.getConnection((err, con) => {
+        console.log('Inserting team stats');
         let sql; 
         for (const stat of stats) {
             stat.weekIndex++; 
@@ -127,6 +128,7 @@ const teamWeeklyStats = (stats, weekType, pool) => {
 
 const schedule = (games, weekType, pool) => {
     pool.getConnection((err, con) => {
+        console.log('inserting schedule');
         let sql; 
         for (let game of games) {
             game.weekIndex++; 
@@ -147,7 +149,7 @@ const schedule = (games, weekType, pool) => {
 const puntingWeeklyStats = (stats, weekType, pool) => {
     pool.getConnection((err, con) => {
         let sql;
-    
+        console.log('punting');
         for (let stat of stats) { 
             stat.weekIndex++; 
             stat.scheduleId = adjustScheduleId(stat.scheduleId);
@@ -166,6 +168,7 @@ const puntingWeeklyStats = (stats, weekType, pool) => {
 
 const passingWeeklyStats = (stats, weekType,pool) => {  
     pool.getConnection((err, con) => {
+        console.log('passing');
         let sql;
         for (let stat of stats) {
             stat.weekIndex++;
@@ -186,6 +189,7 @@ const passingWeeklyStats = (stats, weekType,pool) => {
 
 const defensiveWeeklyStats = (stats, weekType, pool) => {
     pool.getConnection((err, con)=>{
+        console.log('defensive');
         let sql;
         for (let stat of stats) {
             stat.weekIndex++; 
@@ -210,6 +214,7 @@ const defensiveWeeklyStats = (stats, weekType, pool) => {
 
 const kickingWeeklyStats = (stats, weekType, pool) => {
     pool.getConnection((err, con)=>{
+        console.log('kicking');
         let sql;
         for (let stat of stats) { 
             stat.weekIndex++; 
@@ -230,6 +235,7 @@ const kickingWeeklyStats = (stats, weekType, pool) => {
 
 const rushingWeeklyStats = (stats, weekType, pool) => {
     pool.getConnection((err, con) => {
+        console.log('rushing');
         let sql;
         for (let stat of stats) { 
             stat.weekIndex++; 
@@ -250,6 +256,7 @@ const rushingWeeklyStats = (stats, weekType, pool) => {
 
 const receivingWeeklyStats = (stats, weekType, pool) => {
     pool.getConnection((err, con) => {
+        console.log('receiving');
         let sql;
         for (let stat of stats) {
             stat.weekIndex++; 
