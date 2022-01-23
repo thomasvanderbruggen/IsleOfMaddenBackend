@@ -397,7 +397,8 @@ const teamRosters = (players, pool) => {
             if (player.signatureSlotList !== undefined){
                 for (let ability of player.signatureSlotList){
                     if (ability.signatureAbility.signatureLogoId !== 0){
-                        ability.abilityId = ability.signatureAbility.signatureLogoId + player.playerId; 
+                        ability.abilityId = ability.signatureAbility.signatureLogoId + player.playerId;
+                        console.log(player.playerId); 
                         let sql = SQL`INSERT INTO player_abilities (abilityId, abilityTitle, abilityLogo, abilityDescription, rosterId, playerId) VALUES (${ability.abilityId}, ${ability.signatureAbility.signatureTitle}, ${ability.signatureAbility.signatureLogoId}, ${ability.signatureAbility.signatureDescription}, ${player.rosterId}, ${player.playerId}) ON DUPLICATE KEY UPDATE abilityId=${ability.abilityId}, abilityLogo=VALUES(abilityLogo), playerId=VALUES(playerId)`;
                         con.query(sql, (err, res) => {
                             if (err) throw err;
