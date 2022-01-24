@@ -107,7 +107,7 @@ const teamWeeklyStats = (stats, weekType, pool) => {
                 VALUES (${stat.defForcedFum}, ${stat.defFumRec}, ${stat.defIntsRec}, ${stat.defPtsPerGame}, ${stat.defPassYds}, ${stat.defRushYds},
                 ${stat.defRedZoneFGs}, ${stat.defRedZones}, ${stat.defRedZonePct}, ${stat.defRedZoneTDs}, ${stat.defSacks}, ${stat.defTotalYds},
                 ${stat.off4thDownAtt}, ${stat.off4thDownConv}, ${stat.off4thDownConvPct}, ${stat.offFumLost}, ${stat.offIntsLost}, ${stat.off1stDowns},
-                ${stat.offPtsPergame}, ${stat.offPassTds}, ${stat.offPassYds}, ${stat.offRushTDs}, ${stat.offRushYds}, ${stat.offRedZoneFGs}, ${stat.ofFRedZones},
+                ${stat.offPtsPerGame}, ${stat.offPassTDs}, ${stat.offPassYds}, ${stat.offRushTDs}, ${stat.offRushYds}, ${stat.offRedZoneFGs}, ${stat.offRedZones},
                 ${stat.offRedZonePct}, ${stat.offRedZoneTDs}, ${stat.offSacks}, ${stat.off3rdDownAtt}, ${stat.off3rdDownConv}, ${stat.off3rdDownConvPct}, ${stat.off2PtAtt},
                 ${stat.off2PtConv}, ${stat.off2PtConvPct}, ${stat.offTotalYds}, ${stat.offTotalYdsGained}, ${stat.penalties}, ${stat.penaltyYds}, ${stat.scheduleId},
                 ${stat.seed}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.totalLosses}, ${stat.teamId}, ${stat.tODiff}, ${stat.tOGiveaways}, ${stat.tOTakeaways},
