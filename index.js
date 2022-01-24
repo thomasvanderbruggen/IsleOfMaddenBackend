@@ -4,7 +4,7 @@ const app = express();
 const SQL = require('sql-template-strings');
 const cors = require('cors');
 const {realLeagueId} = require('./resources/leagueId.json');
-const { coaches, teamCoach, gameStats, leagueSchedule, allPlayers, teambyTeamName, teamRoster, seasonStats, playerInfo, powerRank, playerSearch, standings, conferenceStandings, divisionStandings, leagueLeaders} = require('./functions/getFunctions');
+const { coaches, teamCoach, gameStats, leagueSchedule, allPlayers, teamByTeamName, teamRoster, seasonStats, playerInfo, powerRank, playerSearch, standings, conferenceStandings, divisionStandings, leagueLeaders} = require('./functions/getFunctions');
 const { leagueInfo, teamWeeklyStats, schedule, puntingWeeklyStats, passingWeeklyStats, defensiveWeeklyStats, kickingWeeklyStats, rushingWeeklyStats, receivingWeeklyStats, freeAgents, teamRosters } = require('./functions/postFunctions');
 let teamsWithInfo = []; 
 
@@ -94,7 +94,7 @@ app.get('/test', (req, res)=> {
 
 app.get('/api/team/:teamName', (req, res) => {
     const {params: {teamName},} = req;
-   teambyTeamName(teamName, res);
+    teamByTeamName(teamName, res);
 })
 
 app.get('/api/roster/:teamId', (req, res) => { 
