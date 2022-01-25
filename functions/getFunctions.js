@@ -25,7 +25,7 @@ const coaches = (res) =>{
 
 const teamCoach = (teamName, res) => {
     let con = connectionGenerator();
-    con.query('select coachName, teamName from coaches where teamName = ?', [teamName], (err, res) => {
+    con.query('select coachName, teamName from coaches where teamName = ?', [teamName], (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else { 
             res.send(sqlRes);
