@@ -18,7 +18,7 @@ const pool = mysql.createPool({
 
 app.set('port', (process.env.PORT || 3001)); 
 
-app.use(cors());
+app.use(cors({origin: true}));
 
 app.get('/', (req, res) => { 
     res.send('Backend for isleofmadden.com'); 
