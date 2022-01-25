@@ -44,8 +44,8 @@ const gameStats = (gameId, res) => {
             sent = true;
             res.sendStatus(500); 
         }
-        sqlRes[0].awayTeam = teamIdToName.get(sqlRes[0].awayTeamId); 
-        sqlRes[0].homeTeam = teamIdToName.get(sqlRes[0].homeTeamId);
+        sqlRes[0].awayTeam = teamIdToName[sqlRes[0].awayTeamId]; 
+        sqlRes[0].homeTeam = teamIdToName[sqlRes[0].homeTeamId];
         response['game'] = sqlRes;
         schedulesDone = true;
         if (schedulesDone && passingDone && rushingDone && defDone && receivingDone && !sent) { 
@@ -125,12 +125,12 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
                 if (game.homeTeamId === 0) { 
                     game['homeTeam'] = 'TBD';
                 }else { 
-                    game['homeTeam'] = teamIdToName.get(game.homeTeamId);
+                    game['homeTeam'] = teamIdToName[game.homeTeamId];
                 }
                 if (game.awayTeamId === 0) { 
                     game['awayTeam'] = 'TBD';
                 }else { 
-                    game['awayTeam'] = teamIdToName.get(game.awayTeamId);
+                    game['awayTeam'] = teamIdToName[game.awayTeamId];
                 }
                 
             }
@@ -230,15 +230,15 @@ const teamByTeamName = (teamName, res) => {
             res.sendStatus(500); 
         }
         for (const week of sqlRes) { 
-            if (week.awayTeamId === teamNameToID.get(teamName)) { 
+            if (week.awayTeamId === teamNameToId[teamName]) { 
                 week.awayTeam = teamName
             }else { 
-                week.awayTeam = teamIdToName.get(week.awayTeamId);
+                week.awayTeam = teamIdToName[week.awayTeamId];
             }
-            if (week.homeTeamId === teamNameToID.get(teamName)) { 
+            if (week.homeTeamId === teamNameToId[teamName]) { 
                 week.homeTeam = teamName;
             }else { 
-                week.homeTeam = teamIdToName.get(week.homeTeamId); 
+                week.homeTeam = teamIdToName[week.homeTeamId]; 
             }
         }
         response['schedule'] = sqlRes;
@@ -339,10 +339,10 @@ const playerInfo = (rosterId, res) => {
                      seasonStats.passYdsPerGame = week.passYdsPerGame;
                      week.passerRating = +week.passerRating.toFixed(2);
                      if (week.awayTeamId === week.teamId){
-                         week['opponent'] = teamIdToName.get(week.homeTeamId);
+                         week['opponent'] = teamIdToName[week.homeTeamId];
                      }
                      if (week.homeTeamId === week.teamId){
-                         week['opponent'] = teamIdToName.get(week.awayTeamId);
+                         week['opponent'] = teamIdToName[week.awayTeamId];
                      }
                      delete week.awayTeamId; 
                      delete week.homeTeamId;
@@ -412,10 +412,10 @@ const playerInfo = (rosterId, res) => {
                      seasonStats.recYdsAfterCatch += week.recYdsAfterCatch; 
                      seasonStats.recYdsPerGame = week.recYdsPerGame;
                      if (week.awayTeamId === week.teamId){
-                         week['opponent'] = teamIdToName.get(week.homeTeamId);
+                         week['opponent'] = teamIdToName[week.homeTeamId];
                      }
                      if (week.homeTeamId === week.teamId){
-                         week['opponent'] = teamIdToName.get(week.awayTeamId);
+                         week['opponent'] = teamIdToName[week.awayTeamId];
                      }
                      delete week.awayTeamId; 
                      delete week.homeTeamId;
@@ -461,10 +461,10 @@ const playerInfo = (rosterId, res) => {
                          seasonStats.recYac += (week.recYacPerCatch * week.recCatches); 
                          seasonStats.recYds += week.recYds;
                          if (week.awayTeamId === week.teamId){
-                             week['opponent'] = teamIdToName.get(week.homeTeamId);
+                             week['opponent'] = teamIdToName[week.homeTeamId];
                          }
                          if (week.homeTeamId === week.teamId){
-                             week['opponent'] = teamIdToName.get(week.awayTeamId);
+                             week['opponent'] = teamIdToName[week.awayTeamId];
                          }
                          delete week.awayTeamId; 
                          delete week.homeTeamId;
@@ -516,10 +516,10 @@ const playerInfo = (rosterId, res) => {
                          seasonStats.defTDs += week.defTDs; 
                          seasonStats.defTotalTackles += week.defTotalTackles;
                          if (week.awayTeamId === week.teamId){
-                             week['opponent'] = teamIdToName.get(week.homeTeamId);
+                             week['opponent'] = teamIdToName[week.homeTeamId];
                          }
                          if (week.homeTeamId === week.teamId){
-                             week['opponent'] = teamIdToName.get(week.awayTeamId);
+                             week['opponent'] = teamIdToName[week.awayTeamId];
                          }
                          delete week.awayTeamId; 
                          delete week.homeTeamId;
@@ -567,10 +567,10 @@ const playerInfo = (rosterId, res) => {
                          seasonStats.kickoffAtt += week.kickoffAtt; 
                          seasonStats.kickoffTBs += week.kickoffTBs;
                          if (week.awayTeamId === week.teamId){
-                             week['opponent'] = teamIdToName.get(week.homeTeamId);
+                             week['opponent'] = teamIdToName[week.homeTeamId];
                          }
                          if (week.homeTeamId === week.teamId){
-                             week['opponent'] = teamIdToName.get(week.awayTeamId);
+                             week['opponent'] = teamIdToName[week.awayTeamId];
                          }
                          delete week.awayTeamId; 
                          delete week.homeTeamId;
@@ -619,10 +619,10 @@ const playerInfo = (rosterId, res) => {
                          seasonStats.xpAtt += week.xPAtt; 
                          seasonStats.xpMade += week.xPMade;
                          if (week.awayTeamId === week.teamId){
-                             week['opponent'] = teamIdToName.get(week.homeTeamId);
+                             week['opponent'] = teamIdToName[week.homeTeamId];
                          }
                          if (week.homeTeamId === week.teamId){
-                             week['opponent'] = teamIdToName.get(week.awayTeamId);
+                             week['opponent'] = teamIdToName[week.awayTeamId];
                          }
                          delete week.awayTeamId; 
                          delete week.homeTeamId;
@@ -746,7 +746,7 @@ const playerSearch = (position, team, name) => {
         if (err) {res.send(500);} 
         else {
             for (let player of sqlRes){  
-                player['teamName'] = teamIdToName.get(player.teamId);
+                player['teamName'] = teamIdToName[player.teamId];
             }
             res.send(sqlRes); 
         }
