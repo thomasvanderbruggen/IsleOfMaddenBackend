@@ -529,6 +529,7 @@ const playerInfo = (rosterId, res) => {
                      }
                      response.weeklyStats = weeklyStats; 
                      response.seasonStats = seasonStats;
+                     console.log(response);
                      res.send(response);
                      con.end();
                  }
