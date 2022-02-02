@@ -115,7 +115,7 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
 
 app.get('/api/player/:rosterId', (req, res) => { 
     const {params: {rosterId}, } = req; 
-   playerInfo(rosterId)
+   playerInfo(rosterId, res)
 })
 
 app.get('/api/powerranking/', (req, res) => { 
