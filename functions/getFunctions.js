@@ -357,7 +357,7 @@ const playerInfo = (rosterId, res) => {
                     res.send(response);
                     con.end()
                  }else {
-                     res.send({});
+                     res.send(response);
                  }
              })
      
@@ -433,7 +433,7 @@ const playerInfo = (rosterId, res) => {
                     res.send(response);
                     con.end();
                  }else {
-                    res.send({});
+                    res.send(response);
                  }
              })
          } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
@@ -485,7 +485,7 @@ const playerInfo = (rosterId, res) => {
                         res.send(response);
                         con.end();
                      }else {
-                         res.send({});
+                         res.send(response);
                      }
                      
                  }
@@ -543,7 +543,7 @@ const playerInfo = (rosterId, res) => {
                         res.send(response);
                         con.end();
                      }else {
-                         res.send({});
+                         res.send(response);
                      } 
                  }
              })
@@ -599,7 +599,7 @@ const playerInfo = (rosterId, res) => {
                         res.send(response);
                         con.end();
                      }else {
-                         res.send({});
+                         res.send(response);
                      }
                  }
              })
@@ -655,7 +655,7 @@ const playerInfo = (rosterId, res) => {
                         res.send(response); 
                         con.end();
                      }else{
-                         res.send({});
+                         res.send(response);
                      }
                  }
              })
