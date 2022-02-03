@@ -451,7 +451,9 @@ const playerInfo = (rosterId, res) => {
              sql = SQL`select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.rosterId = re.rosterId left join schedules sch on sch.scheduleId = re.scheduleId where re.rosterId = ${rosterId} and re.seasonIndex = 1 order by (re.weekIndex) asc`;
              con.query(sql, (err, secondQuery) => { {
                  if (err) { 
-                    res.sendStatus(500);}
+                    res.sendStatus(500);
+                    console.log(err);
+                }
                  else{
                      if (secondQuery.length !== 0){
                         let weeklyStats = [];  
