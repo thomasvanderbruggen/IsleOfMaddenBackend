@@ -1,4 +1,4 @@
-
+node_modules
 secrets/dbcredentials.js
 secrets/dbcredentials.json
 test
