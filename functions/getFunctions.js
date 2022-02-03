@@ -355,7 +355,6 @@ const playerInfo = (rosterId, res) => {
                     response.seasonStats = seasonStats; 
                     response.weeklyStats = weeklyStats; 
                     res.send(response);
-                    con.end()
                  }else {
                      res.send(response);
                  }
@@ -366,7 +365,6 @@ const playerInfo = (rosterId, res) => {
              sql = SQL`select ru.fullName, ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
              ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
              re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex, pl.teamId, sch.homeTeamId, sch.awayTeamId from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId left join players pl ON pl.rosterId = ru.rosterId left join schedules sch on sch.scheduleId = ru.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1 order by (ru.weekIndex) asc`; 
-     
              con.query(sql, (err, secondQuery)=> { 
                  if (err) res.sendStatus(500) 
                  if (secondQuery.length !== 0){
@@ -431,7 +429,6 @@ const playerInfo = (rosterId, res) => {
                     response.seasonStats = seasonStats; 
                     response.weeklyStats = weeklyStats; 
                     res.send(response);
-                    con.end();
                  }else {
                     res.send(response);
                  }
@@ -483,7 +480,6 @@ const playerInfo = (rosterId, res) => {
                         response.weeklyStats = weeklyStats; 
                         response.seasonStats = seasonStats;  
                         res.send(response);
-                        con.end();
                      }else {
                          res.send(response);
                      }
@@ -541,7 +537,6 @@ const playerInfo = (rosterId, res) => {
                         response.weeklyStats = weeklyStats; 
                         response.seasonStats = seasonStats;
                         res.send(response);
-                        con.end();
                      }else {
                          res.send(response);
                      } 
@@ -597,7 +592,6 @@ const playerInfo = (rosterId, res) => {
                         response.seasonStats = seasonStats; 
                         response.weeklyStats = weeklyStats; 
                         res.send(response);
-                        con.end();
                      }else {
                          res.send(response);
                      }
@@ -652,8 +646,7 @@ const playerInfo = (rosterId, res) => {
                         seasonStats.name = secondQuery[0].fullName;
                         response.weeklyStats = weeklyStats; 
                         response.seasonStats = seasonStats;
-                        res.send(response); 
-                        con.end();
+                        res.send(response); ;
                      }else{
                          res.send(response);
                      }
@@ -663,6 +656,7 @@ const playerInfo = (rosterId, res) => {
              res.send(response);
          }
      })
+     con.end();
 
  }
 
