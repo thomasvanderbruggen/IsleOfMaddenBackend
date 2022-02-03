@@ -358,6 +358,7 @@ const playerInfo = (rosterId, res) => {
                  }else {
                      res.send(response);
                  }
+                 con.end();
              })
      
      
@@ -432,6 +433,7 @@ const playerInfo = (rosterId, res) => {
                  }else {
                     res.send(response);
                  }
+                con.end();
              })
          } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
             let seasonStats = { 
@@ -485,6 +487,7 @@ const playerInfo = (rosterId, res) => {
                      }else {
                          res.send(response);
                      }
+                     con.end();
                      
                  }
      
@@ -541,7 +544,8 @@ const playerInfo = (rosterId, res) => {
                         res.send(response);
                      }else {
                          res.send(response);
-                     } 
+                     }
+                     con.end(); 
                  }
              })
          } else if (position === 'P' || position === 'p'){ 
@@ -597,6 +601,7 @@ const playerInfo = (rosterId, res) => {
                      }else {
                          res.send(response);
                      }
+                    con.end();
                  }
              })
      
@@ -648,17 +653,17 @@ const playerInfo = (rosterId, res) => {
                         seasonStats.name = secondQuery[0].fullName;
                         response.weeklyStats = weeklyStats; 
                         response.seasonStats = seasonStats;
-                        res.send(response); ;
+                        res.send(response);
                      }else{
                          res.send(response);
                      }
+                     con.end();
                  }
              })
          }else { 
              res.send(response);
          }
      })
-     con.end();
 
  }
 
