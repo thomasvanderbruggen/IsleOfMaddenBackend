@@ -315,50 +315,50 @@ const playerInfo = (rosterId, res) => {
                  "passYdsPerAtt": 0
              }
              con.query(secondSql, (err, secondQuery) => { 
-                 console.log('in second query');
-                 console.log(err);
-                 console.log(sql);
                  if (err) res.sendStatus(500);
-                 let weeklyStats = []; 
-                 for (const week of secondQuery) { 
-                     seasonStats.name = week.fullName;
-                     seasonStats.rushAttempts += week.rushAtt; 
-                     seasonStats.rushBTackles += week.rushBrokenTackles; 
-                     seasonStats.fumbles += week.rushFum;
-                     if (week.rushLongest > seasonStats.rushLongest) seasonStats.rushLongest = week.rushLongest; 
-                     seasonStats.rushPts += week.rushPts; 
-                     seasonStats.rushTDs += week.rushTDs; 
-                     seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
-                     seasonStats.passAttempts += week.passAtt; 
-                     seasonStats.passCompletions += week.passComp; 
-                     seasonStats.ints += week.passInts; 
-                     if (week.passLongest > seasonStats.passLongest) seasonStats.passLongest = week.passLongest; 
-                     seasonStats.passPts += week.passPts; 
-                     seasonStats.passSacks += week.passSacks;
-                     seasonStats.passTDs += week.passTDs; 
-                     seasonStats.passYds += week.passYds; 
-                     seasonStats.passYdsPerGame = week.passYdsPerGame;
-                     week.passerRating = +week.passerRating.toFixed(2);
-                     if (week.awayTeamId === week.teamId){
-                         week['opponent'] = teamIdToName[week.homeTeamId];
-                     }
-                     if (week.homeTeamId === week.teamId){
-                         week['opponent'] = teamIdToName[week.awayTeamId];
-                     }
-                     delete week.awayTeamId; 
-                     delete week.homeTeamId;
-                     weeklyStats.push(week);
- 
+                 if (secondQuery.length !== 0){
+                    let weeklyStats = []; 
+                    for (const week of secondQuery) { 
+                        seasonStats.name = week.fullName;
+                        seasonStats.rushAttempts += week.rushAtt; 
+                        seasonStats.rushBTackles += week.rushBrokenTackles; 
+                        seasonStats.fumbles += week.rushFum;
+                        if (week.rushLongest > seasonStats.rushLongest) seasonStats.rushLongest = week.rushLongest; 
+                        seasonStats.rushPts += week.rushPts; 
+                        seasonStats.rushTDs += week.rushTDs; 
+                        seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
+                        seasonStats.passAttempts += week.passAtt; 
+                        seasonStats.passCompletions += week.passComp; 
+                        seasonStats.ints += week.passInts; 
+                        if (week.passLongest > seasonStats.passLongest) seasonStats.passLongest = week.passLongest; 
+                        seasonStats.passPts += week.passPts; 
+                        seasonStats.passSacks += week.passSacks;
+                        seasonStats.passTDs += week.passTDs; 
+                        seasonStats.passYds += week.passYds; 
+                        seasonStats.passYdsPerGame = week.passYdsPerGame;
+                        week.passerRating = +week.passerRating.toFixed(2);
+                        if (week.awayTeamId === week.teamId){
+                            week['opponent'] = teamIdToName[week.homeTeamId];
+                        }
+                        if (week.homeTeamId === week.teamId){
+                            week['opponent'] = teamIdToName[week.awayTeamId];
+                        }
+                        delete week.awayTeamId; 
+                        delete week.homeTeamId;
+                        weeklyStats.push(week);
+    
+                    }
+                    seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
+                    seasonStats.passCompPct = seasonStats.passCompletions / seasonStats.passAttempts * 100; 
+                    seasonStats.passYdsPerAtt = seasonStats.passYds / seasonStats.passAttempts;
+                    seasonStats.passerRating = calculatePasserRating(seasonStats).toFixed(2);
+                    response.seasonStats = seasonStats; 
+                    response.weeklyStats = weeklyStats; 
+                    res.send(response);
+                    con.end()
+                 }else {
+                     res.send({});
                  }
-                 seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
-                 seasonStats.passCompPct = seasonStats.passCompletions / seasonStats.passAttempts * 100; 
-                 seasonStats.passYdsPerAtt = seasonStats.passYds / seasonStats.passAttempts;
-                 seasonStats.passerRating = calculatePasserRating(seasonStats).toFixed(2);
-                 response.seasonStats = seasonStats; 
-                 response.weeklyStats = weeklyStats; 
- 
-                 res.send(response);
-                 con.end()
              })
      
      
@@ -368,69 +368,73 @@ const playerInfo = (rosterId, res) => {
              re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex, pl.teamId, sch.homeTeamId, sch.awayTeamId from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId left join players pl ON pl.rosterId = ru.rosterId left join schedules sch on sch.scheduleId = ru.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1 order by (ru.weekIndex) asc`; 
      
              con.query(sql, (err, secondQuery)=> { 
-                 if (err || sqlRes === []) res.sendStatus(500) 
-                 let seasonStats = { 
-                     "name": '',
-                     "rushAttempts": 0, 
-                     "rushBrokenTackles": 0, 
-                     "fumbles": 0, 
-                     "rushLongest": 0, 
-                     "rushPts": 0, 
-                     "rushTDs": 0, 
-                     "rushToPct": 0, 
-                     "rush20PlusYds": 0, 
-                     "rushYds": 0, 
-                     "rushYdsPerAtt": 0, 
-                     "rushYdsPerGame": 0, 
-                     "recCatches": 0, 
-                     "recDrops": 0, 
-                     "recLongest": 0, 
-                     "recPts": 0, 
-                     "recTDs": 0, 
-                     "recYds": 0,
-                     "recYdsAfterCatch": 0, 
-                     "recYdsPerGame": 0, 
-                     "recYdsPerCatch": 0
+                 if (err) res.sendStatus(500) 
+                 if (secondQuery.length !== 0){
+                    let seasonStats = { 
+                        "name": '',
+                        "rushAttempts": 0, 
+                        "rushBrokenTackles": 0, 
+                        "fumbles": 0, 
+                        "rushLongest": 0, 
+                        "rushPts": 0, 
+                        "rushTDs": 0, 
+                        "rushToPct": 0, 
+                        "rush20PlusYds": 0, 
+                        "rushYds": 0, 
+                        "rushYdsPerAtt": 0, 
+                        "rushYdsPerGame": 0, 
+                        "recCatches": 0, 
+                        "recDrops": 0, 
+                        "recLongest": 0, 
+                        "recPts": 0, 
+                        "recTDs": 0, 
+                        "recYds": 0,
+                        "recYdsAfterCatch": 0, 
+                        "recYdsPerGame": 0, 
+                        "recYdsPerCatch": 0
+                    }
+                    let weeklyStats = []; 
+                    for (const week of secondQuery){ 
+                        seasonStats.name = week.fullName;
+                        seasonStats.rushAttempts += week.rushAtt; 
+                        seasonStats.rushBrokenTackles += week.rushBrokenTackles; 
+                        seasonStats.fumbles += week.rushFum; 
+                        if (seasonStats.rushLongest < week.rushLongest) seasonStats.rushLongest = week.rushLongest; 
+                        seasonStats.rushPts += week.rushPts
+                        seasonStats.rushTDs += week.rushTDs; 
+                        seasonStats.rush20PlusYds += week.rush20PlusYds; 
+                        seasonStats.rushYds += week.rushYds; 
+                        seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
+                        seasonStats.recCatches += week.recCatches; 
+                        seasonStats.recDrops += week.recDrops; 
+                        if (seasonStats.recLongest < week.recLongest) seasonStats.recLongest = week.recLongest; 
+                        seasonStats.recPts += week.recPts; 
+                        seasonStats.recTDs += week.recTDs; 
+                        seasonStats.recYds += week.recYds;
+                        seasonStats.recYdsAfterCatch += week.recYdsAfterCatch; 
+                        seasonStats.recYdsPerGame = week.recYdsPerGame;
+                        if (week.awayTeamId === week.teamId){
+                            week['opponent'] = teamIdToName[week.homeTeamId];
+                        }
+                        if (week.homeTeamId === week.teamId){
+                            week['opponent'] = teamIdToName[week.awayTeamId];
+                        }
+                        delete week.awayTeamId; 
+                        delete week.homeTeamId;
+                        weeklyStats.push(week);
+                    }
+                    seasonStats.rushToPct = seasonStats.fumbles / seasonStats.rushAttempts;
+                    seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
+                    if (seasonStats.recCatches > 0){ 
+                        seasonStats.recYdsPerCatch = seasonStats.recYds / seasonStats.recCatches;
+                    }
+                    response.seasonStats = seasonStats; 
+                    response.weeklyStats = weeklyStats; 
+                    res.send(response);
+                    con.end();
+                 }else {
+                    res.send({});
                  }
-                 let weeklyStats = []; 
-                 for (const week of secondQuery){ 
-                     seasonStats.name = week.fullName;
-                     seasonStats.rushAttempts += week.rushAtt; 
-                     seasonStats.rushBrokenTackles += week.rushBrokenTackles; 
-                     seasonStats.fumbles += week.rushFum; 
-                     if (seasonStats.rushLongest < week.rushLongest) seasonStats.rushLongest = week.rushLongest; 
-                     seasonStats.rushPts += week.rushPts
-                     seasonStats.rushTDs += week.rushTDs; 
-                     seasonStats.rush20PlusYds += week.rush20PlusYds; 
-                     seasonStats.rushYds += week.rushYds; 
-                     seasonStats.rushYdsPerGame = week.rushYdsPerGame; 
-                     seasonStats.recCatches += week.recCatches; 
-                     seasonStats.recDrops += week.recDrops; 
-                     if (seasonStats.recLongest < week.recLongest) seasonStats.recLongest = week.recLongest; 
-                     seasonStats.recPts += week.recPts; 
-                     seasonStats.recTDs += week.recTDs; 
-                     seasonStats.recYds += week.recYds;
-                     seasonStats.recYdsAfterCatch += week.recYdsAfterCatch; 
-                     seasonStats.recYdsPerGame = week.recYdsPerGame;
-                     if (week.awayTeamId === week.teamId){
-                         week['opponent'] = teamIdToName[week.homeTeamId];
-                     }
-                     if (week.homeTeamId === week.teamId){
-                         week['opponent'] = teamIdToName[week.awayTeamId];
-                     }
-                     delete week.awayTeamId; 
-                     delete week.homeTeamId;
-                     weeklyStats.push(week);
-                 }
-                 seasonStats.rushToPct = seasonStats.fumbles / seasonStats.rushAttempts;
-                 seasonStats.rushYdsPerAtt = seasonStats.rushYds / seasonStats.rushAttempts; 
-                 if (seasonStats.recCatches > 0){ 
-                     seasonStats.recYdsPerCatch = seasonStats.recYds / seasonStats.recCatches;
-                 }
-                 response.seasonStats = seasonStats; 
-                 response.weeklyStats = weeklyStats; 
-                 res.send(response);
-                 con.end();
              })
          } else if (position === 'WR' || position === 'wr' || position === 'TE' || position === 'te'){ 
             let seasonStats = { 
@@ -449,35 +453,41 @@ const playerInfo = (rosterId, res) => {
              }
              sql = SQL`select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.rosterId = re.rosterId left join schedules sch on sch.scheduleId = re.scheduleId where re.rosterId = ${rosterId} and re.seasonIndex = 1 order by (re.weekIndex) asc`;
              con.query(sql, (err, secondQuery) => { {
-                 if (err) {res.sendStatus(500);}
+                 if (err) { 
+                    res.sendStatus(500);}
                  else{
-                     let weeklyStats = [];  
-                     for (const week of secondQuery) {  
-                         seasonStats.recCatches += week.recCatches; 
-                         seasonStats.recDrops += week.recDrops; 
-                         if (week.recLongest > seasonStats.recLongest) seasonStats.recLongest = week.recLongest; 
-                         seasonStats.recPts += week.recPts;
-                         seasonStats.recTDs += week.recTDs; 
-                         seasonStats.recYdsAfterCatch += week.recYdsAfterCatch; 
-                         seasonStats.recYac += (week.recYacPerCatch * week.recCatches); 
-                         seasonStats.recYds += week.recYds;
-                         if (week.awayTeamId === week.teamId){
-                             week['opponent'] = teamIdToName[week.homeTeamId];
-                         }
-                         if (week.homeTeamId === week.teamId){
-                             week['opponent'] = teamIdToName[week.awayTeamId];
-                         }
-                         delete week.awayTeamId; 
-                         delete week.homeTeamId;
-                         weeklyStats.push(week);
+                     if (secondQuery.length !== 0){
+                        let weeklyStats = [];  
+                        for (const week of secondQuery) {  
+                            seasonStats.recCatches += week.recCatches; 
+                            seasonStats.recDrops += week.recDrops; 
+                            if (week.recLongest > seasonStats.recLongest) seasonStats.recLongest = week.recLongest; 
+                            seasonStats.recPts += week.recPts;
+                            seasonStats.recTDs += week.recTDs; 
+                            seasonStats.recYdsAfterCatch += week.recYdsAfterCatch; 
+                            seasonStats.recYac += (week.recYacPerCatch * week.recCatches); 
+                            seasonStats.recYds += week.recYds;
+                            if (week.awayTeamId === week.teamId){
+                                week['opponent'] = teamIdToName[week.homeTeamId];
+                            }
+                            if (week.homeTeamId === week.teamId){
+                                week['opponent'] = teamIdToName[week.awayTeamId];
+                            }
+                            delete week.awayTeamId; 
+                            delete week.homeTeamId;
+                            weeklyStats.push(week);
+                        }
+                        seasonStats.recYdsPerGame = sqlRes[0].recYdsPerGame;
+                        seasonStats.recYdsPerCatch = (seasonStats.recYds / seasonStats.recCatches); 
+                        seasonStats.name = secondQuery[0].fullName;
+                        response.weeklyStats = weeklyStats; 
+                        response.seasonStats = seasonStats;  
+                        res.send(response);
+                        con.end();
+                     }else {
+                         res.send({});
                      }
-                     seasonStats.recYdsPerGame = sqlRes[0].recYdsPerGame;
-                     seasonStats.recYdsPerCatch = (seasonStats.recYds / seasonStats.recCatches); 
-                     seasonStats.name = secondQuery[0].fullName;
-                     response.weeklyStats = weeklyStats; 
-                     response.seasonStats = seasonStats;  
-                     res.send(response);
-                     con.end();
+                     
                  }
      
              }})
@@ -502,35 +512,39 @@ const playerInfo = (rosterId, res) => {
              sql = SQL`select def.defCatchAllowed, def.defDeflections, def.defForcedFum, def.defFumRec, def.defInts, def.defIntReturnYds, def.defPts, def.defSacks, def.defSafeties, def.defTDs, def.defTotalTackles, def.fullName, def.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from defensive_stats def left join players pl on pl.rosterId = def.rosterId left join schedules sch on sch.scheduleId = def.scheduleId where def.seasonIndex = 1 and def.rosterId = ${rosterId} order by (def.weekIndex) asc`; 
              con.query(sql, (err, secondQuery) => { 
                  if (err) res.sendStatus(500);
-                 else { 
-                     let weeklyStats = []; 
-                     for (const week of secondQuery) { 
-                         seasonStats.defCatchAllowed += week.defCatchAllowed; 
-                         seasonStats.defDeflections += week.defDeflections; 
-                         seasonStats.defForcedFum += week.defForcedFum;
-                         seasonStats.defFumRec += week.defFumRec;
-                         seasonStats.defInts += week.defInts;
-                         seasonStats.defIntReturnYds += week.defIntReturnYds;
-                         seasonStats.defPts += week.defPts;
-                         seasonStats.defSacks += week.defSacks;
-                         seasonStats.defSafeties += week.defSafeties;
-                         seasonStats.defTDs += week.defTDs; 
-                         seasonStats.defTotalTackles += week.defTotalTackles;
-                         if (week.awayTeamId === week.teamId){
-                             week['opponent'] = teamIdToName[week.homeTeamId];
-                         }
-                         if (week.homeTeamId === week.teamId){
-                             week['opponent'] = teamIdToName[week.awayTeamId];
-                         }
-                         delete week.awayTeamId; 
-                         delete week.homeTeamId;
-                         weeklyStats.push(week);
-                         seasonStats.name = secondQuery[0].fullName;
-                     }
-                     response.weeklyStats = weeklyStats; 
-                     response.seasonStats = seasonStats;
-                     res.send(response);
-                     con.end();
+                 else {
+                     if (secondQuery.length !== 0){
+                        let weeklyStats = []; 
+                        for (const week of secondQuery) { 
+                            seasonStats.defCatchAllowed += week.defCatchAllowed; 
+                            seasonStats.defDeflections += week.defDeflections; 
+                            seasonStats.defForcedFum += week.defForcedFum;
+                            seasonStats.defFumRec += week.defFumRec;
+                            seasonStats.defInts += week.defInts;
+                            seasonStats.defIntReturnYds += week.defIntReturnYds;
+                            seasonStats.defPts += week.defPts;
+                            seasonStats.defSacks += week.defSacks;
+                            seasonStats.defSafeties += week.defSafeties;
+                            seasonStats.defTDs += week.defTDs; 
+                            seasonStats.defTotalTackles += week.defTotalTackles;
+                            if (week.awayTeamId === week.teamId){
+                                week['opponent'] = teamIdToName[week.homeTeamId];
+                            }
+                            if (week.homeTeamId === week.teamId){
+                                week['opponent'] = teamIdToName[week.awayTeamId];
+                            }
+                            delete week.awayTeamId; 
+                            delete week.homeTeamId;
+                            weeklyStats.push(week);
+                            seasonStats.name = secondQuery[0].fullName;
+                        }
+                        response.weeklyStats = weeklyStats; 
+                        response.seasonStats = seasonStats;
+                        res.send(response);
+                        con.end();
+                     }else {
+                         res.send({});
+                     } 
                  }
              })
          } else if (position === 'P' || position === 'p'){ 
@@ -552,38 +566,41 @@ const playerInfo = (rosterId, res) => {
              con.query(sql, (err, secondQuery) => { 
                  if (err) {
                      res.sendStatus(500);
-                     console.log(err); 
                  }
                      
                  else {
-                     let weeklyStats = []; 
-                     for (const week of secondQuery) { 
-                         seasonStats.puntsBlocked += week.puntsBlocked; 
-                         seasonStats.puntsIn20 += week.puntsIn20; 
-                         seasonStats.puntLongest += week.puntLongest; 
-                         seasonStats.puntTBs += week.puntTBs; 
-                         seasonStats.puntNetYds += week.puntNetYds;
-                         seasonStats.puntAtt += week.puntAtt;  
-                         seasonStats.puntYds += week.puntYds; 
-                         seasonStats.kickoffAtt += week.kickoffAtt; 
-                         seasonStats.kickoffTBs += week.kickoffTBs;
-                         if (week.awayTeamId === week.teamId){
-                             week['opponent'] = teamIdToName[week.homeTeamId];
-                         }
-                         if (week.homeTeamId === week.teamId){
-                             week['opponent'] = teamIdToName[week.awayTeamId];
-                         }
-                         delete week.awayTeamId; 
-                         delete week.homeTeamId;
-                         weeklyStats.push(week); 
+                     if (seconQuery !== 0){
+                        let weeklyStats = []; 
+                        for (const week of secondQuery) { 
+                            seasonStats.puntsBlocked += week.puntsBlocked; 
+                            seasonStats.puntsIn20 += week.puntsIn20; 
+                            seasonStats.puntLongest += week.puntLongest; 
+                            seasonStats.puntTBs += week.puntTBs; 
+                            seasonStats.puntNetYds += week.puntNetYds;
+                            seasonStats.puntAtt += week.puntAtt;  
+                            seasonStats.puntYds += week.puntYds; 
+                            seasonStats.kickoffAtt += week.kickoffAtt; 
+                            seasonStats.kickoffTBs += week.kickoffTBs;
+                            if (week.awayTeamId === week.teamId){
+                                week['opponent'] = teamIdToName[week.homeTeamId];
+                            }
+                            if (week.homeTeamId === week.teamId){
+                                week['opponent'] = teamIdToName[week.awayTeamId];
+                            }
+                            delete week.awayTeamId; 
+                            delete week.homeTeamId;
+                            weeklyStats.push(week); 
+                        }
+                        seasonStats.puntNetYdsPerAtt = seasonStats.puntNetYds / seasonStats.puntAtt; 
+                        seasonStats.puntYdsPerAtt = seasonStats.puntYds / seasonStats.puntAtt; 
+                        seasonStats.name = secondQuery[0].fullName;
+                        response.seasonStats = seasonStats; 
+                        response.weeklyStats = weeklyStats; 
+                        res.send(response);
+                        con.end();
+                     }else {
+                         res.send({});
                      }
-                     seasonStats.puntNetYdsPerAtt = seasonStats.puntNetYds / seasonStats.puntAtt; 
-                     seasonStats.puntYdsPerAtt = seasonStats.puntYds / seasonStats.puntAtt; 
-                     seasonStats.name = secondQuery[0].fullName;
-                     response.seasonStats = seasonStats; 
-                     response.weeklyStats = weeklyStats; 
-                     res.send(response);
-                     con.end();
                  }
              })
      
@@ -607,35 +624,39 @@ const playerInfo = (rosterId, res) => {
              con.query(sql, (err, secondQuery) => { 
                  if (err) res.sendStatus(500); 
                  else {
-                     let weeklyStats = [];  
-                     for (const week of secondQuery) { 
-                         seasonStats.kickPts += week.kickPts; 
-                         seasonStats.fgAtt += week.fGAtt; 
-                         seasonStats.fg50PlusAtt += week.fG50PlusAtt; 
-                         seasonStats.fg50PlusMade += week.fG50PlusMade; 
-                         if (week.fGlongest > seasonStats.fgLongest) seasonStats.fgLongest = week.fGLongest; 
-                         seasonStats.fgMade += week.fGMade; 
-                         seasonStats.kickoffAtt += week.kickoffAtt; 
-                         seasonStats.kickoffTBs += week.kickoffTBs; 
-                         seasonStats.xpAtt += week.xPAtt; 
-                         seasonStats.xpMade += week.xPMade;
-                         if (week.awayTeamId === week.teamId){
-                             week['opponent'] = teamIdToName[week.homeTeamId];
-                         }
-                         if (week.homeTeamId === week.teamId){
-                             week['opponent'] = teamIdToName[week.awayTeamId];
-                         }
-                         delete week.awayTeamId; 
-                         delete week.homeTeamId;
-                         weeklyStats.push(week);
+                     if (secondQuery.length !== 0){
+                        let weeklyStats = [];  
+                        for (const week of secondQuery) { 
+                            seasonStats.kickPts += week.kickPts; 
+                            seasonStats.fgAtt += week.fGAtt; 
+                            seasonStats.fg50PlusAtt += week.fG50PlusAtt; 
+                            seasonStats.fg50PlusMade += week.fG50PlusMade; 
+                            if (week.fGlongest > seasonStats.fgLongest) seasonStats.fgLongest = week.fGLongest; 
+                            seasonStats.fgMade += week.fGMade; 
+                            seasonStats.kickoffAtt += week.kickoffAtt; 
+                            seasonStats.kickoffTBs += week.kickoffTBs; 
+                            seasonStats.xpAtt += week.xPAtt; 
+                            seasonStats.xpMade += week.xPMade;
+                            if (week.awayTeamId === week.teamId){
+                                week['opponent'] = teamIdToName[week.homeTeamId];
+                            }
+                            if (week.homeTeamId === week.teamId){
+                                week['opponent'] = teamIdToName[week.awayTeamId];
+                            }
+                            delete week.awayTeamId; 
+                            delete week.homeTeamId;
+                            weeklyStats.push(week);
+                        }
+                        seasonStats.fgCompPct = seasonStats.fgMade / seasonStats.fgAtt; 
+                        seasonStats.xpCompPct = seasonStats.xpMade / seasonStats.xpAtt;
+                        seasonStats.name = secondQuery[0].fullName;
+                        response.weeklyStats = weeklyStats; 
+                        response.seasonStats = seasonStats;
+                        res.send(response); 
+                        con.end();
+                     }else{
+                         res.send({});
                      }
-                     seasonStats.fgCompPct = seasonStats.fgMade / seasonStats.fgAtt; 
-                     seasonStats.xpCompPct = seasonStats.xpMade / seasonStats.xpAtt;
-                     seasonStats.name = secondQuery[0].fullName;
-                     response.weeklyStats = weeklyStats; 
-                     response.seasonStats = seasonStats;
-                     res.send(response); 
-                     con.end();
                  }
              })
          }else { 
