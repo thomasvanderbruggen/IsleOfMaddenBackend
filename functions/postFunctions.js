@@ -81,7 +81,6 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
             ON DUPLICATE KEY UPDATE teamName=VALUES(teamName), abbrName=VALUES(abbrName), cityName=VALUES(cityName), logoId=VALUES(logoID), username=VALUES(username)`; 
             con.query(sql, (err, res) => {
                 if (err){
-                    res.sendStatus(500);
                     console.log(err);
                 }
             })
@@ -89,7 +88,6 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
             VALUES (${team.awayWins}, ${team.awayLosses}, ${team.awayTies}, ${team.calendarYear}, ${team.confLosses}, ${team.confTies}, ${team.confWins}, ${team.capRoom}, ${team.capAvailable}, ${team.capSpent}, ${team.defPassYds}, ${team.defPassYdsRank}, ${team.defRushYds}, ${team.defRushYdsRank}, ${team.defTotalYds}, ${team.defTotalYdsRank}, ${team.divLosses}, ${team.divTies}, ${team.divWins}, ${team.homeLosses}, ${team.homeTies}, ${team.homeWins}, ${team.netPts}, ${team.offPassYds}, ${team.offPassYdsrank}, ${team.offRushYds}, ${team.offRushYdsRank}, ${team.offTotalYds}, ${team.offTotalYdsRank}, ${team.ptsAgainstRank}, ${team.ptsForRank}, ${team.playoffStatus}, ${team.prevRank}, ${team.ptsAgainst}, ${team.ptsFor}, ${team.teamRank}, ${team.seed}, ${team.seasonIndex}, ${team.stageIndex}, ${team.totalLosses}, ${team.totalTies}, ${team.totalWins}, ${team.teamOvr}, ${team.tODiff}, ${team.weekIndex}, ${team.winLossStreak}, ${team.winPct}, ${team.ovrRating}, ${team.offScheme}, ${team.defScheme}, ${team.infoId}, ${team.teamId})`
             con.query(secondSQL, (err, res) => {
                 if (err){
-                    res.sendStatus(500); 
                     console.log(err);
                 }
             })
