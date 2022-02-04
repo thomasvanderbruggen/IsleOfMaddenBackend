@@ -311,6 +311,7 @@ const handleRetirees = () => {
         else{
             console.log('success');
         }
+        con.end();
     })
 }
 
@@ -371,10 +372,6 @@ app.post('/retirements/:platform/:leagueId/freeagents/roster', (req, res) => {
         }
     })
     
-})
-
-app.get('/retirements', (req, res) => {
-    let sql = 'UPDATE players SET isRetired = true where playerId in ('; 
 })
 function generatePlayerIdWithFirstName(firstName, lastName, rosterId){
     let output = `${firstName.charCodeAt(0)}`; 
