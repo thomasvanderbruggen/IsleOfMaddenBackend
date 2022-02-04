@@ -277,13 +277,19 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
     });
 });
 
+
+let con = connectionGenerator();
+con.query('select playerId from players',(req, res) =>{
+    for (let row of res){
+        allIds.push(row.playerId);
+    }
+})
+con.end();
 let allIds = []; 
 let gatheredActivePlayers = false;
 let teamsDone = 0;
 app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
-    teamsDone++;
-    console.log(teamsDone);
-    let con = connectionGenerator();
+
     let {params: {leagueId}, } = req; 
     leagueId = parseInt(leagueId);
     let body = ''; 
@@ -293,70 +299,41 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
     req.on('end', () => {
         if (leagueId === realLeagueId){
             const json = JSON.parse(body)['rosterInfoList'];
-            if (!gatheredActivePlayers){
-                gatheredActivePlayers = true;
-                con.query('select playerId from players', (err, sqlRes) => {
-                    console.log(`SQL RES LENGTH ${sqlRes.length}`)
-                    for (let row of sqlRes){
-                        allIds.push(row.playerId);
-                    }
-                    for (let player of json){
-                        player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
-                        gatheredActivePlayers = true;
-                        const index = allIds.indexOf(player.playerId);
-                        if (index !== -1){
-                            allIds.splice(index, 1);
-                        }
-                    }
-                    console.log(allIds.length);
-                    con.end();
-                })
-            }else {
-                for (let player of json){
-                    player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
-                    const index = allIds.indexOf(player.playerId);
-                    if (index !== -1){
-                        allIds.splice(index, 1);
-                    }
-                    console.log(allIds.length); 
-                    res.sendStatus(200);
+            for (let player of json){
+                player['playerId']  =generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
+                const index = allIds.indexOf(player.playerId);
+                if (index !== -1){
+                    allIds.splice(index, 1);
                 }
             }
-
-            // if (!gatheredActivePlayers) {
-            //     con.query('select playerId from players', (err, sqlRes) => {
-            //         for (let row of sqlRes){
-            //             allIds.push(row.playerId);
-            //         }
-            //         gatheredActivePlayers = true;
-            //         for (let player of json){
-            //             player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
-            //             let index = allIds.indexOf(player.playerId); 
-            //             if (index !== -1){
-            //                 allIds.splice(index, 1);
-            //             }
-            //         }
-            //         res.sendStatus(200);
-            //     })
-            // }else {
-            //     for (let player of json){
-            //         player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
-            //         let index = allIds.indexOf(player.playerId);
-            //         if (index !== -1){
-            //             allIds.splice(index, 1);
-            //         }
-            //     }
-            //     for(player of allIds){
-            //         console.log(player);
-            //     }
-            //     res.sendStatus(200);
-            // }
+            console.log(allIds.length);
+            res.sendStatus(200);
         }
     })
 })
 
 app.post('/retirements/:platform/:leagueId/freeagents/roster', (req, res) => {
-    res.sendStatus(200);
+    let {params: {leagueId}, } = req; 
+    leagueId = parseInt(leagueId);
+    let body = ''; 
+    req.on('data', chunk => {
+        body += chunk.toString();
+    })
+    req.on('end', () => {
+        if (leagueId === realLeagueId){
+            const json =JSON.parse(body)['rosterInfoList']; 
+            for (let player of json){
+                player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
+                const index = allIds.indexOf(player.playerId);
+                if (index !== -1){
+                    allIds.splice(index, 1);
+                }
+            }
+            console.log(allIds.length);
+            res.sendStatus(200);
+        }
+    })
+    
 })
 
 app.get('/retirements', (req, res) => {
