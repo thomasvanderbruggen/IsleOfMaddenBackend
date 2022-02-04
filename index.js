@@ -124,7 +124,7 @@ app.get('/api/powerranking/', (req, res) => {
 })
 
 app.get('/api/playerSearch?', (req, res) => { 
-    playerSearch(req.query.position, req.query.team, req.query.name);
+    playerSearch(req.query.position, req.query.team, req.query.name, res);
 })
 
 app.get('/api/standings', (req, res) => {
@@ -254,6 +254,8 @@ app.post('/:platform/:leagueId/freeagents/roster', (req, res) => {
 
     })
 });
+
+
 
 app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => { 
     let {params: {leagueId}, } = req;

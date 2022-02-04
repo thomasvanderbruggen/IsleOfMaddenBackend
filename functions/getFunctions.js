@@ -688,7 +688,7 @@ const powerRank = (res) => {
     })
 }
 
-const playerSearch = (position, team, name) => {
+const playerSearch = (position, team, name, res) => {
     let sql;
     let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr, teamId, position, rosterId";
     let con = connectionGenerator(); 
