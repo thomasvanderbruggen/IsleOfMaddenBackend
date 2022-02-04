@@ -145,7 +145,7 @@ const schedule = (games, weekType, pool) => {
         let sql; 
         for (let game of games) {
             game.weekIndex++; 
-            game.scheduleId = adjustId(game.scheduleId, game.seasonIndex);    
+            game.scheduleId = adjustScheduleId(game.scheduleId, game.seasonIndex);    
             if (weekType === 'pre'){ 
                 game.weekIndex += 23; 
             }
@@ -166,7 +166,7 @@ const puntingWeeklyStats = (stats, weekType, pool) => {
         for (let stat of stats) { 
             stat.weekIndex++; 
             stat.scheduleId = adjustScheduleId(stat.scheduleId, stat.seasonIndex);
-            stat.statId = adjustId(stat.statId, stat.seasonIndex);      
+            stat.statId = adjustStatId(stat.statId, stat.seasonIndex);      
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
