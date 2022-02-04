@@ -281,7 +281,6 @@ let allIds = [];
 let gatheredActivePlayers = false;
 let teamsDone = 0;
 app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
-    console.log(gatheredActivePlayers);
     let con = connectionGenerator();
     let {params: {leagueId}, } = req; 
     leagueId = parseInt(leagueId);
@@ -312,16 +311,15 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                     con.end();
                 })
             }else {
-                res.sendStatus(200);
-                // for (let player of json){
-                //     player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
-                //     const index = allIds.indexOf(player.playerId);
-                //     if (index !== -1){
-                //         allIds.splice(index, 1);
-                //     }
-                //     console.log(allIds.length); 
-                //     res.sendStatus(200);
-                // }
+                for (let player of json){
+                    player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
+                    const index = allIds.indexOf(player.playerId);
+                    if (index !== -1){
+                        allIds.splice(index, 1);
+                    }
+                    console.log(allIds.length); 
+                    res.sendStatus(200);
+                }
             }
 
             // if (!gatheredActivePlayers) {
@@ -354,6 +352,10 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
             // }
         }
     })
+})
+
+app.post('/retirements/:platform/:leagueId/freeagents/roster', (req, res) => {
+    res.sendStatus(200);
 })
 
 app.get('/retirements', (req, res) => {
