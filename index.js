@@ -276,7 +276,15 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
 
     });
 });
-
+const connectionGenerator = () => {
+    let con = mysql.createConnection({
+         "host": process.env.host,
+         "user": process.env.user,
+         "password": process.env.pw,
+         "database": "tomvandy_isle_of_madden"
+     });
+     return con;  
+ }
 
 let con = connectionGenerator();
 con.query('select playerId from players',(req, res) =>{
@@ -347,15 +355,7 @@ function generatePlayerIdWithFirstName(firstName, lastName, rosterId){
     output += `${rosterId}`
     return output;
 }
-const connectionGenerator = () => {
-    let con = mysql.createConnection({
-         "host": process.env.host,
-         "user": process.env.user,
-         "password": process.env.pw,
-         "database": "tomvandy_isle_of_madden"
-     });
-     return con;  
- }
+
  
 
 app.listen(app.get('port'), ()=>{ 
