@@ -281,6 +281,8 @@ let allIds = [];
 let gatheredActivePlayers = false;
 let teamsDone = 0;
 app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
+    teamsDone++;
+    console.log(teamsDone);
     let con = connectionGenerator();
     let {params: {leagueId}, } = req; 
     leagueId = parseInt(leagueId);
