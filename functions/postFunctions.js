@@ -74,7 +74,9 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
         teams[i] = {...teams[i], ...teamsWithInfo[i]};
     }
     pool.getConnection((err, con) => {
+        console.log(teams[0]);
         for (const team of teams) {
+            
             team['infoId'] = generateTeamSeasonStatsId(team.teamId, team.seasonIndex);
             let sql = SQL`INSERT into teams_temp (conferenceId, conferenceName, divisionId, divisionName, teamId, teamName, abbrName, cityName, displayName, logoId, nickName, primaryColor, secondaryColor, username)
             VALUES (${team.conferenceId}, ${team.conferenceName}, ${team.divisionId}, ${team.divisionName}, ${team.teamId}, ${team.teamName}, ${team.abbrName}, ${team.cityName}, ${team.displayName}, ${team.logoId}, ${team.nickName}, ${team.primaryColor}, ${team.secondaryColor}, ${team.userName})
