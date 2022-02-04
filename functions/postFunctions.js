@@ -286,6 +286,10 @@ const freeAgents = (players, pool) => {
             if (player.teamId == 0) { 
                 player.teamId = 1;
             }
+            if (player.rosterId === 553125272){
+                console.log(`Found Him`);
+                console.log(player);
+            }
             player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
     
             // 118 values
@@ -343,9 +347,6 @@ const teamRosters = (players, pool) => {
         players.forEach((player, index) => {
             if (player.teamId == 0) { 
                 player.teamId = 1;
-            }
-            if (index == 0){
-                console.log(player);
             }
             
             player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
