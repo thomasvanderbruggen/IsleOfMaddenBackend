@@ -270,7 +270,7 @@ const teamByTeamName = (teamName, res) => {
 const teamRoster = (teamId, res) => {
     let con = connectionGenerator();
     let sql = 'select * from players where teamId = ?'; 
-    con.query(sql, [teamId], (err, res) => {
+    con.query(sql, [teamId], (err, sqlRes) => {
         if (err) res.sendStatus(500);
         else { 
             res.send(sqlRes);

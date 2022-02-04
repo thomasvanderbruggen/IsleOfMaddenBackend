@@ -277,6 +277,56 @@ app.post('/:platform/:leagueId/team/:teamId/roster', (req, res) => {
     });
 });
 
+let allIds = []; 
+let gatheredActivePlayers = false;
+app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
+    let {params: {leagueId}, } = req; 
+    leagueId = parseInt(leagueId);
+    let body = ''; 
+    req.on('data', chunk => {
+        body+= chunk.toString();
+    })
+    req.on('end', () => {
+        if (leagueId === realLeagueId){
+            const json = JSON.parse(body)['rosterInfoList'];
+            if (!gatheredActivePlayers) {
+                con.query('select playerId from players', (err, sqlRes) => {
+                    allIds = sqlRes;
+                    gatheredActivePlayers = true;
+                    for (let player of json){
+                        player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
+                        let index = allIds.indexOf(player.playerId); 
+                        if (index !== -1){
+                            allIds.splice(index, 1);
+                        }
+                    }
+                    for (let player of allIds){
+                        console.log(player);
+                    }
+                })
+            }else {
+                for (let player of json){
+                    player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
+                    let index = allIds.indexOf(player.playerId);
+                    if (index !== -1){
+                        allIds.splice(index, 1);
+                    }
+                }
+                for(player of allIds){
+                    console.log(player);
+                }
+            }
+        }
+    })
+})
+function generatePlayerIdWithFirstName(firstName, lastName, rosterId){
+    let output = `${firstName.charCodeAt(0)}`; 
+    for (let i = 0; i < lastName.length; i++){
+        output += `${lastName.charCodeAt(i)}`;
+    }
+    output += `${rosterId}`
+    return output;
+}
 
 app.listen(app.get('port'), ()=>{ 
     console.log('Running on part', app.get('port'));
