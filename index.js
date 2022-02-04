@@ -292,10 +292,10 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
         if (leagueId === realLeagueId){
             const json = JSON.parse(body)['rosterInfoList'];
             if (!gatheredActivePlayers){
+                gatheredActivePlayers = true;
                 con.query('select playerId from players', (err, sqlRes) => {
                     for (let row of sqlRes){
                         allIds.push(row.rosterId);
-                        console.log(``)
                     }
                     for (let player of json){
                         player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
