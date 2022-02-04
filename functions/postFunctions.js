@@ -340,15 +340,16 @@ const freeAgents = (players, pool) => {
 const teamRosters = (players, pool) => {
     pool.getConnection((err, con) => {
         let sql;
-        for (let player of players) { 
+        players.forEach((player, index) => {
             if (player.teamId == 0) { 
                 player.teamId = 1;
             }
+            if (index == 0){
+                console.log(player);
+            }
+            
             player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
             // 118 values
-            if (player.rosterId == 553126364){
-                console.log(player.playerId);
-            }
             sql = SQL`INSERT INTO players (accelRating, age, agilityRating, awareRating, bCVRating, bigHitTrait, birthDay, birthMonth, birthYear, blockShedRating, breakSackRating, breakTackleRating, cITRating, capHit,
                 capReleaseNetSavings, capReleasePenalty, carryRating, catchRating, changeOfDirectionRating, clutchTrait, college, confRating, contractBonus, contractLength, contractSalary, contractYearsLeft, coverBallTrait, dLBullRushTrait, 
                 dLSpinTrait, dLSwimTrait, desiredBonus, desiredLength, desiredSalary, devTrait, draftPick, draftRound, dropOpenPassTrait, durabilityGrade, experiencePoints, feetInBoundsTrait, fightForYardsTrait,
@@ -398,7 +399,6 @@ const teamRosters = (players, pool) => {
                 for (let ability of player.signatureSlotList){
                     if (ability.signatureAbility.signatureLogoId !== 0){
                         ability.abilityId = ability.signatureAbility.signatureLogoId + player.playerId;
-                        console.log(player.playerId); 
                         let sql = SQL`INSERT INTO player_abilities (abilityId, abilityTitle, abilityLogo, abilityDescription, rosterId, playerId) VALUES (${ability.abilityId}, ${ability.signatureAbility.signatureTitle}, ${ability.signatureAbility.signatureLogoId}, ${ability.signatureAbility.signatureDescription}, ${player.rosterId}, ${player.playerId}) ON DUPLICATE KEY UPDATE abilityId=${ability.abilityId}, abilityLogo=VALUES(abilityLogo), playerId=VALUES(playerId)`;
                         con.query(sql, (err, res) => {
                             if (err) throw err;
@@ -408,7 +408,7 @@ const teamRosters = (players, pool) => {
                 }
             }
         
-            }
+        })
     })
  
 }
