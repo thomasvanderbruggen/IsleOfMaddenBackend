@@ -294,8 +294,10 @@ con.query('select playerId from players',(req, res) =>{
 })
 con.end();
 let allIds = []; 
-let gatheredActivePlayers = false;
 let teamsDone = 0;
+
+
+
 app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
 
     let {params: {leagueId}, } = req; 
@@ -316,6 +318,8 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
             }
             console.log(allIds.length);
             res.sendStatus(200);
+            teamsDone++; 
+            console.log(teamsDone);
         }
     })
 })
@@ -339,13 +343,15 @@ app.post('/retirements/:platform/:leagueId/freeagents/roster', (req, res) => {
             }
             console.log(allIds.length);
             res.sendStatus(200);
+            teamsDone++; 
+            console.log(teamsDone);
         }
     })
     
 })
 
 app.get('/retirements', (req, res) => {
-    
+    let sql = 'UPDATE players SET isRetired = true where playerId in ('; 
 })
 function generatePlayerIdWithFirstName(firstName, lastName, rosterId){
     let output = `${firstName.charCodeAt(0)}`; 
