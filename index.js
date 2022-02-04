@@ -297,9 +297,6 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                     for (let row of sqlRes){
                         allIds.push(row.playerId);
                     }
-                    for (let row of sqlRes){
-                        allIds.push(row.rosterId);
-                    }
                     for (let player of json){
                         player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
                         gatheredActivePlayers = true;
@@ -309,7 +306,6 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                         }
                     }
                     console.log(allIds.length);
-                    res.sendStatus(200);
                 })
             }else {
                 for (let player of json){
