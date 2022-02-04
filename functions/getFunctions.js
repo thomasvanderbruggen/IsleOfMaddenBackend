@@ -2,7 +2,6 @@ const mysql = require('mysql');
 const {teamNameToId} = require('../resources/teamNameToId.json');
 const {teamIdToName} = require('../resources/teamIdToName.json');
 const SQL = require('sql-template-strings');
-const calculatePasserRating = require('./calculatepasserRating');
 
 const connectionGenerator = () => {
     let con = mysql.createConnection({
