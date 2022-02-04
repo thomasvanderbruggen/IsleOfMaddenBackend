@@ -2,6 +2,7 @@ const mysql = require('mysql');
 const {teamNameToId} = require('../resources/teamNameToId.json');
 const {teamIdToName} = require('../resources/teamIdToName.json');
 const SQL = require('sql-template-strings');
+const calculatePasserRating = require('./calculatepasserRating');
 
 const connectionGenerator = () => {
     let con = mysql.createConnection({
@@ -12,6 +13,16 @@ const connectionGenerator = () => {
     });
     return con; 
 }
+
+function calculatePasserRating (stats) { 
+    let a = (stats.passCompPct - 30) * .05; 
+    let b = (stats.passYdsPerAtt - 3) * .25; 
+    let c = (stats.passTDs / stats.passAttempts) * 100 * .2;
+    if (c > 2.375) c = 2.375;  
+    let d = 2.375 - (stats.ints / stats.passAttempts * 100) * .25;
+    return (a + b + c + d) / 6 * 100;  
+}
+
 
 const coaches = (res) =>{
     let con = connectionGenerator();
@@ -680,7 +691,8 @@ const powerRank = (res) => {
 
 const playerSearch = (position, team, name) => {
     let sql;
-    let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr, teamId, position, rosterId"; 
+    let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr, teamId, position, rosterId";
+    let con = connectionGenerator(); 
     if (!position || position == "Any") { 
         sql = `SELECT ${commonCols}, speedRating, awareRating `; 
     }else { 
