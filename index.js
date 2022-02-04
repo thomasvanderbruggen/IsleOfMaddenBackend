@@ -294,6 +294,7 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
             if (!gatheredActivePlayers){
                 gatheredActivePlayers = true;
                 con.query('select playerId from players', (err, sqlRes) => {
+                    console.log(`SQL RES LENGTH ${sqlRes.length}`)
                     for (let row of sqlRes){
                         allIds.push(row.playerId);
                     }
