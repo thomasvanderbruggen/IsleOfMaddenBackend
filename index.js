@@ -308,6 +308,7 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
                         }
                     }
                     console.log(allIds.length);
+                    res.sendStatus(200);
                 })
             }else {
                 res.sendStatus(200);
