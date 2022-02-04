@@ -296,6 +296,23 @@ con.end();
 let allIds = []; 
 let teamsDone = 0;
 
+const handleRetirees = () => {
+    let sql = 'UPDATE players SET isRetired = true where playerId in ('; 
+    allIds.forEach((playerId, index) => {
+        if (index === allIds.length -1){
+            sql += `'${playerId}')`;
+        }else {
+            sql += `'${playerId}', `;
+        }
+    })
+    let con = connectionGenerator(); 
+    con.query(sql, (err, res) => {
+        if (err) console.log(err); 
+        else{
+            console.log('success');
+        }
+    })
+}
 
 
 app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
@@ -320,6 +337,9 @@ app.post('/retirements/:platform/:leagueId/team/:teamId/roster', (req, res) => {
             res.sendStatus(200);
             teamsDone++; 
             console.log(teamsDone);
+            if (teamsDone === 33){
+                handleRetirees();
+            }
         }
     })
 })
@@ -345,6 +365,9 @@ app.post('/retirements/:platform/:leagueId/freeagents/roster', (req, res) => {
             res.sendStatus(200);
             teamsDone++; 
             console.log(teamsDone);
+            if (teamsDone === 33){
+                handleRetirees();
+            }
         }
     })
     
