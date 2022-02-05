@@ -360,6 +360,7 @@ const freeAgents = (players, pool) => {
 const teamRosters = (players, pool) => {
     pool.getConnection((err, con) => {
         let sql;
+        console.log(players[0]);
         players.forEach((player, index) => {
             if (player.teamId == 0) { 
                 player.teamId = 1;
