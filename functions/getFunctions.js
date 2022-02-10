@@ -128,7 +128,7 @@ const gameStats = (gameId, res) => {
 
 const leagueSchedule = (seasonIndex, currentWeek, res) => {
     let con = connectionGenerator();
-    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus from schedules where seasonIndex = ?`;
+    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus, seasonIndex from schedules where seasonIndex = ? and homeTeamId <> 0 and awayTeamId <> 0`;
     con.query(sql,[seasonIndex], (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
