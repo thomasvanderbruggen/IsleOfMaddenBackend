@@ -6,8 +6,10 @@ const cors = require('cors');
 const {realLeagueId} = require('./resources/leagueId.json');
 const { coaches, teamCoach, gameStats, leagueSchedule, allPlayers, teamByTeamName, teamRoster, seasonStats, playerInfo, powerRank, playerSearch, standings, conferenceStandings, divisionStandings, leagueLeaders} = require('./functions/getFunctions');
 const { leagueInfo, teamWeeklyStats, schedule, puntingWeeklyStats, passingWeeklyStats, defensiveWeeklyStats, kickingWeeklyStats, rushingWeeklyStats, receivingWeeklyStats, freeAgents, teamRosters } = require('./functions/postFunctions');
-let teamsWithInfo = []; 
 
+ 
+const currentSeason;
+const currentWeek;
 
 const pool = mysql.createPool({
     "host": process.env.host,
@@ -15,6 +17,15 @@ const pool = mysql.createPool({
     "password": process.env.pw,
     "database": "tomvandy_isle_of_madden"
 })
+
+pool.query('select seasonIndex, weekIndex from schedules where homeScore = 0 and awayScore = 0 order by seasonIndex asc, weekIndex asc limit 1', (err, res) => {
+    if (err) throw err;
+    else {
+        currentSeason = res[0].seasonIndex;
+        currentWeek = res[0].weekIndex;
+    }
+})
+
 
 app.set('port', (process.env.PORT || 3001)); 
 
@@ -44,37 +55,9 @@ app.get('/api/gamestats/:gameId', (req, res) => {
 })
 
 
-app.get('/api/currentweek/:seasonIndex', (req, res) => { 
-    const {params: {seasonIndex}, } = req;
-    let con = mysql.createConnection({
-        "host": process.env.host,
-        "user": process.env.user,
-        "password": process.env.pw,
-        "database": "tomvandy_isle_of_madden"
-    }); 
-    let sql = SQL`select weekIndex, weekStatus from schedules where seasonIndex = ${seasonIndex}`; 
-    con.query(sql, (err, sqlRes) => { 
-        if (err) res.sendStatus(500); 
-        else {
-            let response = {}; 
-            let setDefaultWeek = false; 
-            let currentWeek = 1; 
-            for (const game of sqlRes) { 
-               if (game.weekStatus === 1){
-                   currentWeek = game.weekIndex;
-                   break;
-               }
-            }
-            response['currentWeek'] = currentWeek; 
-            res.send(response);
-        }  
-    })
-    con.end();
-})
 
-app.get('/api/leagueschedule/:seasonIndex/:weekIndex', (req, res) => { 
-    const {params: {seasonIndex, weekIndex}, } = req;
-    leagueSchedule(seasonIndex, weekindex, res);
+app.get('/api/leagueschedule/', (req, res) => { 
+    leagueSchedule(currentSeason, currentWeek, res);
 })  
    
 
@@ -168,7 +151,7 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
     })
 })
 
-
+let teamsWithInfo = [];
 app.post('/:platform/:leagueId/standings', (req, res) => { 
     let {params: {leagueId}, } = req;
     leagueId = parseInt(leagueId);

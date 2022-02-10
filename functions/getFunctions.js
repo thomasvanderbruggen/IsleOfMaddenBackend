@@ -4,13 +4,13 @@ const {teamIdToName} = require('../resources/teamIdToName.json');
 const SQL = require('sql-template-strings');
 
 const connectionGenerator = () => {
-    let con = mysql.createConnection({
+   let con = mysql.createConnection({
         "host": process.env.host,
         "user": process.env.user,
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     });
-    return con; 
+    return con;  
 }
 
 function calculatePasserRating (stats) { 
@@ -126,10 +126,10 @@ const gameStats = (gameId, res) => {
 
 }
 
-const leagueSchedule = (seasonIndex, weekIndex, res) => {
+const leagueSchedule = (seasonIndex, currentWeek, res) => {
     let con = connectionGenerator();
-    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus from schedules where weekIndex = ${weekIndex} and seasonIndex = ${seasonIndex}`;
-    con.query(sql, (err, sqlRes) => {
+    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus from schedules where seasonIndex = ?`;
+    con.query(sql,[seasonIndex], (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
             for (game of sqlRes) { 
@@ -145,7 +145,8 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
                 }
                 
             }
-            res.send(sqlRes); 
+
+            res.send({games: sqlRes, currentWeek}); 
         }
     })
     con.end(); 
@@ -204,7 +205,7 @@ const teamByTeamName = (teamName, res) => {
         }
     })
     
-    sql = 'select * from team_stats where teamId = ? and weekIndex < 23 and seasonIndex = 1 ORDER BY (weekIndex)'; 
+    sql = 'select * from team_stats where teamId = ? and weekIndex < 23 and seasonIndex = 2 ORDER BY (weekIndex)'; 
     con.query (sql, [teamNameToId[teamName]], (err, sqlRes) => { 
         if (err) {
             sent = true;
@@ -234,7 +235,7 @@ const teamByTeamName = (teamName, res) => {
         }
         
     })
-    sql = `select * from schedules where weekIndex < 24 and (homeTeamId = ? or awayTeamId = ?) and seasonIndex = 1 order by (weekIndex) asc`; 
+    sql = `select * from schedules where weekIndex < 24 and (homeTeamId = ? or awayTeamId = ?) and seasonIndex = 2 order by (weekIndex) asc`; 
     con.query(sql, [teamNameToId[teamName], teamNameToId[teamName]], (err, sqlRes) =>  {
         if (err) {
             sent = true;
