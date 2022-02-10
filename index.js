@@ -8,8 +8,8 @@ const { coaches, teamCoach, gameStats, leagueSchedule, allPlayers, teamByTeamNam
 const { leagueInfo, teamWeeklyStats, schedule, puntingWeeklyStats, passingWeeklyStats, defensiveWeeklyStats, kickingWeeklyStats, rushingWeeklyStats, receivingWeeklyStats, freeAgents, teamRosters } = require('./functions/postFunctions');
 
  
-const currentSeason;
-const currentWeek;
+let currentSeason;
+let currentWeek;
 
 const pool = mysql.createPool({
     "host": process.env.host,
