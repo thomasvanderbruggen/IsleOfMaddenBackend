@@ -60,8 +60,9 @@ app.get('/api/leagueschedule/', (req, res) => {
     leagueSchedule(currentSeason, currentWeek, res);
 })
 
-app.get('/api/leaguschedule/:week', (req, res) => {
-    
+app.get('/api/leagueschedule/:week', (req, res) => {
+    const {params: {week}, } = req; 
+    leagueSchedule(currentSeason, week, res); 
 })
    
 
