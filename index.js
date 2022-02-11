@@ -280,8 +280,9 @@ con.query('select playerId from players',(req, res) =>{
     for (let row of res){
         allIds.push(row.playerId);
     }
+    con.end();
 })
-con.end();
+
 let allIds = []; 
 let teamsDone = 0;
 
