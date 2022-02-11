@@ -62,6 +62,7 @@ app.get('/api/leagueschedule/', (req, res) => {
 
 app.get('/api/leagueschedule/:week', (req, res) => {
     const {params: {week}, } = req; 
+    +week;
     leagueSchedule(currentSeason, week, res); 
 })
    
