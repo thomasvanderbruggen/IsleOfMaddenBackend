@@ -128,10 +128,17 @@ const gameStats = (gameId, res) => {
 
 const leagueSchedule = (seasonIndex, currentWeek, res) => {
     let con = connectionGenerator();
-    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus, seasonIndex from schedules where seasonIndex = ? and homeTeamId <> 0 and awayTeamId <> 0`;
+    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus, seasonIndex from schedules where seasonIndex = ? and homeTeamId <> 0 and awayTeamId <> 0 order by weekIndex asc`;    
     con.query(sql,[seasonIndex], (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
+            // keeps track of which week's games are being processed.
+            let week = sqlRes[0].weekIndex; // 1
+            // array to hold one week's worth of games, will be pushed to allGames once all of that week's games are processed
+            let weeklyGames = []; 
+            //2d array to hold all of the games
+            let allGames = [];
+
             for (game of sqlRes) { 
                 if (game.homeTeamId === 0) { 
                     game['homeTeam'] = 'TBD';
@@ -143,10 +150,18 @@ const leagueSchedule = (seasonIndex, currentWeek, res) => {
                 }else { 
                     game['awayTeam'] = teamIdToName[game.awayTeamId];
                 }
+                if (game.weekIndex == week) { 
+                    weeklyGames.push(game);
+                }else {
+                    allGames.push(weeklyGames);
+                    week = game.weekIndex;
+                    weeklyGames = []; 
+                    weeklyGames.push(week);
+                }
                 
             }
 
-            res.send({games: sqlRes, currentWeek}); 
+            res.send({games: allGames, currentWeek}); 
         }
     })
     con.end(); 
