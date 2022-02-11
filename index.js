@@ -58,7 +58,11 @@ app.get('/api/gamestats/:gameId', (req, res) => {
 
 app.get('/api/leagueschedule/', (req, res) => { 
     leagueSchedule(currentSeason, currentWeek, res);
-})  
+})
+
+app.get('/api/leaguschedule/:week', (req, res) => {
+    
+})
    
 
 app.get('/api/allPlayers', (req, res) => {
