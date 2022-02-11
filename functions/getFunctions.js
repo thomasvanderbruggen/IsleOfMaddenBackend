@@ -478,7 +478,8 @@ const playerInfo = (rosterId, res) => {
                  else{
                      if (secondQuery.length !== 0){
                         let weeklyStats = [];  
-                        for (const week of secondQuery) {  
+                        for (const week of secondQuery) {
+                            console.log(secondQuery);  
                             seasonStats.recCatches += week.recCatches; 
                             seasonStats.recDrops += week.recDrops; 
                             if (week.recLongest > seasonStats.recLongest) seasonStats.recLongest = week.recLongest; 
