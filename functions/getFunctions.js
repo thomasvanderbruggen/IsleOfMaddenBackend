@@ -333,8 +333,9 @@ const playerInfo = (rosterId, res) => {
              }
              con.query(secondSql, (err, secondQuery) => { 
                  if (err) res.sendStatus(500);
+                 console.log(secondQuery);
                  if (secondQuery.length !== 0){
-                    console.log(secondQuery);
+                    
                     let weeklyStats = []; 
                     for (const week of secondQuery) { 
                         seasonStats.name = week.fullName;
