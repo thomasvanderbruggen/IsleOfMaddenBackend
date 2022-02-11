@@ -49,7 +49,7 @@ const gameStats = (gameId, res) => {
     let schedulesDone = false, passingDone = false, rushingDone = false, defDone = false, receivingDone = false, sent = false; 
     let con = connectionGenerator();
     let response = {}; 
-    let sql = "select awayTeamId, homeTeamId, awayScore, homeScore from schedules where scheduleId = ? and seasonIndex = 1";
+    let sql = "select awayTeamId, homeTeamId, awayScore, homeScore from schedules where scheduleId = ? and seasonIndex = 2";
     con.query(sql, [gameId], (err, sqlRes) => {
         if (err) {
             sent = true;
@@ -64,7 +64,7 @@ const gameStats = (gameId, res) => {
             res.send(response);
         }
     }) 
-    sql = "select defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, teamId from defensive_stats where scheduleId = ? and (defSacks > 1 or defInts >= 1 or defTDs >= 1 or defForcedFum >= 1 or defTotalTackles >=5) and seasonIndex = 1"; 
+    sql = "select defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, teamId from defensive_stats where scheduleId = ? and (defSacks > 1 or defInts >= 1 or defTDs >= 1 or defForcedFum >= 1 or defTotalTackles >=5) and seasonIndex = 2"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
         if (err) {
             sent = true;
@@ -77,7 +77,7 @@ const gameStats = (gameId, res) => {
             res.send(response);
         }
     })
-    sql = "select passAtt, passComp, passInts, passLongest, passerRating, passTDs, passYds, fullName, teamId from passing_stats where scheduleId = ? and seasonIndex = 1"; 
+    sql = "select passAtt, passComp, passInts, passLongest, passerRating, passTDs, passYds, fullName, teamId from passing_stats where scheduleId = ? and seasonIndex = 2"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
         if (err) {
             sent = true;
@@ -90,7 +90,7 @@ const gameStats = (gameId, res) => {
             res.send(response);
         }
     })
-    sql = "select re.recCatches, re.recLongest, re.recYds, re.recTDs, re.fullName, re.teamId, ru.rushFum from receiving_stats re left join rushing_stats ru on re.rosterId = ru.rosterId and re.scheduleId = ru.scheduleId where re.scheduleId = ? and re.seasonIndex = 1 and (re.recCatches > 3 or re.recYds > 30 or re.recTDs >= 1)"; 
+    sql = "select re.recCatches, re.recLongest, re.recYds, re.recTDs, re.fullName, re.teamId, ru.rushFum from receiving_stats re left join rushing_stats ru on re.rosterId = ru.rosterId and re.scheduleId = ru.scheduleId where re.scheduleId = ? and re.seasonIndex = 2 and (re.recCatches > 3 or re.recYds > 30 or re.recTDs >= 1)"; 
     con.query(sql, [gameId], (err, sqlRes) => {
         if (err) {
             sent = true;
@@ -103,7 +103,7 @@ const gameStats = (gameId, res) => {
             res.send(response);
         }
     })
-    sql = "select rushAtt, rushLongest, rushFum, rushYds, rushTDs, fullName, teamId from rushing_stats where scheduleId = ? and seasonIndex = 1 and (rushAtt > 8 or rushYds > 25 or rushFum >= 1)"; 
+    sql = "select rushAtt, rushLongest, rushFum, rushYds, rushTDs, fullName, teamId from rushing_stats where scheduleId = ? and seasonIndex = 2 and (rushAtt > 8 or rushYds > 25 or rushFum >= 1)"; 
     con.query(sql, [gameId], (err, sqlRes) => { 
         if (err) {
             sent = true;
@@ -305,7 +305,7 @@ const playerInfo = (rosterId, res) => {
              let secondSql =SQL`SELECT r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
               p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName, p.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId
              FROM passing_stats p LEFT JOIN rushing_stats r ON p.rosterId = r.rosterId AND p.weekIndex = r.weekIndex AND p.scheduleId = r.scheduleId 
-             LEFT JOIN players pl ON pl.rosterID = p.rosterId LEFT JOIN schedules sch ON sch.scheduleId = p.scheduleId WHERE p.rosterId = ${rosterId} AND p.seasonIndex = 1 ORDER BY (p.weekIndex) ASC;`;
+             LEFT JOIN players pl ON pl.rosterID = p.rosterId LEFT JOIN schedules sch ON sch.scheduleId = p.scheduleId WHERE p.rosterId = ${rosterId} AND p.seasonIndex = 2 ORDER BY (p.weekIndex) ASC;`;
              let seasonStats = {
                  "name": '', 
                  "rushAttempts": 0, 
@@ -382,7 +382,7 @@ const playerInfo = (rosterId, res) => {
          } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
              sql = SQL`select ru.fullName, ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
              ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
-             re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex, pl.teamId, sch.homeTeamId, sch.awayTeamId from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId left join players pl ON pl.rosterId = ru.rosterId left join schedules sch on sch.scheduleId = ru.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 1 order by (ru.weekIndex) asc`; 
+             re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex, pl.teamId, sch.homeTeamId, sch.awayTeamId from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId left join players pl ON pl.rosterId = ru.rosterId left join schedules sch on sch.scheduleId = ru.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 2 order by (ru.weekIndex) asc`; 
              con.query(sql, (err, secondQuery)=> { 
                  if (err) res.sendStatus(500) 
                  if (secondQuery.length !== 0){
@@ -467,7 +467,7 @@ const playerInfo = (rosterId, res) => {
                  "recYdsPerCatch": 0, 
                  "recYdsPerGame": 0
              }
-             sql = SQL`select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.rosterId = re.rosterId left join schedules sch on sch.scheduleId = re.scheduleId where re.rosterId = ${rosterId} and re.seasonIndex = 1 order by (re.weekIndex) asc`;
+             sql = SQL`select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.rosterId = re.rosterId left join schedules sch on sch.scheduleId = re.scheduleId where re.rosterId = ${rosterId} and re.seasonIndex = 2 order by (re.weekIndex) asc`;
              con.query(sql, (err, secondQuery) => { {
                  if (err) { 
                     res.sendStatus(500);
@@ -527,7 +527,7 @@ const playerInfo = (rosterId, res) => {
                  "defTDs": 0, 
                  "defTotalTackles": 0
              }
-             sql = SQL`select def.defCatchAllowed, def.defDeflections, def.defForcedFum, def.defFumRec, def.defInts, def.defIntReturnYds, def.defPts, def.defSacks, def.defSafeties, def.defTDs, def.defTotalTackles, def.fullName, def.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from defensive_stats def left join players pl on pl.rosterId = def.rosterId left join schedules sch on sch.scheduleId = def.scheduleId where def.seasonIndex = 1 and def.rosterId = ${rosterId} order by (def.weekIndex) asc`; 
+             sql = SQL`select def.defCatchAllowed, def.defDeflections, def.defForcedFum, def.defFumRec, def.defInts, def.defIntReturnYds, def.defPts, def.defSacks, def.defSafeties, def.defTDs, def.defTotalTackles, def.fullName, def.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from defensive_stats def left join players pl on pl.rosterId = def.rosterId left join schedules sch on sch.scheduleId = def.scheduleId where def.seasonIndex = 2 and def.rosterId = ${rosterId} order by (def.weekIndex) asc`; 
              con.query(sql, (err, secondQuery) => { 
                  if (err) res.sendStatus(500);
                  else {
@@ -580,7 +580,7 @@ const playerInfo = (rosterId, res) => {
                  "kickoffAtt": 0, 
                  "kickoffTBs": 0
              }
-             sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs, p.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId and p.scheduleId = k.scheduleId and p.weekIndex = k.weekIndex left join players pl on pl.rosterId = p.rosterId left join schedules sch on sch.scheduleId = p.scheduleId where p.seasonIndex = 1 and p.rosterId = ${rosterId} order by (p.weekIndex) asc`; 
+             sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs, p.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId and p.scheduleId = k.scheduleId and p.weekIndex = k.weekIndex left join players pl on pl.rosterId = p.rosterId left join schedules sch on sch.scheduleId = p.scheduleId where p.seasonIndex = 2 and p.rosterId = ${rosterId} order by (p.weekIndex) asc`; 
              con.query(sql, (err, secondQuery) => { 
                  if (err) {
                      res.sendStatus(500);
@@ -638,7 +638,7 @@ const playerInfo = (rosterId, res) => {
                  "xpMade": 0,
                  "xpCompPct": 0
              } 
-             sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.rosterId = k.rosterId left join schedules sch on sch.scheduleId = k.scheduleId where k.seasonIndex = 1 and rosterId = ${rosterId} order by (weekIndex) asc`;
+             sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, pl.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.rosterId = k.rosterId left join schedules sch on sch.scheduleId = k.scheduleId where k.seasonIndex = 2 and rosterId = ${rosterId} order by (weekIndex) asc`;
              con.query(sql, (err, secondQuery) => { 
                  if (err) res.sendStatus(500); 
                  else {
@@ -803,7 +803,7 @@ const standings = (res) => {
     con.query(sql, (err, sqlRes) => {
         if (err) throw err;
         response['standings'] = sqlRes;
-        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 1 and (awayScore > 0 and homeScore > 0)'; 
+        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 2 and (awayScore > 0 and homeScore > 0)'; 
         con.query(sql, (err, scheduleRes) => {
             if (err) throw err;
             let results = {}; 
@@ -851,7 +851,7 @@ const conferenceStandings = (conference, res) => {
     con.query(sql, [conference], (err, sqlRes) => {
         if (err) throw err; 
         response['standings'] = sqlRes;
-        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 1 and (awayScore > 0 and homeScore > 0)'; 
+        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 2 and (awayScore > 0 and homeScore > 0)'; 
         con.query(sql, (err, scheduleRes) => {
             if (err) throw err;
             let results = {}; 
@@ -896,7 +896,7 @@ const divisionStandings = (division, res) => {
     con.query(sql, [division], (err, sqlRes) => {
         if (err) throw err; 
         response['standings'] = sqlRes; 
-        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 1 and (awayScore > 0 and homeScore > 0)'; 
+        sql = 'select awayScore, homeScore, awayTeamId, homeTeamId from schedules where seasonIndex = 2 and (awayScore > 0 and homeScore > 0)'; 
         con.query(sql, (err, scheduleRes) => {
             if (err) throw err;
             let results = {}; 
@@ -936,15 +936,15 @@ const divisionStandings = (division, res) => {
 
 const leagueLeaders = (res) => {
         /* 
-select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 1 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10;
+select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 2 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10;
 select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10; 
-select fullName, sum(recCatches) "recCatches", sum(recYds) "recYds", sum(recTDs) "recTDs", max(recLongest) "recLongest" from receiving_stats where seasonIndex = 1 group by rosterId order by sum(recYds) desc, sum(recTDs) desc LIMIT 10; 
-select fullName, sum(defTotalTackles) "defTotalTackles", sum(defForcedFum) "defForcedFum", sum(defSacks) "defSacks" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defTotalTackles) desc, sum(defForcedFum) desc LIMIT 10;
-select fullName, sum(defInts) "defInts", sum(defDeflections) "defDeflections", sum(defCatchAllowed) "defCatchAllowed", sum(defTDs) "defTDs" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defInts) desc, sum(defDeflections) desc, sum(defCatchAllowed) asc LIMIT 10;
-select fullName, sum(defForcedFum) "defForcedFum", sum(defTotalTackles) "defTackles", sum(defFumRec) "defFumRec", sum(defInts) "defInts" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defForcedFum) desc, sum(defTotalTackles) desc LIMIT 10;
-select fullName, sum(fGMade) "fgMade", sum(fGAtt) "fgAtt", sum(xpMade) "xpMade" from kicking_stats where seasonIndex = 1 group by rosterId order by sum(fGMade) desc, sum(fgAtt) asc LIMIT 10;
+select fullName, sum(recCatches) "recCatches", sum(recYds) "recYds", sum(recTDs) "recTDs", max(recLongest) "recLongest" from receiving_stats where seasonIndex = 2 group by rosterId order by sum(recYds) desc, sum(recTDs) desc LIMIT 10; 
+select fullName, sum(defTotalTackles) "defTotalTackles", sum(defForcedFum) "defForcedFum", sum(defSacks) "defSacks" from defensive_stats where seasonIndex = 2 group by rosterId order by sum(defTotalTackles) desc, sum(defForcedFum) desc LIMIT 10;
+select fullName, sum(defInts) "defInts", sum(defDeflections) "defDeflections", sum(defCatchAllowed) "defCatchAllowed", sum(defTDs) "defTDs" from defensive_stats where seasonIndex = 2 group by rosterId order by sum(defInts) desc, sum(defDeflections) desc, sum(defCatchAllowed) asc LIMIT 10;
+select fullName, sum(defForcedFum) "defForcedFum", sum(defTotalTackles) "defTackles", sum(defFumRec) "defFumRec", sum(defInts) "defInts" from defensive_stats where seasonIndex = 2 group by rosterId order by sum(defForcedFum) desc, sum(defTotalTackles) desc LIMIT 10;
+select fullName, sum(fGMade) "fgMade", sum(fGAtt) "fgAtt", sum(xpMade) "xpMade" from kicking_stats where seasonIndex = 2 group by rosterId order by sum(fGMade) desc, sum(fgAtt) asc LIMIT 10;
 */
-let sql = 'select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 1 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10; select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10; select fullName, sum(recCatches) "recCatches", sum(recYds) "recYds", sum(recTDs) "recTDs", max(recLongest) "recLongest" from receiving_stats where seasonIndex = 1 group by rosterId order by sum(recYds) desc, sum(recTDs) desc LIMIT 10; select fullName, sum(defTotalTackles) "defTotalTackles", sum(defForcedFum) "defForcedFum", sum(defSacks) "defSacks" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defTotalTackles) desc, sum(defForcedFum) desc LIMIT 10; select fullName, sum(defInts) "defInts", sum(defDeflections) "defDeflections", sum(defCatchAllowed) "defCatchAllowed", sum(defTDs) "defTDs" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defInts) desc, sum(defDeflections) desc, sum(defCatchAllowed) asc LIMIT 10; select fullName, sum(defForcedFum) "defForcedFum", sum(defTotalTackles) "defTackles", sum(defFumRec) "defFumRec", sum(defInts) "defInts" from defensive_stats where seasonIndex = 1 group by rosterId order by sum(defForcedFum) desc, sum(defTotalTackles) desc LIMIT 10; select fullName, sum(fGMade) "fgMade", sum(fGAtt) "fgAtt", sum(xpMade) "xpMade" from kicking_stats where seasonIndex = 1 group by rosterId order by sum(fGMade) desc, sum(fgAtt) asc LIMIT 10;'
+let sql = 'select fullName, sum(passAtt) "passAtt", sum(passComp) "passComp", sum(passYds) "passYds", sum(passTDs) "passTDs" from passing_stats where seasonIndex = 2 group by rosterId order by sum(passYds) desc, sum(passTDs) desc LIMIT 10; select fullName, sum(rushAtt) "rushAtt", sum(rushYds) "rushYds", sum(rushTDs) "rushTDs", max(rushLongest) "rushLongest" from rushing_stats group by rosterId order by sum(rushYds) desc, sum(rushTDs) desc LIMIT 10; select fullName, sum(recCatches) "recCatches", sum(recYds) "recYds", sum(recTDs) "recTDs", max(recLongest) "recLongest" from receiving_stats where seasonIndex = 2 group by rosterId order by sum(recYds) desc, sum(recTDs) desc LIMIT 10; select fullName, sum(defTotalTackles) "defTotalTackles", sum(defForcedFum) "defForcedFum", sum(defSacks) "defSacks" from defensive_stats where seasonIndex = 2 group by rosterId order by sum(defTotalTackles) desc, sum(defForcedFum) desc LIMIT 10; select fullName, sum(defInts) "defInts", sum(defDeflections) "defDeflections", sum(defCatchAllowed) "defCatchAllowed", sum(defTDs) "defTDs" from defensive_stats where seasonIndex = 2 group by rosterId order by sum(defInts) desc, sum(defDeflections) desc, sum(defCatchAllowed) asc LIMIT 10; select fullName, sum(defForcedFum) "defForcedFum", sum(defTotalTackles) "defTotalTackles", sum(defFumRec) "defFumRec", sum(defInts) "defInts" from defensive_stats where seasonIndex = 2 group by rosterId order by sum(defForcedFum) desc, sum(defTotalTackles) desc LIMIT 10; select fullName, sum(fGMade) "fgMade", sum(fGAtt) "fgAtt", sum(xpMade) "xpMade" from kicking_stats where seasonIndex = 2 group by rosterId order by sum(fGMade) desc, sum(fgAtt) asc LIMIT 10;'
 let con = mysql.createConnection({ 
     "host": process.env.host,
     "user": process.env.user,
