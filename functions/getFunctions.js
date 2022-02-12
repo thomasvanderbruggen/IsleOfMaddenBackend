@@ -165,7 +165,9 @@ const allPlayers = (res) => {
     con.query(sql, (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
-            for (let player of sqlRes){
+            console.log(sqlRes[0]);
+            for (let player of sqlRes)
+            {
                 player['teamname'] = teamIdToName[player.teamId];
             }
             res.send(sqlRes);
