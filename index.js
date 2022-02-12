@@ -102,9 +102,9 @@ app.get('/api/seasonstats/:year/:position/:playerId', (req, res) => {
     res.sendStatus(200);
 })
 
-app.get('/api/player/:rosterId', (req, res) => { 
-    const {params: {rosterId}, } = req; 
-   playerInfo(rosterId, res)
+app.get('/api/player/:playerId', (req, res) => { 
+    const {params: {playerId}, } = req; 
+   playerInfo(playerId, res)
 })
 
 app.get('/api/powerranking/', (req, res) => { 
