@@ -60,7 +60,7 @@ function generatePlayerIdWithFirstName(firstName, lastName, rosterId){
 
 function generatePlayerIdWithFullName(fullName, rosterId) {
     let output = `${fullName.charCodeAt(0)}`;
-    const lastName = fullName.slice(3); 
+    const lastName = fullName.slice(2); 
     for (let i = 0; i < lastName.length; i++){
         output += `${lastName.charCodeAt(i)}`;
     }
