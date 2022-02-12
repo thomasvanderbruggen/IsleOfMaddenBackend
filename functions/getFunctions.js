@@ -593,6 +593,7 @@ const seasonStats = (year, position, playerId, res) => {
                 }
                     
                 else {
+                    console.log(secondQuery);
                     if (secondQuery.length !== 0){
                        let weeklyStats = []; 
                        for (const week of secondQuery) { 
