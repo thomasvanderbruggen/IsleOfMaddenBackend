@@ -191,6 +191,7 @@ const passingWeeklyStats = (stats, weekType,pool) => {
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
+            stat.statId = adjustStatId(stat.statId, stat.seasonIndex);
             stat['playerId'] = generatePlayerIdWithFullName(stat.fullName, stat.rosterId);
             sql = SQL`INSERT INTO passing_stats (fullName, passAtt, passComp, passCompPct, passInts, passLongest, passPts, passerRating, passSacks, passTDs, passYds, passYdsPerAtt, passYdsPerGame, rosterid, playerId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
             (${stat.fullName}, ${stat.passAtt}, ${stat.passComp}, ${stat.passCompPct}, ${stat.passInts}, ${stat.passLongest}, ${stat.passPts}, ${stat.passerRating}, ${stat.passSacks}, ${stat.passTDs}, ${stat.passYds}, ${stat.passYdsPerAtt}, ${stat.passYdsPerGame}, ${stat.rosterId},${stat.playerId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
@@ -215,7 +216,7 @@ const defensiveWeeklyStats = (stats, weekType, pool) => {
                 stat.weekIndex += 23; 
             }
             stat['playerId'] = generatePlayerIdWithFullName(stat.fullName, stat.rosterId);
-    
+            stat.statId = adjustStatId(stat.statId, stat.seasonIndex);
             sql = SQL`INSERT INTO defensive_stats (defCatchAllowed, defDeflections, defForcedFum, defFumRec, defInts, defIntReturnYds, defPts, defSacks, defSafeties, defTDs, defTotalTackles, fullName, rosterId, playerId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
             (${stat.defCatchAllowed}, ${stat.defDeflections}, ${stat.defForcedFum}, ${stat.defFumRec}, ${stat.defInts}, ${stat.defIntReturnYds}, ${stat.defPts}, ${stat.defSacks}, ${stat.defSafeties}, ${stat.defTDs}, ${stat.defTotalTackles}, ${stat.fullName}, ${stat.rosterId}, ${stat.playerId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
             ON DUPLICATE KEY UPDATE defCatchAllowed=VALUES(defCatchAllowed), defDeflections=VALUES(defDeflections), defForcedFum=VALUES(defForcedFum), defFumRec=VALUES(defFumRec), defInts=VALUES(defInts), defIntReturnYds=VALUES(defIntReturnYds),
@@ -239,6 +240,7 @@ const kickingWeeklyStats = (stats, weekType, pool) => {
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
+            stat.statId = adjustStatId(stat.statId, stat.seasonIndex);
             stat['playerId'] = generatePlayerIdWithFullName(stat.fullName, stat.rosterId);
             sql = SQL`INSERT INTO kicking_stats (kickPts, fGAtt, fG50PlusAtt, fG50PlusMade, fGLongest, fGMade, fGCompPct, fullName, kickoffAtt, kickoffTBs, rosterId, playerId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex, xPAtt, xPMade, xPCompPct)
             VALUES (${stat.kickPts}, ${stat.fGAtt}, ${stat.fG50PlusAtt}, ${stat.fG50PlusMade}, ${stat.fGLongest}, ${stat.fGMade}, ${stat.fGCompPct}, ${stat.fullName}, ${stat.kickoffAtt}, ${stat.kickoffTBs}, ${stat.rosterId}, ${stat.playerId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex}, ${stat.xPAtt}, ${stat.xPMade}, ${stat.xPCompPct})
@@ -260,6 +262,7 @@ const rushingWeeklyStats = (stats, weekType, pool) => {
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
+            stat.statId = adjustStatId(stat.statId, stat.seasonIndex);
             stat['playerId'] = generatePlayerIdWithFullName(stat.fullName, stat.rosterId);
             sql = SQL`INSERT INTO rushing_stats (fullName, rushAtt, rushBrokenTackles, rushFum, rushLongest, rushPts, rosterId, playerId, rushTDs, rushToPct, rush20PlusYds, rushYdsAfterContact, rushYds, rushYdsPerAtt, rushYdsPerGame, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
             (${stat.fullName}, ${stat.rushAtt}, ${stat.rushBrokenTackles}, ${stat.rushFum}, ${stat.rushLongest}, ${stat.rushPts}, ${stat.rosterId}, ${stat.playerId}, ${stat.rushTDs}, ${stat.rushToPct}, ${stat.rush20PlusYds}, ${stat.rushYdsAfterContact}, ${stat.rushYds}, ${stat.rushYdsPerAtt}, ${stat.rushYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
@@ -281,6 +284,7 @@ const receivingWeeklyStats = (stats, weekType, pool) => {
             if (weekType === 'pre'){ 
                 stat.weekIndex += 23; 
             }
+            stat.statId = adjustStatId(stat.statId, stat.seasonIndex);
             stat['playerId'] = generatePlayerIdWithFullName(stat.fullName, stat.rosterId);
             sql = SQL`INSERT INTO receiving_stats (fullName, recCatches, recCatchPct, recDrops, recLongest, recPts, rosterId, playerId, recTDs, recToPct, recYdsAfterCatch, recYacPerCatch, recYds, recYdsPerCatch, recYdsPerGame, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex) VALUES 
             (${stat.fullName}, ${stat.recCatches}, ${stat.recCatchPct}, ${stat.recDrops}, ${stat.recLongest}, ${stat.recPts}, ${stat.rosterId}, ${stat.playerId}, ${stat.recTDs}, ${stat.recToPct}, ${stat.recYdsAfterCatch}, ${stat.recYacPerCatch}, ${stat.recYds}, ${stat.recYdsPerCatch}, ${stat.recYdsPerGame}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
