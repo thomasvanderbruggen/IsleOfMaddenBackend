@@ -471,7 +471,7 @@ const seasonStats = (year, position, playerId, res) => {
                 "recYdsPerCatch": 0, 
                 "recYdsPerGame": 0
             }
-            sql = `select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, re.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.playerId = re.playerId left join schedules sch on sch.scheduleId = re.scheduleId where re.playerId = ${playerId} and re.seasonIndex = 2 and re.weekIndex < 24 order by (re.weekIndex) asc`;
+            sql = SQL`select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, re.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.playerId = re.playerId left join schedules sch on sch.scheduleId = re.scheduleId where re.playerId = ${playerId} and re.seasonIndex = 2 and re.weekIndex < 24 order by (re.weekIndex) asc`;
             console.log(sql);
             con.query(sql, (err, secondQuery) => { {
                 if (err) { 
