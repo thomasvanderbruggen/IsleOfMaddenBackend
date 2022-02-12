@@ -305,7 +305,7 @@ const seasonStats = (year, position, playerId, res) => {
             let secondSql =SQL`SELECT r.rushAtt, r.rushBrokenTackles, r.rushFum, r.rushLongest, r.rushPts, r.rushTDs, r.rushToPct, r.rush20PlusYds, r.rushYds, r.rushYdsPerAtt, r.rushYdsPerGame,p.passAtt, p.passComp,
              p.passCompPct, p.passInts, p.passLongest, p.passPts, p.passerRating, p.passSacks, p.passTDs, p.passYds, p.passYdsPerGame, p.fullName, p.weekIndex, r.teamId, sch.awayTeamId, sch.homeTeamId
             FROM passing_stats p LEFT JOIN rushing_stats r ON p.rosterId = r.rosterId AND p.weekIndex = r.weekIndex AND p.scheduleId = r.scheduleId 
-            LEFT JOIN players pl ON pl.rosterID = p.rosterId LEFT JOIN schedules sch ON sch.scheduleId = p.scheduleId WHERE p.rosterId = ${rosterId} AND p.seasonIndex = 2 ORDER BY (p.weekIndex) ASC;`;
+            LEFT JOIN players pl ON pl.rosterID = p.rosterId LEFT JOIN schedules sch ON sch.scheduleId = p.scheduleId WHERE p.rosterId = ${rosterId} AND p.seasonIndex = 2 AND p.weekIndex < 24 ORDER BY (p.weekIndex) ASC;`;
             let seasonStats = {
                 "name": '', 
                 "rushAttempts": 0, 
@@ -384,7 +384,7 @@ const seasonStats = (year, position, playerId, res) => {
         } else if (position === 'HB' || position === 'hb' || position === 'FB' || position === 'fb'){
             sql = SQL`select ru.fullName, ru.rushAtt, ru.rushBrokenTackles, ru.rushFum, ru.rushLongest, ru.rushPts, ru.rushTDs, ru.rushToPct, ru.rush20PlusYds, 
             ru.rushYds, ru.rushYdsPerAtt, ru.rushYdsPerGame, re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, 
-            re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex, ru.teamId, sch.homeTeamId, sch.awayTeamId from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId left join players pl ON pl.rosterId = ru.rosterId left join schedules sch on sch.scheduleId = ru.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 2 order by (ru.weekIndex) asc`; 
+            re.recToPct, re.recYds, re.recYdsAfterCatch, re.recYdsPerGame, re.weekIndex, ru.teamId, sch.homeTeamId, sch.awayTeamId from rushing_stats ru left join receiving_stats re ON ru.rosterId = re.rosterId and ru.weekIndex = re.weekIndex  and ru.scheduleId = re.scheduleId left join players pl ON pl.rosterId = ru.rosterId left join schedules sch on sch.scheduleId = ru.scheduleId where ru.rosterId = ${rosterId} and re.seasonIndex = 2 and re.weekIndex < 24 order by (ru.weekIndex) asc`; 
             con.query(sql, (err, secondQuery)=> { 
                 if (err) res.sendStatus(500) 
                 if (secondQuery.length !== 0){
@@ -469,7 +469,7 @@ const seasonStats = (year, position, playerId, res) => {
                 "recYdsPerCatch": 0, 
                 "recYdsPerGame": 0
             }
-            sql = SQL`select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, re.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.rosterId = re.rosterId left join schedules sch on sch.scheduleId = re.scheduleId where re.rosterId = ${rosterId} and re.seasonIndex = 2 order by (re.weekIndex) asc`;
+            sql = SQL`select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, re.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.rosterId = re.rosterId left join schedules sch on sch.scheduleId = re.scheduleId where re.rosterId = ${rosterId} and re.seasonIndex = 2 and re.weekIndex < 24 order by (re.weekIndex) asc`;
             con.query(sql, (err, secondQuery) => { {
                 if (err) { 
                    res.sendStatus(500);
@@ -530,7 +530,7 @@ const seasonStats = (year, position, playerId, res) => {
                 "defTDs": 0, 
                 "defTotalTackles": 0
             }
-            sql = SQL`select def.defCatchAllowed, def.defDeflections, def.defForcedFum, def.defFumRec, def.defInts, def.defIntReturnYds, def.defPts, def.defSacks, def.defSafeties, def.defTDs, def.defTotalTackles, def.fullName, def.weekIndex, def.teamId, sch.awayTeamId, sch.homeTeamId from defensive_stats def left join players pl on pl.rosterId = def.rosterId left join schedules sch on sch.scheduleId = def.scheduleId where def.seasonIndex = 2 and def.rosterId = ${rosterId} order by (def.weekIndex) asc`; 
+            sql = SQL`select def.defCatchAllowed, def.defDeflections, def.defForcedFum, def.defFumRec, def.defInts, def.defIntReturnYds, def.defPts, def.defSacks, def.defSafeties, def.defTDs, def.defTotalTackles, def.fullName, def.weekIndex, def.teamId, sch.awayTeamId, sch.homeTeamId from defensive_stats def left join players pl on pl.rosterId = def.rosterId left join schedules sch on sch.scheduleId = def.scheduleId where def.seasonIndex = 2 and def.rosterId = ${rosterId} and def.weekIndex < 24 order by (def.weekIndex) asc`; 
             con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500);
                 else {
@@ -583,7 +583,7 @@ const seasonStats = (year, position, playerId, res) => {
                 "kickoffAtt": 0, 
                 "kickoffTBs": 0
             }
-            sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs, p.weekIndex, k.teamId, sch.awayTeamId, sch.homeTeamId from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId and p.scheduleId = k.scheduleId and p.weekIndex = k.weekIndex left join players pl on pl.rosterId = p.rosterId left join schedules sch on sch.scheduleId = p.scheduleId where p.seasonIndex = 2 and p.rosterId = ${rosterId} order by (p.weekIndex) asc`; 
+            sql = SQL`select p.puntsBlocked, p.puntsIn20, p.puntLongest, p.puntTBs, p.puntNetYds, p.puntAtt, p.puntYds, p.fullName, k.kickoffAtt, k.kickoffTBs, p.weekIndex, k.teamId, sch.awayTeamId, sch.homeTeamId from punting_stats p left join kicking_stats k ON p.rosterId = k.rosterId and p.scheduleId = k.scheduleId and p.weekIndex = k.weekIndex left join players pl on pl.rosterId = p.rosterId left join schedules sch on sch.scheduleId = p.scheduleId where p.seasonIndex = 2 and p.rosterId = ${rosterId} and p.weekIndex < 24 order by (p.weekIndex) asc`; 
             con.query(sql, (err, secondQuery) => { 
                 if (err) {
                     res.sendStatus(500);
@@ -641,7 +641,7 @@ const seasonStats = (year, position, playerId, res) => {
                 "xpMade": 0,
                 "xpCompPct": 0
             } 
-            sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, k.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.rosterId = k.rosterId left join schedules sch on sch.scheduleId = k.scheduleId where k.seasonIndex = 2 and rosterId = ${rosterId} order by (weekIndex) asc`;
+            sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, k.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.rosterId = k.rosterId left join schedules sch on sch.scheduleId = k.scheduleId where k.seasonIndex = 2 and rosterId = ${rosterId} and k.weekIndex < 24 order by (weekIndex) asc`;
             con.query(sql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500); 
                 else {
