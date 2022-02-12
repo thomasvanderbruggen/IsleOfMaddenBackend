@@ -11,7 +11,7 @@ const { leagueInfo, teamWeeklyStats, schedule, puntingWeeklyStats, passingWeekly
 let currentSeason;
 let currentWeek;
 
-const pool = mysql.createConnection({
+const pool = mysql.createPool({
     "host": process.env.host,
     "user": process.env.user,
     "password": process.env.pw,
@@ -25,7 +25,6 @@ pool.query('select seasonIndex, weekIndex from schedules where homeScore = 0 and
         currentWeek = res[0].weekIndex;
     }
 })
-pool.end();
 
 
 app.set('port', (process.env.PORT || 3001)); 
