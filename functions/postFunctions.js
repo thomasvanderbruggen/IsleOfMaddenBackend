@@ -76,14 +76,13 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
     pool.getConnection((err, con) => {
         console.log(teams[0]);
         for (const team of teams) {
-            
             team['infoId'] = generateTeamSeasonStatsId(team.teamId, team.seasonIndex);
             let sql = SQL`INSERT into teams_temp (conferenceId, conferenceName, divisionId, divisionName, teamId, teamName, abbrName, cityName, displayName, logoId, nickName, primaryColor, secondaryColor, username)
             VALUES (${team.conferenceId}, ${team.conferenceName}, ${team.divisionId}, ${team.divisionName}, ${team.teamId}, ${team.teamName}, ${team.abbrName}, ${team.cityName}, ${team.displayName}, ${team.logoId}, ${team.nickName}, ${team.primaryColor}, ${team.secondaryColor}, ${team.userName})
             ON DUPLICATE KEY UPDATE teamName=VALUES(teamName), abbrName=VALUES(abbrName), cityName=VALUES(cityName), logoId=VALUES(logoID), username=VALUES(username)`; 
             con.query(sql, (err, res) => {
                 if (err){
-                    console.log(err);
+                    throw err;
                 }
             })
             let secondSQL = SQL`INSERT into team_season_stats (awayWins, awayLosses, awayTies, calendarYear, confLosses, confTies, confWins, capRoom, capAvailable, capSpent, defPassYds, defPassYdsRank, defRushYds, defRushYdsRank, defTotalYds, defTotalYdsRank, divLosses, divTies, divWins, homeLosses, homeTies, homeWins, netPts, offPassYds, offPassYdsRank, offRushYds, offRushYdsRank, offTotalYds, offTotalYdsRank, ptsAgainstRank, ptsForRank, playoffStatus, prevRank, ptsAgainst, ptsFor, teamRank, seed, seasonIndex, stageIndex, totalLosses, totalTies, totalWins, teamOvr, tODiff, weekIndex, winLossStreak, winPct, ovrRating, offScheme, defScheme, infoId, teamId)
@@ -91,7 +90,7 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
             ON DUPLICATE KEY UPDATE awayWins=VALUES(awayWins), awayLosses=VALUES(awayLosses), awayTies=VALUES(awayTies), confLosses=VALUES(confLosses), confTies=VALUES(confTies), confWins=VALUES(confWins), capRoom=VALUES(capRoom), capAvailable=VALUES(capAvailable), capSpent=VALUES(capSpent), defPassYds=VALUES(defPassYds), defPassYdsRank=VALUES(defPassYdsRank), defRushYds=VALUES(defRushYds), defRushYdsRank=VALUES(defRushYdsRank), defTotalYds=VALUES(defTotalYds), defTotalYdsRank=VALUES(defTotalYdsRank), divLosses=VALUES(divLosses), divTies=VALUES(divTies), divWins=VALUES(divWins), homeLosses=VALUES(homeLosses), homeTies=VALUES(homeTies), netPts=VALUES(netPts), offPassYds=VALUES(offPassYds), offPassYdsRank=VALUES(offPassYdsRank), offRushYds=VALUES(offRushYds), offRushYdsRank=VALUES(offRushYdsRank), offTotalYds=VALUES(offTotalYds),offTotalYdsRank=VALUES(offTotalYdsRank), ptsAgainstRank=VALUES(ptsAgainstRank), ptsForRank=VALUES(ptsForRank), playoffStatus=VALUES(playoffStatus), prevRank=VALUES(prevRank), ptsAgainst=VALUES(ptsAgainst), ptsFor=VALUES(ptsFor), teamRank=VALUES(teamRank), seed=VALUES(seed), stageIndex=VALUES(stageIndex), totalLosses=VALUES(totalLosses), totalTies=VALUES(totalTies), totalWins=VALUES(totalWins), teamOvr=VALUES(teamOvr), tODiff=VALUES(tODiff), weekIndex=VALUES(weekIndex), winLossStreak=VALUES(winLossStreak), winPct=VALUES(winPct), ovrRating=VALUES(ovrRating), offScheme=VALUES(offScheme), defScheme=VALUES(defScheme), infoId=VALUES(infoId), teamId=VALUES(teamId)`
             con.query(secondSQL, (err, res) => {
                 if (err){
-                    console.log(err);
+                    throw err;
                 }
             })
     
