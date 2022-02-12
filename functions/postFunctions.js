@@ -199,6 +199,7 @@ const passingWeeklyStats = (stats, weekType,pool) => {
             seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
             con.query(sql, (err, res) => { 
                 if (err) throw err;
+                console.log(res);
             })
         }
     })
