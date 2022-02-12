@@ -474,6 +474,7 @@ const seasonStats = (year, position, playerId, res) => {
                 if (err) { 
                    res.sendStatus(500);
                    console.log(err);
+                   con.end(); 
                }
                 else{
                     if (secondQuery.length !== 0){
@@ -508,7 +509,6 @@ const seasonStats = (year, position, playerId, res) => {
                         res.send(response);
                     }
                     con.end();
-                    
                 }
     
             }})
@@ -590,7 +590,7 @@ const seasonStats = (year, position, playerId, res) => {
                 }
                     
                 else {
-                    if (seconQuery !== 0){
+                    if (secondQuery !== 0){
                        let weeklyStats = []; 
                        for (const week of secondQuery) { 
                            seasonStats.puntsBlocked += week.puntsBlocked; 
