@@ -82,8 +82,6 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
             con.query(sql, (err, res) => {
                 if (err){
                     throw err;
-                }else {
-                    con.release();
                 }
             })
             let secondSQL = SQL`INSERT into team_season_stats (awayWins, awayLosses, awayTies, calendarYear, confLosses, confTies, confWins, capRoom, capAvailable, capSpent, defPassYds, defPassYdsRank, defRushYds, defRushYdsRank, defTotalYds, defTotalYdsRank, divLosses, divTies, divWins, homeLosses, homeTies, homeWins, netPts, offPassYds, offPassYdsRank, offRushYds, offRushYdsRank, offTotalYds, offTotalYdsRank, ptsAgainstRank, ptsForRank, playoffStatus, prevRank, ptsAgainst, ptsFor, teamRank, seed, seasonIndex, stageIndex, totalLosses, totalTies, totalWins, teamOvr, tODiff, weekIndex, winLossStreak, winPct, ovrRating, offScheme, defScheme, infoId, teamId)
