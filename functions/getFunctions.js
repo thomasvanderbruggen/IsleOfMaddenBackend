@@ -297,6 +297,8 @@ const seasonStats = (year, position, playerId, res) => {
     let con = connectionGenerator();
     let response = {};
     let sql = 'SELECT p.*, t.primaryColor, t.secondaryColor, t.teamName from players p, teams t where p.teamId = t.teamId and p.playerId = ?;'; 
+    console.log(playerId); 
+    console.log(typeof playerId);
     con.query(sql, [playerId], (err, sqlRes) => { 
         if (err) res.send(404); 
         response['player'] = sqlRes[0];
