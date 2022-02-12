@@ -593,7 +593,7 @@ const seasonStats = (year, position, playerId, res) => {
                 }
                     
                 else {
-                    if (secondQuery !== 0){
+                    if (secondQuery.length !== 0){
                        let weeklyStats = []; 
                        for (const week of secondQuery) { 
                            seasonStats.puntsBlocked += week.puntsBlocked; 
