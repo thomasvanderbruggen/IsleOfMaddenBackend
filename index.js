@@ -11,20 +11,21 @@ const { leagueInfo, teamWeeklyStats, schedule, puntingWeeklyStats, passingWeekly
 let currentSeason;
 let currentWeek;
 
-const pool = mysql.createPool({
+const con = mysql.createPool({
     "host": process.env.host,
     "user": process.env.user,
     "password": process.env.pw,
     "database": "tomvandy_isle_of_madden"
 })
 
-pool.query('select seasonIndex, weekIndex from schedules where homeScore = 0 and awayScore = 0 order by seasonIndex asc, weekIndex asc limit 1', (err, res) => {
+con.query('select seasonIndex, weekIndex from schedules where homeScore = 0 and awayScore = 0 order by seasonIndex asc, weekIndex asc limit 1', (err, res) => {
     if (err) throw err;
     else {
         currentSeason = res[0].seasonIndex;
         currentWeek = res[0].weekIndex;
     }
 })
+con.release();
 
 
 app.set('port', (process.env.PORT || 3001)); 

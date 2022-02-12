@@ -82,6 +82,8 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
             con.query(sql, (err, res) => {
                 if (err){
                     throw err;
+                }else {
+                    con.release();
                 }
             })
             let secondSQL = SQL`INSERT into team_season_stats (awayWins, awayLosses, awayTies, calendarYear, confLosses, confTies, confWins, capRoom, capAvailable, capSpent, defPassYds, defPassYdsRank, defRushYds, defRushYdsRank, defTotalYds, defTotalYdsRank, divLosses, divTies, divWins, homeLosses, homeTies, homeWins, netPts, offPassYds, offPassYdsRank, offRushYds, offRushYdsRank, offTotalYds, offTotalYdsRank, ptsAgainstRank, ptsForRank, playoffStatus, prevRank, ptsAgainst, ptsFor, teamRank, seed, seasonIndex, stageIndex, totalLosses, totalTies, totalWins, teamOvr, tODiff, weekIndex, winLossStreak, winPct, ovrRating, offScheme, defScheme, infoId, teamId)
@@ -94,6 +96,7 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
             })
     
         }
+        con.release();
     })
 
 }
@@ -131,8 +134,10 @@ const teamWeeklyStats = (stats, weekType, pool) => {
                 tOGiveaways=VALUES(tOGiveaways), tOTakeaways=VALUES(tOTakeaways), totalTies=VALUES(totalTies), totalWins=VALUES(totalWins), weekIndex=VALUES(weekIndex)`; 
             con.query(sql, (err, res) => { 
                 if (err) throw err;
+                
             })
         }
+        con.release();
     })
 
 }
@@ -151,8 +156,10 @@ const schedule = (games, weekType, pool) => {
             ON DUPLICATE KEY UPDATE awayScore=VALUES(awayScore), awayTeamId=VALUES(awayTeamId), isGameOfTheWeek=VALUES(isGameOfTheWeek), homeScore=VALUES(homeScore), homeTeamId=VALUES(homeTeamId), seasonIndex=VALUES(seasonIndex), weekStatus=VALUES(weekStatus), weekIndex=VALUES(weekIndex)`;                
             con.query(sql, (err, res) => { 
                 if (err) throw err;
+                
             })
         }
+        con.release();
     })
 }
 
@@ -173,7 +180,8 @@ const puntingWeeklyStats = (stats, weekType, pool) => {
             con.query(sql, (err, res) => { 
                 if (err) throw err;
             })
-        } 
+        }
+        con.release(); 
     })
 }
 
@@ -197,6 +205,7 @@ const passingWeeklyStats = (stats, weekType,pool) => {
                 if (err) throw err;
             })
         }
+        con.release();
     })
 }
 
@@ -219,6 +228,7 @@ const defensiveWeeklyStats = (stats, weekType, pool) => {
                 if (err) throw err;
             })
         }
+        con.release();
     })
 
  
@@ -241,7 +251,8 @@ const kickingWeeklyStats = (stats, weekType, pool) => {
             con.query(sql, (err, res) => { 
                 if (err) throw err;
             })
-        } 
+        }
+        con.release(); 
     })
 }
 
@@ -264,6 +275,7 @@ const rushingWeeklyStats = (stats, weekType, pool) => {
                 if (err) throw err;
             })
         }
+        con.release();
     })
 }
 
@@ -287,6 +299,7 @@ const receivingWeeklyStats = (stats, weekType, pool) => {
                 if (err) throw err;
             })
         }
+        con.release();
     })
 
     
@@ -351,6 +364,7 @@ const freeAgents = (players, pool) => {
                 })
     
         }
+        con.release();
     })
 }
 
@@ -424,6 +438,7 @@ const teamRosters = (players, pool) => {
             }
         
         })
+        con.release();
     })
  
 }
@@ -489,6 +504,7 @@ const retirees = (players, pool) => {
             })
     
         }
+        con.release();
     })
 }
 
