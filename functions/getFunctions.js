@@ -165,7 +165,6 @@ const allPlayers = (res) => {
     con.query(sql, (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
-            console.log(sqlRes[0]);
             for (let player of sqlRes)
             {
                 player['teamname'] = teamIdToName[player.teamId];
@@ -207,7 +206,6 @@ const teamByTeamName = (teamName, res) => {
         response['coach'] = sqlRes;
         teamCoachDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
-            console.log(`sending: ${response}`);
             sent = true;
             res.send(response); 
         }
@@ -222,7 +220,6 @@ const teamByTeamName = (teamName, res) => {
         response['teamStats'] = sqlRes;
         teamStatsDone = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
-            console.log(`sending: ${response}`);
             sent = true;
             res.send(response); 
         }
@@ -237,7 +234,7 @@ const teamByTeamName = (teamName, res) => {
         response['roster'] = sqlRes;
         teamRosterDone = true; 
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
-            console.log(`sending: ${response}`);
+
             sent = true;
             res.send(response);
         }
@@ -264,8 +261,6 @@ const teamByTeamName = (teamName, res) => {
         response['schedule'] = sqlRes;
         teamSchedules = true;
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) {
-            console.log('sending');
-            console.log(response);
             sent = true; 
             res.send(response);
         }
@@ -299,8 +294,6 @@ const seasonStats = (year, position, playerId, res) => {
     let con = connectionGenerator();
     let response = {};
     let sql = 'SELECT p.*, t.primaryColor, t.secondaryColor, t.teamName from players p, teams t where p.teamId = t.teamId and p.playerId = ?;'; 
-    console.log(playerId); 
-    console.log(typeof playerId);
     con.query(sql, [playerId], (err, sqlRes) => { 
         if (err) res.send(404); 
         response['player'] = sqlRes[0];
@@ -337,7 +330,6 @@ const seasonStats = (year, position, playerId, res) => {
             }
             con.query(secondSql, (err, secondQuery) => { 
                 if (err) res.sendStatus(500);
-                console.log(secondQuery);
                 if (secondQuery.length !== 0){
                    
                    let weeklyStats = []; 
@@ -474,7 +466,6 @@ const seasonStats = (year, position, playerId, res) => {
                 "recYdsPerGame": 0
             }
             sql = SQL`select re.recCatches, re.recCatchPct, re.recDrops, re.recLongest, re.recPts, re.recTDs, re.recYdsAfterCatch, re.recYacPerCatch, re.recYds, re.recYdsPerCatch, re.recYdsPerGame, re.fullName, re.weekIndex, re.teamId, sch.awayTeamId, sch.homeTeamId from receiving_stats re left join players pl on pl.playerId = re.playerId left join schedules sch on sch.scheduleId = re.scheduleId where re.playerId = ${playerId} and re.seasonIndex = 2 and re.weekIndex < 24 order by (re.weekIndex) asc`;
-            console.log(sql);
             con.query(sql, (err, secondQuery) => { {
                 if (err) { 
                    res.sendStatus(500);
@@ -485,7 +476,6 @@ const seasonStats = (year, position, playerId, res) => {
                     if (secondQuery.length !== 0){
                        let weeklyStats = [];  
                        for (const week of secondQuery) {
-                           console.log(secondQuery);  
                            seasonStats.recCatches += week.recCatches; 
                            seasonStats.recDrops += week.recDrops; 
                            if (week.recLongest > seasonStats.recLongest) seasonStats.recLongest = week.recLongest; 
@@ -595,7 +585,6 @@ const seasonStats = (year, position, playerId, res) => {
                 }
                     
                 else {
-                    console.log(secondQuery);
                     if (secondQuery.length !== 0){
                        let weeklyStats = []; 
                        for (const week of secondQuery) { 
@@ -791,9 +780,9 @@ const playerSearch = (position, team, name, res) => {
     }
     sql += " ORDER BY CONCAT(lastName, firstName);"; 
     con.query(sql, (err, sqlRes) => {
-        console.log(sql);
-        console.log(err);
-        if (err) {res.send(500);} 
+        if (err) {
+            res.send(500);
+        } 
         else {
             for (let player of sqlRes){  
                 player['teamName'] = teamIdToName[player.teamId];
@@ -816,14 +805,12 @@ const standings = (res) => {
         con.query(sql, (err, scheduleRes) => {
             if (err) throw err;
             let results = {}; 
-            console.log(response.standings.length);
             for (const game of scheduleRes) { 
                 if (results[game.homeTeamId] === undefined){
                     results[game.homeTeamId] = {}; 
                     results[game.homeTeamId]['ptsFor'] = game.homeScore;
                     results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
                     results[game.homeTeamId]['id'] = game.homeTeamId;
-                    console.log(results[game.homeTeamId]);
                 }else { 
                     results[game.homeTeamId]['ptsFor'] += game.homeScore;
                     results[game.homeTeamId]['ptsAgainst'] += game.awayScore;
@@ -834,7 +821,6 @@ const standings = (res) => {
                     results[game.awayTeamId]['ptsFor'] = game.awayScore;
                     results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
                     results[game.awayTeamId]['id'] = game.awayTeamId;
-                    console.log(results[game.awayTeamId]);  
                 }else{
                     results[game.awayTeamId]['ptsFor'] += game.awayScore;
                     results[game.awayTeamId]['ptsAgainst'] += game.homeScore;
@@ -864,14 +850,12 @@ const conferenceStandings = (conference, res) => {
         con.query(sql, (err, scheduleRes) => {
             if (err) throw err;
             let results = {}; 
-            console.log(response.standings.length);
             for (const game of scheduleRes) { 
                 if (results[game.homeTeamId] === undefined){
                     results[game.homeTeamId] = {}; 
                     results[game.homeTeamId]['ptsFor'] = game.homeScore;
                     results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
                     results[game.homeTeamId]['id'] = game.homeTeamId;
-                    console.log(results[game.homeTeamId]);
                 }else { 
                     results[game.homeTeamId]['ptsFor'] += game.homeScore;
                     results[game.homeTeamId]['ptsAgainst'] += game.awayScore;
@@ -882,7 +866,6 @@ const conferenceStandings = (conference, res) => {
                     results[game.awayTeamId]['ptsFor'] = game.awayScore;
                     results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
                     results[game.awayTeamId]['id'] = game.awayTeamId;
-                    console.log(results[game.awayTeamId]);  
                 }else{
                     results[game.awayTeamId]['ptsFor'] += game.awayScore;
                     results[game.awayTeamId]['ptsAgainst'] += game.homeScore;
@@ -909,14 +892,12 @@ const divisionStandings = (division, res) => {
         con.query(sql, (err, scheduleRes) => {
             if (err) throw err;
             let results = {}; 
-            console.log(response.standings.length);
             for (const game of scheduleRes) { 
                 if (results[game.homeTeamId] === undefined){
                     results[game.homeTeamId] = {}; 
                     results[game.homeTeamId]['ptsFor'] = game.homeScore;
                     results[game.homeTeamId]['ptsAgainst'] = game.awayScore;
                     results[game.homeTeamId]['id'] = game.homeTeamId;
-                    console.log(results[game.homeTeamId]);
                 }else { 
                     results[game.homeTeamId]['ptsFor'] += game.homeScore;
                     results[game.homeTeamId]['ptsAgainst'] += game.awayScore;
@@ -927,7 +908,6 @@ const divisionStandings = (division, res) => {
                     results[game.awayTeamId]['ptsFor'] = game.awayScore;
                     results[game.awayTeamId]['ptsAgainst'] = game.homeScore;
                     results[game.awayTeamId]['id'] = game.awayTeamId;
-                    console.log(results[game.awayTeamId]);  
                 }else{
                     results[game.awayTeamId]['ptsFor'] += game.awayScore;
                     results[game.awayTeamId]['ptsAgainst'] += game.homeScore;

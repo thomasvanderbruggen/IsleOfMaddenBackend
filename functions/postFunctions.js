@@ -198,7 +198,6 @@ const passingWeeklyStats = (stats, weekType,pool) => {
             (${stat.fullName}, ${stat.passAtt}, ${stat.passComp}, ${stat.passCompPct}, ${stat.passInts}, ${stat.passLongest}, ${stat.passPts}, ${stat.passerRating}, ${stat.passSacks}, ${stat.passTDs}, ${stat.passYds}, ${stat.passYdsPerAtt}, ${stat.passYdsPerGame}, ${stat.rosterId},${stat.playerId}, ${stat.scheduleId}, ${stat.seasonIndex}, ${stat.statId}, ${stat.stageIndex}, ${stat.teamId}, ${stat.weekIndex})
             ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), passAtt=VALUES(passAtt), passComp=VALUES(passComp), passInts=VALUES(passInts), passLongest=VALUES(passLongest), passPts=VALUES(passPts), passerRating=VALUES(passerRating), passSacks=VALUES(passSacks), passTDs=VALUES(passTDs), passYds=VALUES(passYds), passYdsPerAtt=VALUES(passYdsPerAtt), passYdsPerGame=VALUES(passYdsPerGame), rosterId=VALUES(rosterId), scheduleId=VALUES(scheduleId),
             seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`;
-            console.log(stat.statId);
             con.query(sql, (err, res) => { 
                 if (err) throw err;
             })
@@ -256,7 +255,6 @@ const kickingWeeklyStats = (stats, weekType, pool) => {
 
 const rushingWeeklyStats = (stats, weekType, pool) => {
     pool.getConnection((err, con) => {
-        console.log('rushing');
         let sql;
         for (let stat of stats) { 
             stat.weekIndex++; 
@@ -279,7 +277,6 @@ const rushingWeeklyStats = (stats, weekType, pool) => {
 
 const receivingWeeklyStats = (stats, weekType, pool) => {
     pool.getConnection((err, con) => {
-        console.log('receiving');
         let sql;
         for (let stat of stats) {
             stat.weekIndex++; 
@@ -309,10 +306,6 @@ const freeAgents = (players, pool) => {
         for (let player of players) { 
             if (player.teamId == 0) { 
                 player.teamId = 1;
-            }
-            if (player.rosterId === 553125272){
-                console.log(`Found Him`);
-                console.log(player);
             }
             player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
     
@@ -369,7 +362,6 @@ const freeAgents = (players, pool) => {
 const teamRosters = (players, pool) => {
     pool.getConnection((err, con) => {
         let sql;
-        console.log(players[0]);
         players.forEach((player, index) => {
             if (player.teamId == 0) { 
                 player.teamId = 1;
@@ -450,10 +442,6 @@ const retirees = (players, pool) => {
         })
         for (let player of players) { 
 
-            if (player.rosterId === 553125272){
-                console.log(`Found Him`);
-                console.log(player);
-            }
             player['playerId'] = generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId);
     
             // 118 values
