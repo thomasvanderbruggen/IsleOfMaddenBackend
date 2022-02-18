@@ -186,7 +186,7 @@ const teamByTeamName = (teamName, res) => {
         "password": process.env.pw,
         "database": "tomvandy_isle_of_madden"
     });
-    let sql = 'select * from teams where teamName = ?';
+    let sql = 'select t.teamName, t.teamId, t.divisionName, t.conferenceName, t.cityName, ts.capAvailable, ts.teamOvr, ts.totalWins, ts.totalLosses, ts.totalTies from teams_temp t, team_season_stats ts where teamName = ? and t.teamId = ts.teamId and ts.seasonIndex = 2';
     con.query(sql, [teamName], (err, sqlRes) => {
         if (err) {
             sent = true;
@@ -197,6 +197,7 @@ const teamByTeamName = (teamName, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             sent = true;
             res.send(response); 
+            con.end(); 
         }
     })
     sql = 'select coachName from coaches where teamName = ?';
@@ -210,6 +211,7 @@ const teamByTeamName = (teamName, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             sent = true;
             res.send(response); 
+            con.end(); 
         }
     })
     
@@ -224,6 +226,7 @@ const teamByTeamName = (teamName, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) { 
             sent = true;
             res.send(response); 
+            con.end(); 
         }
         
     })
@@ -239,6 +242,7 @@ const teamByTeamName = (teamName, res) => {
 
             sent = true;
             res.send(response);
+            con.end(); 
         }
         
     })
@@ -265,10 +269,11 @@ const teamByTeamName = (teamName, res) => {
         if (teamInfoDone && teamCoachDone && teamStatsDone && teamRosterDone && teamSchedules && !sent) {
             sent = true; 
             res.send(response);
+            con.end(); 
         }
         
     })
-    con.end();  
+     
 
 }
 
