@@ -29,9 +29,10 @@ const coaches = (res) =>{
         if (err) res.sendStatus(500); 
         else {
             res.send(sqlRes);
+            con.end();
         }
     }); 
-    con.end();
+    
 }
 
 const teamCoach = (teamName, res) => {
@@ -40,9 +41,10 @@ const teamCoach = (teamName, res) => {
         if (err) res.sendStatus(500); 
         else { 
             res.send(sqlRes);
+            con.end();
         }
     })
-    con.end();
+    
 }
 
 const gameStats = (gameId, res) => {
