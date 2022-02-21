@@ -70,9 +70,8 @@ function generatePlayerIdWithFullName(fullName, rosterId) {
 
 
 const leagueInfo = (teams, teamsWithInfo, pool) => {
-    let newTeams = []; 
     for (let i = 0; i < teamsWithInfo.length; i++){
-        newTeams[i] = {...teams[i], ...teamsWithInfo[i]};
+        teams[i] = {...teams[i], ...teamsWithInfo[i]};
     }
     pool.getConnection((err, con) => {
         console.log(teams[0]); 
