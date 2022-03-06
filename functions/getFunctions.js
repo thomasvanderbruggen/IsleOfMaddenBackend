@@ -134,12 +134,6 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
     con.query(sql,[seasonIndex, weekIndex], (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
-            // keeps track of which week's games are being processed.
-            let week = sqlRes[0].weekIndex; // 1
-            // array to hold one week's worth of games, will be pushed to allGames once all of that week's games are processed
-            let weeklyGames = []; 
-            //2d array to hold all of the games
-
             for (game of sqlRes) { 
                 if (game.homeTeamId === 0) { 
                     game['homeTeam'] = 'TBD';
@@ -154,7 +148,9 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
                 
             }
 
-            res.send({games: sqlRes, weekIndex}); 
+            // generates the calendar year using the starting year of the franchise
+            let calendarYear = sqlRes[0].seasonIndex + 2021;
+            res.send({games: sqlRes, weekIndex, seasonIndex: sqlRes[0].seasonIndex, calendarYear}); 
         }
     })
     con.end(); 
