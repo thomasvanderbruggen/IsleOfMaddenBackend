@@ -19,15 +19,13 @@ const pool = mysql.createPool({
 })
 
 const setCurrentWeek = () => {
-    pool.getConnection((err, con) => {
-        con.query('select seasonIndex, weekIndex from schedules where homeScore = 0 and awayScore = 0 order by seasonIndex asc, weekIndex asc limit 1', (err, res) => {
+    pool.query('select seasonIndex, weekIndex from schedules where homeScore = 0 and awayScore = 0 order by seasonIndex asc, weekIndex asc limit 1', (err, res) => {
             if (err) throw err;
             else {
                 currentSeason = res[0].seasonIndex;
                 currentWeek = res[0].weekIndex;
             }
-        })
-        con.release();
+        
     })
 }
 
