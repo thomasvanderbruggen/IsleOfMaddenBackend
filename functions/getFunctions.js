@@ -149,7 +149,7 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
                 }else { 
                     game['awayTeam'] = teamIdToName[game.awayTeamId];
                 }
-                
+                console.log(game);
             }
 
             // generates the calendar year using the starting year of the franchise
