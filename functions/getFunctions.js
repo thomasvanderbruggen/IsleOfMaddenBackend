@@ -136,7 +136,7 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
         else {
             let games = [...sqlRes]; 
 
-            for (game of games) {
+            for (let game of games) {
                 console.log(`Game Home ID: ${game.homeTeamId}`); 
                 console.log(`Game Away ID: ${game.awayTeamId}`);  
                 if (game.homeTeamId === 0) { 
