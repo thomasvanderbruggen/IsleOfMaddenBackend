@@ -134,7 +134,9 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
     con.query(sql,[seasonIndex, weekIndex], (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
-            for (game of sqlRes) {
+            let games = [...sqlRes]; 
+
+            for (game of games) {
                 console.log(`Game Home ID: ${game.homeTeamId}`); 
                 console.log(`Game Away ID: ${game.awayTeamId}`);  
                 if (game.homeTeamId === 0) { 
@@ -152,7 +154,7 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
 
             // generates the calendar year using the starting year of the franchise
             let calendarYear = sqlRes[0].seasonIndex + 2021;
-            res.send({games: sqlRes, weekIndex, seasonIndex: sqlRes[0].seasonIndex, calendarYear}); 
+            res.send({games, weekIndex, seasonIndex: sqlRes[0].seasonIndex, calendarYear}); 
         }
     })
     con.end(); 
