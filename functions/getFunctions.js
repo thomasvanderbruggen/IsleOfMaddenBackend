@@ -134,7 +134,9 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
     con.query(sql,[seasonIndex, weekIndex], (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
-            for (game of sqlRes) { 
+            for (game of sqlRes) {
+                console.log(`Game Home ID: ${game.homeTeamId}`); 
+                console.log(`Game Away ID: ${game.awayTeamId}`);  
                 if (game.homeTeamId === 0) { 
                     game['homeTeam'] = 'TBD';
                 }else { 
