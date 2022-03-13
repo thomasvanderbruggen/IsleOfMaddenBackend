@@ -130,7 +130,7 @@ const gameStats = (gameId, res) => {
 
 const leagueSchedule = (seasonIndex, weekIndex, res) => {
     let con = connectionGenerator();
-    let sql = SQL`select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus, seasonIndex from schedules where seasonIndex = ? and weekIndex = ? order by weekStatus desc`;    
+    let sql = 'select homeTeamId, homeScore, awayTeamId, awayScore, weekIndex, weekStatus, seasonIndex from schedules where seasonIndex = ? and weekIndex = ? order by weekStatus desc';    
     con.query(sql,[seasonIndex, weekIndex], (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
@@ -163,7 +163,7 @@ const leagueSchedule = (seasonIndex, weekIndex, res) => {
 const allPlayers = (res) => {
     let con = connectionGenerator();
 
-    let sql = 'select pl.firstName, pl.lastName, pl.devTrait, pl.age, pl.height, pl.weight, pl.playerBestOvr, pl.speedRating, pl.awareRating, pl.position, pl.teamId, pl.playerId, t.teamName from players pl, teams t where pl.teamId = t.teamId order by concat(firstName, lastName) asc;'; 
+    let sql = 'select pl.firstName, pl.lastName, pl.devTrait, pl.age, pl.height, pl.weight, pl.playerBestOvr, pl.speedRating, pl.awareRating, pl.position, pl.teamId, pl.playerId, t.teamName from players pl, teams_temp t where pl.teamId = t.teamId order by concat(firstName, lastName) asc;'; 
     con.query(sql, (err, sqlRes) => {
         if (err) res.sendStatus(500); 
         else {
@@ -300,7 +300,7 @@ const seasonStats = (year, position, playerId, res) => {
  const playerInfo = (playerId, res) => {
     let con = connectionGenerator();
     let response = {};
-    let sql = 'SELECT p.*, t.primaryColor, t.secondaryColor, t.teamName from players p, teams t where p.teamId = t.teamId and p.playerId = ?;'; 
+    let sql = 'SELECT p.*, t.primaryColor, t.secondaryColor, t.teamName from players p, teams_temp t where p.teamId = t.teamId and p.playerId = ?;'; 
     con.query(sql, [playerId], (err, sqlRes) => { 
         if (err) res.send(404); 
         response['player'] = sqlRes[0];
