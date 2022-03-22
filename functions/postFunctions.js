@@ -79,7 +79,7 @@ const leagueInfo = (teams, teamsWithInfo, pool) => {
             team['infoId'] = generateTeamSeasonStatsId(team.teamId, team.seasonIndex);
             let sql = SQL`INSERT into teams_temp (conferenceId, conferenceName, divisionId, divisionName, teamId, teamName, abbrName, cityName, displayName, logoId, nickName, primaryColor, secondaryColor, username)
             VALUES (${team.conferenceId}, ${team.conferenceName}, ${team.divisionId}, ${team.divisionName}, ${team.teamId}, ${team.teamName}, ${team.abbrName}, ${team.cityName}, ${team.displayName}, ${team.logoId}, ${team.nickName}, ${team.primaryColor}, ${team.secondaryColor}, ${team.username})
-            ON DUPLICATE KEY UPDATE teamName=VALUES(teamName), abbrName=VALUES(abbrName), cityName=VALUES(cityName), logoId=VALUES(logoID), username=VALUES(username)`; 
+            ON DUPLICATE KEY UPDATE teamName=VALUES(teamName)`; 
             con.query(sql, (err, res) => {
                 if (err){
                     throw err;
