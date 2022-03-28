@@ -375,8 +375,16 @@ const seasonStats = (year, position, playerId, res) => {
                    seasonStats.passYdsPerAtt = seasonStats.passYds / seasonStats.passAttempts;
                    seasonStats.passerRating = calculatePasserRating(seasonStats).toFixed(2);
                    response.seasonStats = seasonStats; 
-                   response.weeklyStats = weeklyStats; 
-                   res.send(response);
+                   response.weeklyStats = weeklyStats;
+                   if (response.player.devTrait >= 2){
+                    con.query('select abilityTitle, abilityDescription from player_abiltiies where playerId = ?',[response.player.playerId], (err, abilityRes) => {
+                        response.abilities = abilityRes; 
+                        res.send(response);
+                    })  
+                   }else{
+                    res.send(response);
+                   } 
+                   
                 }else {
                     res.send(response);
                 }
@@ -451,7 +459,14 @@ const seasonStats = (year, position, playerId, res) => {
                    }
                    response.seasonStats = seasonStats; 
                    response.weeklyStats = weeklyStats; 
-                   res.send(response);
+                   if (response.player.devTrait >= 2){
+                    con.query('select abilityTitle, abilityDescription from player_abiltiies where playerId = ?',[response.player.playerId], (err, abilityRes) => {
+                        response.abilities = abilityRes; 
+                        res.send(response);
+                    })  
+                   }else{
+                    res.send(response);
+                   } 
                 }else {
                    res.send(response);
                 }
@@ -506,7 +521,14 @@ const seasonStats = (year, position, playerId, res) => {
                        seasonStats.name = secondQuery[0].fullName;
                        response.weeklyStats = weeklyStats; 
                        response.seasonStats = seasonStats;  
-                       res.send(response);
+                       if (response.player.devTrait >= 2){
+                        con.query('select abilityTitle, abilityDescription from player_abiltiies where playerId = ?',[response.player.playerId], (err, abilityRes) => {
+                            response.abilities = abilityRes; 
+                            res.send(response);
+                        })  
+                       }else{
+                        res.send(response);
+                       } ;
                     }else {
                         res.send(response);
                     }
@@ -563,7 +585,14 @@ const seasonStats = (year, position, playerId, res) => {
                        }
                        response.weeklyStats = weeklyStats; 
                        response.seasonStats = seasonStats;
-                       res.send(response);
+                       if (response.player.devTrait >= 2){
+                        con.query('select abilityTitle, abilityDescription from player_abiltiies where playerId = ?',[response.player.playerId], (err, abilityRes) => {
+                            response.abilities = abilityRes; 
+                            res.send(response);
+                        })  
+                       }else{
+                        res.send(response);
+                       } 
                     }else {
                         res.send(response);
                     }
@@ -619,7 +648,14 @@ const seasonStats = (year, position, playerId, res) => {
                        seasonStats.name = secondQuery[0].fullName;
                        response.seasonStats = seasonStats; 
                        response.weeklyStats = weeklyStats; 
-                       res.send(response);
+                       if (response.player.devTrait >= 2){
+                        con.query('select abilityTitle, abilityDescription from player_abiltiies where playerId = ?',[response.player.playerId], (err, abilityRes) => {
+                            response.abilities = abilityRes; 
+                            res.send(response);
+                        })  
+                       }else{
+                        res.send(response);
+                       } ;
                     }else {
                         res.send(response);
                     }
@@ -675,8 +711,14 @@ const seasonStats = (year, position, playerId, res) => {
                        seasonStats.name = secondQuery[0].fullName;
                        response.weeklyStats = weeklyStats; 
                        response.seasonStats = seasonStats;
-                       res.send(response);
-                    }else{
+                       if (response.player.devTrait >= 2){
+                        con.query('select abilityTitle, abilityDescription from player_abiltiies where playerId = ?',[response.player.playerId], (err, abilityRes) => {
+                            response.abilities = abilityRes; 
+                            res.send(response);
+                        })  
+                       }else{
+                        res.send(response);
+                       }                     }else{
                         res.send(response);
                     }
                     con.end();
