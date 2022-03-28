@@ -375,6 +375,7 @@ const seasonStats = (year, position, playerId, res) => {
                    seasonStats.passerRating = calculatePasserRating(seasonStats).toFixed(2);
                    response.seasonStats = seasonStats; 
                    response.weeklyStats = weeklyStats;
+                   console.log(sqlRes[0].devTrait);
                    if (sqlRes[0].devTrait >= 2){
                     con.query('select abilityTitle, abilityDescription from player_abiltiies where playerId = ?',[response.player.playerId], (err, abilityRes) => {
                         response.abilities = abilityRes; 
