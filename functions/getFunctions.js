@@ -336,7 +336,10 @@ const seasonStats = (year, position, playerId, res) => {
                 "passYdsPerAtt": 0
             }
             con.query(secondSql, (err, secondQuery) => { 
-                if (err) res.sendStatus(500);
+                if (err) {
+                    res.sendStatus(500);
+                    console.log(err);
+                }
                 if (secondQuery.length !== 0){
                    let weeklyStats = []; 
                    for (const week of secondQuery) { 
@@ -540,8 +543,8 @@ const seasonStats = (year, position, playerId, res) => {
                     }else {
                         res.send(response);
                     }
-                    con.end();
                 }
+                con.end();
     
             }})
         } else if (position === 'DT' || position === 'dt' || position === 'RE' || position === 're' || position === 'LE' || 
@@ -604,8 +607,8 @@ const seasonStats = (year, position, playerId, res) => {
                     }else {
                         res.send(response);
                     }
-                    con.end(); 
                 }
+                con.end(); 
             })
         } else if (position === 'P' || position === 'p'){ 
             let seasonStats = { 
@@ -627,7 +630,6 @@ const seasonStats = (year, position, playerId, res) => {
                 if (err) {
                     res.sendStatus(500);
                 }
-                    
                 else {
                     if (secondQuery.length !== 0){
                        let weeklyStats = []; 
@@ -667,8 +669,9 @@ const seasonStats = (year, position, playerId, res) => {
                     }else {
                         res.send(response);
                     }
-                   con.end();
+                   
                 }
+                con.end();
             })
     
         } else if (position === 'K' || position === 'k') {
@@ -687,8 +690,8 @@ const seasonStats = (year, position, playerId, res) => {
                 "xpMade": 0,
                 "xpCompPct": 0
             } 
-            sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, k.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.playerId = k.playerId left join schedules sch on sch.scheduleId = k.scheduleId where k.seasonIndex = 2 and playerId = ${playerId} and k.weekIndex < 24 order by (weekIndex) asc`;
-            con.query(sql, (err, secondQuery) => { 
+            sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, k.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.playerId = k.playerId left join schedules sch on sch.scheduleId = k.scheduleId where k.seasonIndex = 2 and playerId = ? and k.weekIndex < 24 order by (weekIndex) asc`;
+            con.query(sql,[playerId], (err, secondQuery) => { 
                 if (err) res.sendStatus(500); 
                 else {
                     if (secondQuery.length !== 0){
@@ -729,8 +732,9 @@ const seasonStats = (year, position, playerId, res) => {
                        }                     }else{
                         res.send(response);
                     }
-                    con.end();
+                    
                 }
+                con.end();
             })
         }else { 
             res.send(response);
