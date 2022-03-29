@@ -31,6 +31,8 @@ const pool = mysql.createPool({
 
 // setCurrentWeek();
 
+currentSeason = 2;
+currentWeek = 23;
 
 
 
