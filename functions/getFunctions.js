@@ -690,7 +690,7 @@ const seasonStats = (year, position, playerId, res) => {
                 "xpMade": 0,
                 "xpCompPct": 0
             } 
-            sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, k.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.playerId = k.playerId left join schedules sch on sch.scheduleId = k.scheduleId where k.seasonIndex = 2 and playerId = ? and k.weekIndex < 24 order by (weekIndex) asc`;
+            sql = SQL`select k.kickPts, k.fGAtt, k.fG50PlusAtt, k.fG50PlusMade, k.fGLongest, k.fGMade, k.kickoffAtt, k.kickoffTBs, k.xPAtt, k.xPMade, k.xPCompPct, k.fullName, k.weekIndex, k.teamId, sch.awayTeamId, sch.homeTeamId from kicking_stats k left join players pl on pl.playerId = k.playerId left join schedules sch on sch.scheduleId = k.scheduleId where k.seasonIndex = 2 and k.playerId = ? and k.weekIndex < 24 order by (weekIndex) asc`;
             con.query(sql,[playerId], (err, secondQuery) => { 
                 if (err) {
                     res.sendStatus(500); 
