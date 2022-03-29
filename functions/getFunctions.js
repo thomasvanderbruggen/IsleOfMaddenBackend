@@ -390,6 +390,7 @@ const seasonStats = (year, position, playerId, res) => {
                         con.query('select abilityTitle, abilityDescription from player_abilities where playerId = ?',[response.player.playerId], (err, abilityRes) => {
                             response.abilities = abilityRes; 
                             res.send(response);
+                            con.end();
                         })  
                        }else{
                         res.send(response);
@@ -532,6 +533,7 @@ const seasonStats = (year, position, playerId, res) => {
                         con.query('select abilityTitle, abilityDescription from player_abilities where playerId = ?',[response.player.playerId], (err, abilityRes) => {
                             response.abilities = abilityRes; 
                             res.send(response);
+                            con.end();
                         })  
                        }else{
                         res.send(response);
@@ -596,6 +598,7 @@ const seasonStats = (year, position, playerId, res) => {
                         con.query('select abilityTitle, abilityDescription from player_abilities where playerId = ?',[response.player.playerId], (err, abilityRes) => {
                             response.abilities = abilityRes; 
                             res.send(response);
+                            con.end();
                         })  
                        }else{
                         res.send(response);
@@ -659,6 +662,7 @@ const seasonStats = (year, position, playerId, res) => {
                         con.query('select abilityTitle, abilityDescription from player_abilities where playerId = ?',[response.player.playerId], (err, abilityRes) => {
                             response.abilities = abilityRes; 
                             res.send(response);
+                            con.end();
                         })  
                        }else{
                         res.send(response);
@@ -722,6 +726,7 @@ const seasonStats = (year, position, playerId, res) => {
                         con.query('select abilityTitle, abilityDescription from player_abilities where playerId = ?',[response.player.playerId], (err, abilityRes) => {
                             response.abilities = abilityRes; 
                             res.send(response);
+                            con.end();
                         })  
                        }else{
                         res.send(response);
