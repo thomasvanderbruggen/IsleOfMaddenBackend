@@ -18,18 +18,18 @@ const pool = mysql.createPool({
     "database": "tomvandy_isle_of_madden"
 })
 
-const setCurrentWeek = () => {
-    pool.query('select seasonIndex, weekIndex from schedules where homeScore = 0 and awayScore = 0 order by seasonIndex asc, weekIndex asc limit 1', (err, res) => {
-            if (err) throw err;
-            else {
-                currentSeason = res[0].seasonIndex;
-                currentWeek = res[0].weekIndex;
-            }
+// const setCurrentWeek = () => {
+//     pool.query('select seasonIndex, weekIndex from schedules where homeScore = 0 and awayScore = 0 order by seasonIndex asc, weekIndex asc limit 1', (err, res) => {
+//             if (err) throw err;
+//             else {
+//                 currentSeason = res[0].seasonIndex;
+//                 currentWeek = res[0].weekIndex;
+//             }
         
-    })
-}
+//     })
+// }
 
-setCurrentWeek();
+// setCurrentWeek();
 
 
 
@@ -226,7 +226,7 @@ app.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', (req, res)
                 receivingWeeklyStats(stats, weekType, pool);
             }
             res.sendStatus(200);
-            setCurrentWeek();
+            //setCurrentWeek();
         }else{
             res.sendStatus(500);
         }
