@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "ftp": "^0.3.10",
     "mysql": "^2.18.1",
     "sql-template-strings": "^2.2.2"
