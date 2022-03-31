@@ -155,6 +155,7 @@ app.post('/:platform/:leagueId/leagueTeams', (req, res) => {
     req.on('end', () =>{ 
         if (leagueId === realLeagueId){
             const teams = JSON.parse(body)['leagueTeamInfoList'];
+            console.log(teams[0]); 
             console.log('----Teams----');
             for (const team of teams) { 
                 teamsWithInfo.push(team); 
