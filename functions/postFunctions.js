@@ -70,11 +70,7 @@ function generatePlayerIdWithFullName(fullName, rosterId) {
 
 
 const leagueInfo = (teams, teamsWithInfo, pool) => {
-    for (let i = 0; i < teamsWithInfo.length; i++){
-        teams[i] = {...teams[i], ...teamsWithInfo[i]};
-    }
     pool.getConnection((err, con) => {
-        console.log(teams[0]); 
         for (const team of teams) {
             team['infoId'] = generateTeamSeasonStatsId(team.teamId, team.seasonIndex);
             let sql = SQL`INSERT into teams_temp (conferenceId, conferenceName, divisionId, divisionName, teamId, teamName, abbrName, cityName, displayName, logoId, nickName, primaryColor, secondaryColor, username)

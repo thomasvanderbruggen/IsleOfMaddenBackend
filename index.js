@@ -179,6 +179,7 @@ app.post('/:platform/:leagueId/standings', (req, res) => {
     req.on('end', () => { 
         if (leagueId === realLeagueId){
             const teams = JSON.parse(body)['teamStandingInfoList'];
+            console.log(teams[0]);
             leagueInfo(teams, teamsWithInfo, pool);
             teamsWithInfo = []; 
             res.sendStatus(200); 
