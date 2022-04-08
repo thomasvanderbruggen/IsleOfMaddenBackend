@@ -13,7 +13,7 @@ export const teamsByStandings = async (teams) => {
     }); 
 
     for (const team of teams) { 
-        let success= teamsByStandingsQuery(team, pool); 
+        let success = teamsByStandingsQuery(team, pool); 
         if (!success){
             return false;
         }

@@ -11,15 +11,14 @@ import utils, { generatePlayerIdWithFirstName } from '../../utils';
      if there is an error, return false
 */
 
-export const rostersQuery = async (player) => {
+export const rostersQuery = async (player, pool) => {
     let con = await mysql.createConnection(utils.dbConfig); 
     if (!player.teamId || player.teamId === 0){
         player.teamId = 1; 
     }
     player['playerId'] =  generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId); 
     try {
-
-        let [rows, fields] = await con.query(
+        pool.query(
             `INSERT INTO players (accelRating, age, agilityRating, awareRating, bCVRating, bigHitTrait, birthDay, birthMonth, birthYear, blockShedRating,
                  breakSackRating, breakTackleRating, cITRating, capHit, capReleaseNetSavings, capReleasePenalty, carryRating, catchRating, 
                  changeOfDirectionRating, clutchTrait, college, confRating, contractBonus, contractLength, contractSalary, contractYearsLeft, 
@@ -84,13 +83,6 @@ export const rostersQuery = async (player) => {
               player.throwAwayTrait, player.throwOnRunRating, player.throwPowerRating, player.throwUnderPressureRating, player.tightSpiralTrait, 
               player.toughRating, player.truckRating, player.weight, player.yACCatchTrait, player.yearsPro, player.zoneCoverRating])
         
-        
-        
-        if (rows.affectedRows === 1){
-            return true; 
-        }else {
-            throw new Error('More than one row affected by a player insert'); 
-        }
     
     }catch (err){
         console.log(err); 
