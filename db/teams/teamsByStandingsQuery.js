@@ -28,7 +28,7 @@ export const teamsByStandingsQuery = async (team) => {
                     offTotalYds, offTotalYdsRank, ptsAgainstRank, ptsForRank, playoffStatus, prevRank, ptsAgainst, ptsFor, teamRank, seed, seasonIndex, stageIndex, totalLosses, totalTies, totalWins, 
                     teamOvr, tODiff, tOTakeaways, tOGiveaways, weekIndex, winLossStreak, winPct, ovrRating, infoId, teamId)
                 VALUES 
-                 (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?) 
+                 (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?) 
                 ON DUPLICATE KEY UPDATE
                  awayWins=VALUES(awayWins), awayLosses=VALUES(awayLosses), awayTies=VALUES(awayTies), confLosses=VALUES(confLosses), confTies=VALUES(confTies), confWins=VALUES(confWins), capRoom=VALUES(capRoom),
                  capAvailable=VALUES(capAvailable), capSpent=VALUES(capSpent), defPassYds=VALUES(defPassYds), defPassYdsRank=VALUES(defPassYdsRank), defRushYds=VALUES(defRushYds), defRushYdsRank=VALUES(defRushYdsRank),
