@@ -1,15 +1,13 @@
-import { dbConfig } from "../../utils"
-import mysql from 'mysql2/promise'; 
+
 import { generateTeamSeasonStatsId } from "../../utils";
 
 
 /*
     The "basic" team information is stored in the teams_temp table and the seasonal data is stored in team_season_stats; 
 */
-export const teamsByStandingsQuery = async (team) => {
-    let con = await mysql.createConnection(dbConfig); 
+export const teamsByStandingsQuery = async (team, pool) => {
     try {
-        con.query(
+        pool.query(
             `INSERT INTO teams_temp (conferenceId, conferenceName, divisionId, divisionName, teamName, teamId)
             VALUES
             (?, ?, ?, ?, ?, ?)
@@ -21,7 +19,7 @@ export const teamsByStandingsQuery = async (team) => {
             
             let statId = generateTeamSeasonStatsId(team.teamId, team.seasonIndex); 
            
-            con.query(
+            pool.query(
                 `INSERT INTO team_season_stats 
                   (awayWins, awayLosses, awayTies, calendarYear, confLosses, confTies, confWins, capRoom, capAvailable, capSpent, defPassYds, defPassYdsRank, defRushYds, 
                     defRushYdsRank, defTotalYds, defTotalYdsRank, divLosses, divTies, divWins, homeLosses, homeTies, homeWins, netPts, offPassYds, offPassYdsRank, offRushYds, offRushYdsRank, 
