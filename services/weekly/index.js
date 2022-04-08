@@ -4,7 +4,7 @@ import passing from './passing';
 import defense from './defense'; 
 import kicking from './kicking';
 import rushing from './rushing'; 
-
+import receiving from './receiving';
 
 export default { 
     schedule,
@@ -12,5 +12,6 @@ export default {
     passing,
     defense, 
     kicking,
-    rushing
+    rushing,
+    receiving
 }

@@ -6,7 +6,7 @@ import { generatePlayerIdWithFullName } from "../../utils";
 /*
     Adjusts weekIndex, scheduleId, statId, and generates playerId. Runs receivingQuery for each stat. 
 */
-export default receiving = async (stats, weekType) => {
+export const receiving = async (stats, weekType) => {
     for (const stat of stats) {
         stat.weekIndex++; 
         stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex); 
@@ -24,3 +24,4 @@ export default receiving = async (stats, weekType) => {
     }   
     return true;
 }
+export default receiving; 
