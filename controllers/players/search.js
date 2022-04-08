@@ -1,4 +1,3 @@
-import { Types } from "mysql";
 import { searchService } from "../../services/players/searchService"
 
 /*
