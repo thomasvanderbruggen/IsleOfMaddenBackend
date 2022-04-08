@@ -1,5 +1,5 @@
 import mysql from 'mysql2/promise'; 
-import utils from '../../utils';
+import utils, { generatePlayerIdWithFirstName } from '../../utils';
 
 
 /*
@@ -16,6 +16,7 @@ export const rostersQuery = async (player) => {
     if (!player.teamId || player.teamId === 0){
         player.teamId = 1; 
     }
+    player['playerId'] =  generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId); 
     try {
 
         let [rows, fields] = await con.query(
@@ -85,7 +86,7 @@ export const rostersQuery = async (player) => {
         
         
         
-              if (rows.affectedRows === 1){
+        if (rows.affectedRows === 1){
             return true; 
         }else {
             throw new Error('More than one row affected by a player insert'); 
