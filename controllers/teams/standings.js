@@ -18,12 +18,16 @@ export const standings = async (req, res) => {
         body += chunk.toString();
     }); 
 
-    req.on('end', () => {
+    req.on('end', async () => {
         //Verify LeagueID is as expected, and insert into database
         if (leagueId === realLeagueId){
             const inputTeams = JSON.parse(body)['teamStandingInfoList']; 
-            let success= await teams.teamsByStandings(inputTeams);
-            return success;
+            let success = await teams.teamsByStandings(inputTeams);
+            if (success){
+                res.sendStatus(200);
+            }else{
+                res.sendStatus(500);
+            }
         }
     })
 
