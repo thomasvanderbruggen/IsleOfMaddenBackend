@@ -38,8 +38,9 @@ export const teamsByStandingsQuery = async (team) => {
                  ptsFor=ptsFor+VALUES(ptsFor), teamRank=VALUES(teamRank), seed=VALUES(seed), stageIndex=VALUES(stageIndex), totalLosses=VALUES(totalLosses), totalTies=VALUES(totalTies), totalWins=VALUES(totalWins), teamOvr=VALUES(teamOvr),
                  tODiff=VALUES(tODiff), tOTakeaways=VALUES(tOTakeaways), tOGiveaways=VALUES(tOGiveaways), weekIndex=VALUES(weekIndex), winLossStreak=VALUES(winLossStreak), winPct=VALUES(winPct), ovrRating=VALUES(ovrRating), infoId=VALUES(infoId), teamId=VALUES(teamId)
                 `, [team.awayWins, team.awayLosses, team.awayTies, team.calendarYear, team.confLosses, team.confTies, team.confWins, team.capRoom, team.capAvailable, team.capSpent, team.defPassYds, team.defPassYdsRank, team.defRushYds, team.defRushYdsRank, team.defTotalYds, 
-                    team.defTotalYdsRank, team.divLosses, team.divTies, team.divWins, team.homeLosses, team.homeTies, team.homeWins, team.netPts, team.offPassYds, team.offPassYdsRank, team.offRushYds, team.OffRushYdsRank, team.offTotalYds, team.offTotalYdsRank, team.ptsAgainstRank,
-                    team.ptsForRank, team.playoffStatus, team.prevRank, team.ptsAgainst, team.ptsFor, team.rank, team.seed, team.seasonIndex, team.stageIndex, team.totalLosses, team.totalTies, team.totalWins, team.teamOvr, statId, team.teamId])
+                    team.defTotalYdsRank, team.divLosses, team.divTies, team.divWins, team.homeLosses, team.homeTies, team.homeWins, team.netPts, team.offPassYds, team.offPassYdsRank, team.offRushYds, team.OffRushYdsRank, team.offTotalYds, team.offTotalYdsRank, 
+                    team.ptsAgainstRank,team.ptsForRank, team.playoffStatus, team.prevRank, team.ptsAgainst, team.ptsFor, team.rank, team.seed, team.seasonIndex, team.stageIndex, 
+                    team.totalLosses, team.totalTies, team.totalWins, team.teamOvr, team.tODiff,team.tOTakeaways, team.tOGiveaways, team.weekIndex, team.winLossStreak, team.winPct, team.ovrRating, statId, team.teamId])
 
     }catch (err) {
         console.log(err); 
