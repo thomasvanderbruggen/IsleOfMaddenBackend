@@ -26,7 +26,7 @@ app.set('teamNameToId', teamNameToId);
 console.log(seasonIndex); 
 console.log(weekIndex); 
 
-app.listen(3000, () => console.log('App listening on port 3000')); 
+app.listen(app.get('port'), () => console.log('App listening on port 3000')); 
 
 
 
