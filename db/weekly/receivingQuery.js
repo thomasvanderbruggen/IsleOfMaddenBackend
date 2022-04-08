@@ -5,7 +5,7 @@ import { dbConfig } from '../../utils';
     Inserts stats into the receiving_stats table
 */
 
-export default receivingQuery = async (stat) => {
+export const receivingQuery = async (stat) => {
     let con = await mysql.createConnection(dbConfig); 
 
     try { 
@@ -29,3 +29,5 @@ export default receivingQuery = async (stat) => {
         return false;
     }
 }
+
+export default receivingQuery; 
