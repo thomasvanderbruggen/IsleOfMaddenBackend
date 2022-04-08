@@ -22,7 +22,8 @@ export const standings = async (req, res) => {
         //Verify LeagueID is as expected, and insert into database
         if (leagueId === realLeagueId){
             const inputTeams = JSON.parse(body)['teamStandingInfoList']; 
-            teams.teamsByStandings(inputTeams); 
+            let success= await teams.teamsByStandings(inputTeams);
+            return success;
         }
     })
 
