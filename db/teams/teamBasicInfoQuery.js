@@ -18,11 +18,9 @@ export const teamBasicInfoQuery = async (team, pool) => {
             UPDATE teamId=VALUES(teamId), abbrName=VALUES(abbrName), cityName=VALUES(cityName), displayName=VALUES(displayName), nickName=VALUES(nickName), primaryColor=VALUES(primaryColor), secondaryColor=VALUES(secondaryColor), divisionName=VALUES(divisionName)`
             ,[team.abbrName, team.cityName, team.displayName, team.nickName, team.primaryColor, team.secondaryColor, team.divName, team.teamId]);
         
-        con.release();
         return true;
     }catch (err){
         console.log(err); 
-        con.release();
         return false;
     }
 }

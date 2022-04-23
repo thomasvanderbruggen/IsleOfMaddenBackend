@@ -13,6 +13,7 @@ export const teamsByStandings = async (teams) => {
             return false;
         }
     }
+    pool.end();
     return true;
 }
 
