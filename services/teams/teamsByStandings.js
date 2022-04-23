@@ -4,13 +4,7 @@ import { dbConfig } from '../../utils';
 
 // Runs the query for each team sent by the API
 export const teamsByStandings = async (teams) => {
-    const pool = mysql.createPool({
-        "host": dbConfig.host,
-        "user": dbConfig.user,
-        "database": dbConfig.database,
-        "password": dbConfig.password,
-        "connectionLimit": 15
-    }); 
+    const pool = mysql.createPool(dbConfig).promise(); 
 
     for (const team of teams) { 
         let success = teamsByStandingsQuery(team, pool); 
