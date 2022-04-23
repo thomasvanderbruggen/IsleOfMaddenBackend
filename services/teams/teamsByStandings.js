@@ -6,14 +6,17 @@ import { dbConfig } from '../../utils';
 export const teamsByStandings = async (teams) => {
     const pool = mysql.createPool(dbConfig);
     const promisePool = pool.promise();  
-
+    let counter = 0; 
     for (const team of teams) { 
-        let success = await teamsByStandingsQuery(team, promisePool); 
+        let success = teamsByStandingsQuery(team, promisePool); 
         if (!success){
             return false;
         }
+        counter++; 
+        if (counter === teams.length){
+            pool.end(); 
+        }
     }
-    pool.end();
     return true;
 }
 
