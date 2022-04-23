@@ -10,7 +10,7 @@ import mysql from 'mysql2/promise';
 export const teamBasicInfoQuery = async (team, pool) => {
     
     try {
-        let [rows, fields] = pool.query(
+        let response = pool.query(
             `insert into teams_temp (abbrName, cityName, displayName, nickName, primaryColor, secondaryColor, divisionName, teamId)
             VALUES
             (?, ?, ?, ?, ?, ?, ?, ?)
