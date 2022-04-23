@@ -7,7 +7,7 @@ import { generateTeamSeasonStatsId } from "../../utils";
 */
 export const teamsByStandingsQuery = async (team, pool) => {
     try {
-        let response = await pool.query(
+        pool.query(
             `INSERT INTO teams_temp (conferenceId, conferenceName, divisionId, divisionName, teamName, teamId)
             VALUES
             (?, ?, ?, ?, ?, ?)
@@ -18,7 +18,7 @@ export const teamsByStandingsQuery = async (team, pool) => {
 
         let statId = generateTeamSeasonStatsId(team.teamId, team.seasonIndex); 
         
-        response = await pool.query(
+        pool.query(
             `INSERT INTO team_season_stats 
                 (awayWins, awayLosses, awayTies, calendarYear, confLosses, confTies, confWins, capRoom, capAvailable, capSpent, defPassYds, defPassYdsRank, defRushYds, 
                 defRushYdsRank, defTotalYds, defTotalYdsRank, divLosses, divTies, divWins, homeLosses, homeTies, homeWins, netPts, offPassYds, offPassYdsRank, offRushYds, offRushYdsRank, 
