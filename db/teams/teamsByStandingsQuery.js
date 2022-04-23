@@ -16,7 +16,6 @@ export const teamsByStandingsQuery = async (team, pool) => {
             `
             ,[team.conferenceId, team.conferenceName, team.divisionId, team.divisionName,team.teamName, team.teamId]);  
 
-        console.log(response);
         let statId = generateTeamSeasonStatsId(team.teamId, team.seasonIndex); 
         
         response = await pool.query(
@@ -39,8 +38,7 @@ export const teamsByStandingsQuery = async (team, pool) => {
                 team.defTotalYdsRank, team.divLosses, team.divTies, team.divWins, team.homeLosses, team.homeTies, team.homeWins, team.netPts, team.offPassYds, team.offPassYdsRank, team.offRushYds, team.OffRushYdsRank, team.offTotalYds, team.offTotalYdsRank, 
                 team.ptsAgainstRank,team.ptsForRank, team.playoffStatus, team.prevRank, team.ptsAgainst, team.ptsFor, team.rank, team.seed, team.seasonIndex, team.stageIndex, 
                 team.totalLosses, team.totalTies, team.totalWins, team.teamOvr, team.tODiff,team.tOTakeaways, team.tOGiveaways, team.weekIndex, team.winLossStreak, team.winPct, team.ovrRating, statId, team.teamId])
-        console.log(response);
-
+        return true;
     }catch (err) {
         console.log(err); 
         return false;   
