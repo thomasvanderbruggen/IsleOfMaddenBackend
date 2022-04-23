@@ -8,14 +8,11 @@ export const teamsByStandings = async (teams) => {
     const promisePool = pool.promise();  
     let counter = 0; 
     for (const team of teams) { 
-        let success = teamsByStandingsQuery(team, promisePool); 
+        let success = await teamsByStandingsQuery(team, promisePool); 
         if (!success){
             return false;
         }
         counter++; 
-        if (counter === teams.length){
-            pool.end(); 
-        }
     }
     return true;
 }
