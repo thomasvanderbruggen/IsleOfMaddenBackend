@@ -14,8 +14,9 @@ export const roster = async (players) => {
         'password': dbConfig.password, 
         'connectionLimit': 15
     })
+    let success; 
     for (const player of players) {
-        let success = rostersQuery(player, pool);
+        success = rostersQuery(player, pool);
         if (!success) {
             return false; 
         }    
