@@ -8,16 +8,16 @@ import { realLeagueId } from "../../utils";
 export const roster = async (req, res) => {
     let { params: { leagueId }, } = req;
     let body = '';
-    const pool = req.
     leagueId = parseInt(leagueId); 
     req.on('data', chunk => {
         body += chunk.toString();
+        console.log('in roster'); 
     }); 
     req.on('end', async () => {
         if (leagueId === realLeagueId) {
           const json = JSON.parse(body)['rosterInfoList'] 
           const pool = req.app.locals.settings.pool; 
-          console.log('in roster'); 
+         
           let success = teams.roster(json, pool); 
           
           if (success){
