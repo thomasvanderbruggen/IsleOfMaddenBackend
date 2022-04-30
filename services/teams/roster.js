@@ -15,7 +15,7 @@ export const roster = async (players) => {
         'connectionLimit': 15
     })
     for (const player of players) {
-        let success = await rostersQuery(player, pool);
+        let success = rostersQuery(player, pool);
         if (!success) {
             return false; 
         }    
