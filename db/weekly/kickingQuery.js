@@ -15,7 +15,7 @@ export const kickingQuery = async (stat) => {
             rosterId=VALUES(rosterId), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), weekIndex=VALUES(weekIndex), xPAtt=VALUES(xPAtt), 
             xPMade=VALUES(xPMade), xPCompPct=VALUES(xPCompPct)
             `, [stat.kickPts, stat.fGAtt, stat.fG50PlusAtt, stat.fG500PlusMade, stat.fGLongest, stat.fGMade, 
-                stat.fGCompPct, stat.fullName, stat.kickoffAtt, stat.kickoffTBs, stat.rosterId, stat.playerId, stat.scheduleId, stat.seasonIndex, stat.statId, stat.stageIndex, stat.teamId, stat.weekindex, stat.xPAtt, stat.xPMade, xtat.xPCompPct]); 
+                stat.fGCompPct, stat.fullName, stat.kickoffAtt, stat.kickoffTBs, stat.rosterId, stat.playerId, stat.scheduleId, stat.seasonIndex, stat.statId, stat.stageIndex, stat.teamId, stat.weekindex, stat.xPAtt, stat.xPMade, stat.xPCompPct]); 
         
         con.end(); 
         return true;

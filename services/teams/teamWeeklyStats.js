@@ -9,14 +9,14 @@ import teamWeeklyStatsQuery from "../../db/teams/teamWeeklyStatsQuery";
     
     Runs the teamWeeklyStatsQuery for each stat provided from the API
 */
-export const teamWeeklyStats = async (stats, weekType) => {
+export const teamWeeklyStats = async (stats, weekType, pool) => {
     for (let stat of stats) {
         stat.weekIndex++
         stat.scheduleId = utils.adjustId(stat.scheduleId, stat.seasonIndex);
         if (weekType === 'pre'){
             stat.weekIndex += 23;
         }
-        const pool = req.app.locals.settings.pool; 
+
         let success = teamWeeklyStatsQuery(stat, pool); 
         if (!success){
             return false;
