@@ -5,7 +5,7 @@ export const passingQuery = async (stat) => {
     let con = await mysql.createConnection(dbConfig); 
 
     try {
-        let [rows, fields] = con.query(
+        let [rows, fields] = await con.query(
             `INSERT INTO passing_stats (fullName, passAtt, passComp, passCompPct, passInts, passLongest, passPts, passerRating, passSacks, 
                 passTDs, passYds, passYdsPerAtt, passYdsPerGame, rosterid, playerId, 
                 scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex)

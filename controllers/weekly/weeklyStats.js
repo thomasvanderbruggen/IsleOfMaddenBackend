@@ -18,6 +18,7 @@ export const weeklyStats = async (req, res) => {
     req.on('end',  async () => {
         let success;
         if (leagueId === realLeagueId){
+            const pool = req.app.locals.settings.pool; 
             let json = JSON.parse(body); 
             if (dataType === 'teamstats'){ // Contains team stats for each game played
                 let stats = json['teamStatInfoList']; 
