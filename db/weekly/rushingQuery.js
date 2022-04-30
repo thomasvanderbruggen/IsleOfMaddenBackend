@@ -18,7 +18,7 @@ export const rushingQuery = async (stat) => {
             rush20PlusYds=VALUES(rush20PlusYds), rushYdsAfterContact=VALUES(rushYdsAfterContact), rushYds=VALUES(rushYds), rushYdsPerAtt=VALUES(rushYdsPerAtt), 
             rushYdsPerGame=VALUES(rushYdsPerGame), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex)`
             ,[stat.fullName,stat.rushAtt, stat.rushBrokenTackles,stat.rushFum,stat.rushLongest,stat.rushPts,stat.rosterId,stat.playerId,stat.rushTDs,stat.rushToPct,stat.rush20PlusYds,
-                stat.rushYdsAftercontact,stat.rushYds,stat.rushYdsPerAtt,stat.rushYdsPerGame,stat.scheduleId,stat.seasonIndex,stat.statId,stat.stageIndex,stat.teamId,stat.weekIndex])
+                stat.rushYdsAfterContact,stat.rushYds,stat.rushYdsPerAtt,stat.rushYdsPerGame,stat.scheduleId,stat.seasonIndex,stat.statId,stat.stageIndex,stat.teamId,stat.weekIndex])
 
         con.end();
         return true;
