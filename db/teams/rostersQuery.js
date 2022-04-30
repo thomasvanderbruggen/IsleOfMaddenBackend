@@ -12,7 +12,6 @@ import utils, { generatePlayerIdWithFirstName } from '../../utils';
 */
 
 export const rostersQuery = async (player, pool) => {
-    let con = await mysql.createConnection(utils.dbConfig); 
     if (!player.teamId || player.teamId === 0){
         player.teamId = 1; 
     }
