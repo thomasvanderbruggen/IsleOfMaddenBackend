@@ -17,7 +17,7 @@ export const roster = async (req, res) => {
         if (leagueId === realLeagueId) {
           const json = JSON.parse(body)['rosterInfoList'] 
           const pool = req.app.locals.settings.pool
-          let success = await teams.roster(json, pool); 
+          let success = teams.roster(json, pool); 
           
           if (success){
               res.sendStatus(200); 
