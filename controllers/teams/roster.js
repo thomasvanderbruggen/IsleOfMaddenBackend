@@ -8,6 +8,7 @@ import { realLeagueId } from "../../utils";
 export const roster = async (req, res) => {
     let { params: { leagueId }, } = req;
     let body = '';
+    const pool = req.
     leagueId = parseInt(leagueId); 
     req.on('data', chunk => {
         body += chunk.toString();
@@ -15,7 +16,8 @@ export const roster = async (req, res) => {
     req.on('end', async () => {
         if (leagueId === realLeagueId) {
           const json = JSON.parse(body)['rosterInfoList'] 
-          let success = await teams.roster(json); 
+          const pool = req.app.locals.settings.pool
+          let success = await teams.roster(json, pool); 
           
           if (success){
               res.sendStatus(200); 

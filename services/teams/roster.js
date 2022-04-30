@@ -6,13 +6,7 @@ import { dbConfig } from "../../utils";
     Runs the rosterQuery for each player on the roster
 */
 
-export const roster = async (players) => {
-    const pool = mysql.createPool({
-        'host': dbConfig.host,
-        'user': dbConfig.user,
-        'database': dbConfig.database,
-        'password': dbConfig.password, 
-    })
+export const roster = async (players, pool) => {
     let success; 
     for (const player of players) {
         success = rostersQuery(player, pool);

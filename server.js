@@ -1,7 +1,8 @@
 import express from 'express'; 
 import currentWeek from './db/weekly/currentWeek.js';
 import routes from './routes/index.js'; 
-import { generateTeamIdConversions } from './utils/index.js';
+import { generateTeamIdConversions, dbConfig } from './utils/index.js';
+
 
 const app = express(); 
 app.set('port', process.env.PORT || 3001);
@@ -25,6 +26,15 @@ app.set('teamNameToId', teamNameToId);
 
 console.log(seasonIndex); 
 console.log(weekIndex); 
+
+const pool = mysql.createPool({
+  'host': dbConfig.host,
+  'user': dbConfig.user,
+  'database': dbConfig.database,
+  'password': dbConfig.password, 
+})
+
+app.set('pool', pool); 
 
 app.listen(app.get('port'), () => console.log('App listening on port 3000')); 
 
