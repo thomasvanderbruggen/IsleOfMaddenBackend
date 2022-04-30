@@ -25,9 +25,9 @@ export const searchService = async (position, team, name, teamIdToName) => {
     Builds the select statement based on the position.  
 */
 const buildSelect = (position) => {
-    let commonColumns = "firstName, lastName, devTrait, age, height, weight, playerBestOvr, teamId, position, playerId"
+    let commonCols = "firstName, lastName, devTrait, age, height, weight, playerBestOvr, teamId, position, playerId"
      if (!position || position === "Any"){ 
-        return `SELECT ${commonColumns}, speedRating, awareRating`; 
+        return `SELECT ${commonCols}, speedRating, awareRating`; 
      }else if (position === 'QB') {
          return `SELECT ${commonCols}, throwPowerRating, throwAccRating, throwOnRunRating, throwAccShortRating, throwAccMedRating, throwAccDeepRating, speedRating, awareRating, playActionRating, breakSackRating, throwUnderPressureRating`;
      }else if (position === "HB"){ 
