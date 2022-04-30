@@ -28,6 +28,8 @@ export const weeklyStats = async (req, res) => {
                 success = weekly.schedule(games, weekType);
             }else if (dataType === 'punting'){ // Contains punting stats for each game played
                 let stats = json['playerPuntingStatInfoList']; 
+                console.log('in request handler for punts'); 
+                
                 success == weekly.punting(stats, weekType);
             }else if (dataType === 'passing'){ // Contains passing stats fro each game played
                 let stats = json['playerPassingStatInfoList'];

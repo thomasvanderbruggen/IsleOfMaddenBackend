@@ -8,6 +8,7 @@ import { adjustId } from '../../utils';
     Adjusts weekIndex, scheduleId, and statId. Generates the playerId for the player that the stat is from. Runs the puntingQuery. 
 */
 export const punting = async (stats, weekType) => {
+    console.log('in punting service'); 
      for (let stat of stats) {
         stat.weekIndex++; 
         stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex); 

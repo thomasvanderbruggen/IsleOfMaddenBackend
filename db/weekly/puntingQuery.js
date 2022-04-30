@@ -8,7 +8,7 @@ import { dbConfig } from '../../utils';
 */
 export const puntingQuery = async (game) => {
     let con = await mysql.createConnection(dbConfig); 
-
+    console.log('in punting query');
     try {
         let [rows, fields] = await con.query(
             `INSERT INTO punting_stats (fullName, puntsBlocked, puntsIn20, puntLongest, puntTBs, puntNetYdsPerAtt, 
