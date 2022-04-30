@@ -30,7 +30,6 @@ export const teamWeeklyStatsQuery = async (stat, pool) => {
                 stat.off3rdDownConv,stat.off3rdDownConvPct,stat.off2PtAtt,stat.off2PtConv,stat.off2PtConvPct,stat.offTotalYds,stat.offTotalYdsGained,stat.penalties,stat.penaltyYds,stat.scheduleId, stat.seed,stat.seasonIndex,
                 stat.statId,stat.stageIndex,stat.totalLosses,stat.teamId,stat.tODiff,stat.tOGiveaways,stat.tOTakeaways,stat.totalTies,stat.totalWins,stat.weekIndex]);
         
-        con.end();
         return true;
     }catch (err) {
         console.log(err);
