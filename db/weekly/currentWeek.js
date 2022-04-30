@@ -20,7 +20,7 @@ export const currentWeek = async () => {
     }else{
         let [newRows, newFields] = await con.query(
             `SELECT seasonIndex, weekIndex
-            FROM schedules WHERE weekINdex < 24
+            FROM schedules WHERE weekIndex < 24
             ORDER BY seasonIndex DESC, weekIndex DESC limit 1
             `)
         return [newRows[0].seasonIndex, newRows[0].weekIndex]; 
