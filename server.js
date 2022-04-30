@@ -2,6 +2,7 @@ import express from 'express';
 import currentWeek from './db/weekly/currentWeek.js';
 import routes from './routes/index.js'; 
 import { generateTeamIdConversions, dbConfig } from './utils/index.js';
+import mysql from 'mysql2/promise'; 
 
 
 const app = express(); 
