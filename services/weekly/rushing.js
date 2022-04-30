@@ -8,6 +8,7 @@ import rushingQuery from '../../db/weekly/rushingQuery';
 */  
 
 export const rushing = async (stats, weekType) => {
+    console.log(stats[0]);
     for (let stat of stats){
         stat.weekIndex++; 
         stat.scheduleId = adjustId(stat.scheduleId, stat.seasonIndex); 
