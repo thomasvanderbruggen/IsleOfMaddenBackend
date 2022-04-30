@@ -12,7 +12,6 @@ export const roster = async (players) => {
         'user': dbConfig.user,
         'database': dbConfig.database,
         'password': dbConfig.password, 
-        'connectionLimit': 15
     })
     let success; 
     for (const player of players) {
