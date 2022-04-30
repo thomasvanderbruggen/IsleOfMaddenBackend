@@ -4,11 +4,9 @@ import { dbConfig } from "../../utils";
 
 
 //For each team in the json object, insert/update the database
-export const teamBasicInfo = async (teams) => {
-    const pool = mysql.createPool(dbConfig);
-    const promisePool = pool.promise();
+export const teamBasicInfo = async (teams, pool) => {
     for (const team of teams) { 
-        let success = await teamBasicInfoQuery(team, pool);
+        let success = teamBasicInfoQuery(team, pool);
         if (!success){
             return false;
         } 

@@ -11,7 +11,6 @@ export const roster = async (req, res) => {
     leagueId = parseInt(leagueId); 
     req.on('data', chunk => {
         body += chunk.toString();
-        console.log('in roster'); 
     }); 
     req.on('end', async () => {
         if (leagueId === realLeagueId) {

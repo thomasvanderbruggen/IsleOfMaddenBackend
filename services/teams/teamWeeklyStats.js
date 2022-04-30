@@ -16,8 +16,8 @@ export const teamWeeklyStats = async (stats, weekType) => {
         if (weekType === 'pre'){
             stat.weekIndex += 23;
         }
-        
-        let success = await teamWeeklyStatsQuery(stat); 
+        const pool = req.app.locals.settings.pool; 
+        let success = teamWeeklyStatsQuery(stat, pool); 
         if (!success){
             return false;
         }

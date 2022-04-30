@@ -22,7 +22,8 @@ export const standings = async (req, res) => {
         //Verify LeagueID is as expected, and insert into database
         if (leagueId === realLeagueId){
             const inputTeams = JSON.parse(body)['teamStandingInfoList']; 
-            let success = await teams.teamsByStandings(inputTeams);
+            const pool = req.app.locals.settings.pool; 
+            let success = teams.teamsByStandings(inputTeams, pool);
             if (success){
                 res.sendStatus(200);
             }else{

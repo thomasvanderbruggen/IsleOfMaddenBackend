@@ -1,8 +1,8 @@
 import rostersQuery from "../../db/teams/rostersQuery";
 
-export const freeAgents = async (freeAgents) => {
+export const freeAgents = async (freeAgents, pool) => {
     for (const player of freeAgents) {
-        let success = await rostersQuery(player);
+        let success = rostersQuery(player, pool);
         if (!success) {
             return false; 
         }    

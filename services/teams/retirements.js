@@ -25,7 +25,7 @@ export const retirements = async (players) => {
         }
     }
 
-    let success = await handleRetirees(allIds); 
+    let success = handleRetirees(allIds, pool); 
 
     return success;
 

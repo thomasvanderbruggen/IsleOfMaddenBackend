@@ -12,8 +12,9 @@ export const freeAgents = async (req, res) => {
     req.on('end', async () => {
         if (leagueId === realLeagueId){ 
             const json = JSON.parse(body)['rosterInfoList']; 
-            let success = await teams.freeAgents(json);
-            
+            const pool = req.app.locals.settings.pool; 
+            let success = teams.freeAgents(json);
+           
             if (success){
                 res.sendStatus(200); 
             }else{

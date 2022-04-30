@@ -5,11 +5,10 @@ import utils from '../../utils';
 /*
     Inserts and updates the team_stats table 
 */
-export const teamWeeklyStatsQuery = async (stat) => {
-    let con = await mysql.createConnection(utils.dbConfig); 
+export const teamWeeklyStatsQuery = async (stat, pool) => {
 
     try { 
-        let [rows, fields] = await con.query(
+        let [rows, fields] = await pool.query(
             `INSERT INTO team_stats (defForcedFum, defFumRec, defIntsRec, defPtsPerGame, defPassYds, defRushYds,
                 defRedZoneFGs, defRedZones, defRedZonePct, defRedZoneTDs, defSacks, defTotalYds, off4thDownAtt, off4thDownConv,
                 off4thDownConvPct, offFumLost, offIntsLost, off1stDowns, offPtsPerGame, offPassTDs, offPassYds, offRushTDs, offRushYds,
