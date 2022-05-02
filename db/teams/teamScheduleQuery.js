@@ -29,7 +29,8 @@ export const teamScheduleQuery = async (teamId, seasonIndex) => {
              SELECT teamName, teamId
              FROM teams_temp
          )t2 on t2.teamId = sch.awayTeamId
-        WHERE (sch.homeTeamId = ? or sch.awayTeamId = ?) and seasonIndex = ? and weekIndex < 23
+        WHERE (sch.homeTeamId = ? or sch.awayTeamId = ?) and seasonIndex = ? and weekIndex < 23 
+        ORDER BY weekIndex asc
          `, [teamId, teamId, seasonIndex])
         con.end(); 
         return rows;
