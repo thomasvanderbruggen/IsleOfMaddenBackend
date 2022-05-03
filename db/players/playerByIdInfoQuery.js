@@ -70,6 +70,7 @@ export const playerByIdInfoQuery = async (playerId) => {
                 p.blockShedRating,
                 p.kickPowerRating,
                 p.kickAccRating,
+                p.portraitId,
                 t.teamName
             FROM 
                 players p
