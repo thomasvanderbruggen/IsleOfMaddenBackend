@@ -12,7 +12,7 @@ import wrStatsQuery from "../../db/players/wrStatsQuery";
     Gathers all of the information about a player from the given season. Depending on the position the player plays, the stats will be different
 */
 
-export const playerByIdService = async (playerId, seasonIndex) => {
+export const playerByIdService = async (playerId, seasonIndex, teamIdToName) => {
     let playerInfo = await playerByIdInfoQuery(playerId, seasonIndex); 
     let seasonStats = {}; 
     let weeklyStats = []; 
