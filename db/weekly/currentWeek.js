@@ -23,6 +23,7 @@ export const currentWeek = async () => {
             FROM schedules WHERE weekIndex < 24
             ORDER BY seasonIndex DESC, weekIndex DESC limit 1
             `)
+        con.end();
         return [newRows[0].seasonIndex, newRows[0].weekIndex]; 
     }
 
