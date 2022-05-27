@@ -31,8 +31,7 @@ export const weeklyStats = async (req, res) => {
                 let stats = json['playerPuntingStatInfoList']; 
                 console.log('in request handler for punts'); 
 
-                success = await weekly.punting(stats, weekType);
-                console.log(`success: ${success}`);
+                success = weekly.punting(stats, weekType);
             }else if (dataType === 'passing'){ // Contains passing stats fro each game played
                 let stats = json['playerPassingStatInfoList'];
                 success = weekly.passing(stats, weekType);  
