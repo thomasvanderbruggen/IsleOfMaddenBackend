@@ -56,7 +56,7 @@ export const dbConfig = {
     "host": process.env.host,
     "user": process.env.user,
     "password": process.env.pw,
-    "database": "tomvandy_isle_of_madden"
+    "database": "isle_of_madden"
 }
 
 export const generateTeamIdConversions = async () => {
