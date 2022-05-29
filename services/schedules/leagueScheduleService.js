@@ -17,7 +17,7 @@ export const leagueScheduleService = async (seasonIndex, weekIndex) => {
     if (weekIndex < 0 || weekIndex > 26 || weekIndex === 22) {
         return false;
     }
-
+    console.log(`lss ${seasonIndex}`)
     return await leagueScheduleQuery(seasonIndex, weekIndex); 
 }
 
