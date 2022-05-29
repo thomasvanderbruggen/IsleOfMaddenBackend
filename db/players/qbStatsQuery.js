@@ -49,6 +49,7 @@ export const qbStatsQuery = async (playerId, seasonIndex) => {
             p.weekIndex < 24   
             `, [playerId, seasonIndex])
         con.end(); 
+        console.log(rows); 
         return rows;
     }catch (err){
         console.log(err);
