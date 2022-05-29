@@ -157,6 +157,7 @@ export const playerByIdService = async (playerId, seasonIndex, teamIdToName) => 
             "recYdsPerCatch": 0, 
             "recYdsPerGame": 0
         }
+        console.log(weeklyStats);
         if (weeklyStats.length !== 0){
             for (const week of weeklyStats){
                 seasonStats.name = week.fullName;
