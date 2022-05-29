@@ -36,6 +36,8 @@ export const defenseStatsQuery = async (playerId, seasonIndex) => {
                 def.weekIndex < 24
             `
         , [playerId, seasonIndex]) 
+        con.end();
+        return rows;
     }catch (err){
         console.log(err); 
         con.end(); 
