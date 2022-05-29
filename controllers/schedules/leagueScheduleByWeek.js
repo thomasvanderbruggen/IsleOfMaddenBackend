@@ -9,7 +9,7 @@ export const leagueScheduleByWeek = async (req, res) => {
     let {params: {week}, } = req; 
     const currentSeason = req.app.locals.settings.currentSeason; 
     week = parseInt(week); 
-
+    console.log(`lsbw ${currentSeason}`)
     let response = await leagueScheduleService(currentSeason, week); 
 
     if (response){
