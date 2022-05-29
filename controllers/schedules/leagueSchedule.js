@@ -8,6 +8,7 @@ import schedules from "../../services/schedules";
 export const leagueSchedule = async (req, res) => {
     const weekIndex = req.app.locals.settings.currentWeek; 
     const seasonIndex = req.app.locals.settings.currentSeason;
+    console.log(`SI ${seasonIndex}`)
     let response = await schedules.leagueScheduleService(seasonIndex, weekIndex); 
     console.log(response);
 
