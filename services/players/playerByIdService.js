@@ -17,6 +17,8 @@ export const playerByIdService = async (playerId, seasonIndex, teamIdToName) => 
     let seasonStats = {}; 
     let weeklyStats = []; 
     let abilities = {}; 
+    console.log(`${seasonIndex} SI ${playerId} playerId`); 
+
     if (playerInfo?.position === "QB"){
         weeklyStats = await qbStatsQuery(playerId, seasonIndex);
         if (weeklyStats.length !== 0){
