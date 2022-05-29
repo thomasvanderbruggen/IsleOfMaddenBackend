@@ -15,7 +15,7 @@ app.use('/', routes);
 
 let [seasonIndex, weekIndex] = await currentWeek(); 
 
-app.set('currentSeason', 3); 
+app.set('currentSeason', seasonIndex); 
 app.set('currentWeek', weekIndex); 
 const [teamIdToName, teamNameToId] = await generateTeamIdConversions();
 app.set('teamIdToName', teamIdToName);
