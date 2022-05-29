@@ -270,6 +270,7 @@ export const playerByIdService = async (playerId, seasonIndex, teamIdToName) => 
         }
     }else {
         weeklyStats = await defenseStatsQuery(playerId, seasonIndex); 
+        console.log(weeklyStats);
         if (weeklyStats.length !== 0){
             seasonStats = {
                 "name": '', 
