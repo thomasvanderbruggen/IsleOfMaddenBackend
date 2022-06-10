@@ -9,6 +9,7 @@ import weekly from "../../services/weekly";
 */
 export const weeklyStats = async (req, res) => {
     let {params : {dataType, weekType, leagueId}, } = req; 
+    let currentWeek = req.app.locals.settings.currentWeek; 
     leagueId = parseInt(leagueId); 
     let body = ''; 
     req.on('data', chunk => {
@@ -20,6 +21,10 @@ export const weeklyStats = async (req, res) => {
         if (leagueId === realLeagueId){
             const pool = req.app.locals.settings.pool; 
             let json = JSON.parse(body); 
+
+            /*
+                Routes the data to the correct function based on the 'dataType' parameter
+            */
             if (dataType === 'teamstats'){ // Contains team stats for each game played
                 let stats = json['teamStatInfoList']; 
                 success = teams.teamWeeklyStats(stats, weekType, pool);
@@ -27,6 +32,14 @@ export const weeklyStats = async (req, res) => {
                 let games = json['gameScheduleInfoList']; 
                 success = weekly.schedule(games, weekType);
                 console.log(`schedule success: ${success}`)
+                if (games[0].weekIndex > currentWeek){
+                    for (const game of games){
+                        if (game.status > 1){
+                            req.app.set('currentWeek', game.weekIndex)
+                            break;
+                        }
+                    }
+                }
             }else if (dataType === 'punting'){ // Contains punting stats for each game played
                 let stats = json['playerPuntingStatInfoList']; 
                 console.log('in request handler for punts'); 
@@ -48,6 +61,10 @@ export const weeklyStats = async (req, res) => {
                 let stats = json['playerReceivingStatInfoList']; 
                 success = weekly.receiving(stats, weekType);
             }
+            /*
+                End of dataType routing
+            */ 
+
         }
 
         if (success){
