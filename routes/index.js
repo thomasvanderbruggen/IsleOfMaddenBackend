@@ -21,8 +21,8 @@ router.post('/:platform/:leagueId/week/:weekType/:weekNumber/:dataType', weekly.
 router.post('/:platform/:leagueId/freeagents/roster', teams.roster); 
 router.post('/:platform/:leagueId/team/:teamId/roster', teams.roster); 
 // /retirements is used at the start of offseason to determine who has retired
-router.post('/retirements/:leagueId/team/:teamId/roster', teams.retirements);
-router.post('/retirements/:platform/:leagueId/team/freeagents/roster', teams.retirements); 
+router.post('/retirements/:platform/:leagueId/team/:teamId/roster', teams.retirements);
+router.post('/retirements/:platform/:leagueId/freeagents/roster', teams.retirements); 
 
 
 // -------------- GET ROUTES --------------
