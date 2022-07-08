@@ -9,11 +9,14 @@ import { dbConfig } from "../../utils";
 export const roster = async (players, pool) => {
     let success; 
     for (const player of players) {
+        if (player.firstName == 'Chris'){
+            console.log(`${player.firstName} ${player.lastName} ${player.teamId}`);
+        }
         success = rostersQuery(player, pool);
         if (!success) {
             return false; 
         }
-        console.log(`${player.firstName} ${player.lastName} ${player.teamId}`)   
+           
     }
 
     if (success){
