@@ -21,8 +21,9 @@ export const roster = async (req, res) => {
           
           if (success){
               res.sendStatus(200); 
-
           }
+          let a = await success;
+          console.log(a); 
         }
     })
 }
