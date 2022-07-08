@@ -12,7 +12,10 @@ export const roster = async (players, pool) => {
         success = rostersQuery(player, pool);
         if (!success) {
             return false; 
-        }    
+        }
+        if (player.firstName === 'Chris' && player.lastName === 'Streveler') {
+            console.log(player);
+        }     
     }
 
     if (success){
