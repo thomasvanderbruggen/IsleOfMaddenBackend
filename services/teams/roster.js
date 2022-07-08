@@ -13,9 +13,7 @@ export const roster = async (players, pool) => {
         if (!success) {
             return false; 
         }
-        if (player.firstName === 'Chris' && player.lastName === 'Streveler') {
-            console.log(player);
-        }     
+        console.log(`${player.firstName} ${player.lastName} ${player.teamId}`)   
     }
 
     if (success){
