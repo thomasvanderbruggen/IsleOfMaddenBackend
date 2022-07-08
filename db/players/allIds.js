@@ -6,7 +6,9 @@ export const allIds = async (team) => {
     
     
     try { 
-        let [rows, fields] = await con.query('select playerId from players where teamId = ?', [team]);
+        let test = await con.query('select playerId from players where teamId = ?', [team]);
+        console.log(test); 
+        let [rows, fields] = test;
         let ids = rows.map(row => row.playerId); 
 
         return ids; 
