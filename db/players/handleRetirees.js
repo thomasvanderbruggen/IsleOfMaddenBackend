@@ -1,11 +1,12 @@
 import mysql from 'mysql2/promise'; 
-import utils from '../../utils';
+import utils, { dbConfig } from '../../utils';
 
-export const handleRetirees = async (ids, pool) => {
+export const handleRetirees = async (ids) => {
+    const con = mysql.createConnection(utils.dbConfig)
     let sql = 'UPDATE players SET isRetired = true where playerId in (' + ids.toString() + ')'; 
 
     try {
-        let [rows, fields] = await pool.query(sql);
+        let [rows, fields] = await con.query(sql);
         
         return true;
     } catch (err) {
