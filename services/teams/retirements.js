@@ -12,6 +12,9 @@ import handleRetirees from "../../db/players/handleRetirees";
 */
 
 export const retirements = async (players) => {
+    console.log(players); 
+
+
     if (players[0].teamId === 0){
         players[0].teamId = 1; 
     }
@@ -20,12 +23,16 @@ export const retirements = async (players) => {
     for (let player of players) { 
         player['playerId'] =  utils.generatePlayerIdWithFirstName(player.firstName, player.lastName, player.rosterId); 
         const index = currentPlayers.indexOf(player.playerId); 
+
+        
+
+
         if (index !== -1){
-            allIds.splice(index, 1); 
+            currentPlayers.splice(index, 1); 
         }
     }
 
-    let success = handleRetirees(allIds, pool); 
+    let success = handleRetirees(currentPlayers, pool); 
 
     return success;
 
