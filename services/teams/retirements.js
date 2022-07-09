@@ -32,7 +32,7 @@ export const retirements = async (players) => {
         }
     }
 
-    let success = handleRetirees(currentPlayers, pool); 
+    let success = handleRetirees(currentPlayers); 
 
     return success;
 
