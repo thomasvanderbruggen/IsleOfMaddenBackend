@@ -21,7 +21,7 @@ export const retirements = async (req, res) => {
             if (success){
                 res.sendStatus(200); 
             }else{
-                res.sendStauts(500); 
+                res.sendStatus(500); 
             }
         }
     })
