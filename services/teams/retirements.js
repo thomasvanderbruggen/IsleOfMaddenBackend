@@ -28,8 +28,14 @@ export const retirements = async (players) => {
             currentPlayers.splice(index, 1); 
         }
     }
-
-    let success = handleRetirees(currentPlayers); 
+    let success = false; 
+    
+    if (currentPlayers.length === 0) {
+        return true; 
+    }else {
+        success = handleRetirees(currentPlayers); 
+    }
+    
 
     return success;
 
