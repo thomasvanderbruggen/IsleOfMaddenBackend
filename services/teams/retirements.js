@@ -12,9 +12,6 @@ import handleRetirees from "../../db/players/handleRetirees";
 */
 
 export const retirements = async (players) => {
-    console.log(players); 
-
-
     if (players[0].teamId === 0){
         players[0].teamId = 1; 
     }
