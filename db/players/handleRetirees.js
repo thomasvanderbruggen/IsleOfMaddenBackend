@@ -2,7 +2,7 @@ import mysql from 'mysql2/promise';
 import utils, { dbConfig } from '../../utils';
 
 export const handleRetirees = async (ids) => {
-    const con = mysql.createConnection(utils.dbConfig)
+    const con = await mysql.createConnection(utils.dbConfig)
     let sql = 'UPDATE players SET isRetired = true where playerId in (' + ids.toString() + ')'; 
 
     try {
