@@ -21,3 +21,5 @@ export const roster = async (players, pool) => {
         return true;
     } 
 }
+
+export default roster;
