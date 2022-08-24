@@ -19,7 +19,7 @@ export const teamInfo = async (req, res) => {
     })
     req.on('end', () => {
         //Verify leagueId is the expected one, and send to teamBasicInfo
-        if (leagueId === realLeagueId) {
+        if (leagueId === leagueId) {
             const inputTeams = JSON.parse(body)['leagueTeamInfoList'];
             const pool = req.app.locals.settings.pool; 
             let success = teams.teamBasicInfo(inputTeams, pool); 

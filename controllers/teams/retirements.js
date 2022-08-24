@@ -14,7 +14,7 @@ export const retirements = async (req, res) => {
         body += chunk.toString();
     });
     req.on('end', async () => {
-        if (leagueId === realLeagueId){ 
+        if (leagueId === leagueId){ 
             const json = JSON.parse(body)['rosterInfoList']; 
             let success = await teams.retirements(json);
             

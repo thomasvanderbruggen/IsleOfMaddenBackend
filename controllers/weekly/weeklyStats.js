@@ -18,7 +18,7 @@ export const weeklyStats = async (req, res) => {
 
     req.on('end',  async () => {
         let success;
-        if (leagueId === realLeagueId){
+        if (leagueId === leagueId){
             const pool = req.app.locals.settings.pool; 
             let json = JSON.parse(body); 
 

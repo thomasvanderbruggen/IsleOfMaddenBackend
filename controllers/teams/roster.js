@@ -13,7 +13,7 @@ export const roster = async (req, res) => {
         body += chunk.toString();
     }); 
     req.on('end', async () => {
-        if (leagueId === realLeagueId) {
+        if (leagueId === leagueId) {
           const json = JSON.parse(body)['rosterInfoList'] 
           const pool = req.app.locals.settings.pool; 
          
