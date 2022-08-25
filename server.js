@@ -13,16 +13,16 @@ app.use(cors())
 app.use('/', routes); 
 
 
-//let [seasonIndex, weekIndex] = await currentWeek(); 
+let [seasonIndex, weekIndex] = await currentWeek(); 
 
-// app.set('currentSeason', seasonIndex); 
-// app.set('currentWeek', weekIndex); 
-// const [teamIdToName, teamNameToId] = await generateTeamIdConversions();
-// app.set('teamIdToName', teamIdToName);
-// app.set('teamNameToId', teamNameToId);  
+app.set('currentSeason', seasonIndex); 
+app.set('currentWeek', weekIndex); 
+const [teamIdToName, teamNameToId] = await generateTeamIdConversions();
+app.set('teamIdToName', teamIdToName);
+app.set('teamNameToId', teamNameToId);  
 
-// console.log(seasonIndex); 
-// console.log(weekIndex); 
+console.log(seasonIndex); 
+console.log(weekIndex); 
 
 const pool = mysql.createPool({
   'host': dbConfig.host,
