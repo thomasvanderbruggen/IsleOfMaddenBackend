@@ -8,9 +8,12 @@ import { dbConfig } from "../../utils";
 
 export const roster = async (players, pool) => {
     let success; 
+
+    console.log(players[0]); 
     for (const player of players) {
 
         success = rostersQuery(player, pool);
+        
         if (!success) {
             return false; 
         }
