@@ -15,7 +15,7 @@ export const passing = async (stats, weekType) => {
         }
         stat['playerId'] = generatePlayerIdWithFullName(stat.fullName, stat.rosterId); 
         
-        if (stat.teamId === 972030015){
+        if (stat.weekIndex === 3){
             console.log(stat);
         }
 

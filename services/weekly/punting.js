@@ -19,7 +19,6 @@ export const punting = async (stats, weekType) => {
         stat['playerId'] = generatePlayerIdWithFullName(stat.fullName, stat.rosterId); 
 
         let success = await puntingQuery(stat); 
-        console.log("puntingQuery success: ", success);
         if(!success){
             return false;
         }

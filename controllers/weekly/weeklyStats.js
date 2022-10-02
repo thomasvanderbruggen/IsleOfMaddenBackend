@@ -31,7 +31,6 @@ export const weeklyStats = async (req, res) => {
             }else if (dataType === 'schedules'){ // Contains the scheduling information for the week
                 let games = json['gameScheduleInfoList']; 
                 success = weekly.schedule(games, weekType);
-                console.log(`schedule success: ${success}`)
                 if (games[0].weekIndex > currentWeek){
                     for (const game of games){
                         if (game.status > 1){
@@ -42,8 +41,6 @@ export const weeklyStats = async (req, res) => {
                 }
             }else if (dataType === 'punting'){ // Contains punting stats for each game played
                 let stats = json['playerPuntingStatInfoList']; 
-                console.log('in request handler for punts'); 
-
                 success = weekly.punting(stats, weekType);
             }else if (dataType === 'passing'){ // Contains passing stats fro each game played
                 let stats = json['playerPassingStatInfoList'];
