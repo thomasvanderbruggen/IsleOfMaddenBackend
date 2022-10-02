@@ -15,8 +15,8 @@ export const puntingQuery = async (game) => {
                 puntNetYds, puntAtt, rosterId, playerId, scheduleId, seasonIndex, statId, stageIndex, teamId, weekIndex)
             VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), puntsBlocked=VALUES(puntsBlocked), puntsIn20=VALUES(puntsIn20), puntLongest=VALUES(puntLongest), puntTBs=VALUES(puntTBs), puntNetYdsPerAtt=VALUES(puntNetYdsPerAtt), 
-            puntNetYds=VALUES(puntNetYds), rosterId=VALUES(rosterId), scheduleId=VALUES(scheduleId), seasonIndex=VALUES(seasonIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`, 
-            [game.fullName, game.puntsBlocked, game.puntsIn20, game.puntLongest, game.puntTBs,game.puntNetYdsPerAtt, game.puntNetYds, game.puntAtt, game.rosterId, game.playerId, game.scheduleId, game.seasonIndex, game.statId, game.stageIndex, game.teamId, game.weekIndex])
+            puntNetYds=VALUES(puntNetYds), rosterId=VALUES(rosterId), scheduleId=VALUES(scheduleId), seasonIndex=VALUES(seasonIndex), weekIndex=VALUES(weekIndex)`, 
+            [game.fullName, game.puntsBlocked, game.puntsIn20, game.puntLongest, game.puntTBs,game.puntNetYdsPerAtt, game.puntNetYds, game.puntAtt, game.rosterId, game.playerId, game.scheduleId, game.seasonIndex, game.statId, game.stageIndex, game.teamId,game.weekIndex])
     
         con.end();
         return true;

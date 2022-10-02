@@ -17,7 +17,7 @@ export const receivingQuery = async (stat) => {
             ON DUPLICATE KEY UPDATE fullName=VALUES(fullName), recCatches=VALUES(recCatches), recCatchPct=VALUES(recCatchPct), recDrops=VALUES(recDrops), 
             recLongest=VALUES(recLongest), recPts=VALUES(recPts), rosterId=VALUES(rosterId), recTDs=VALUES(recTDs), recToPct=VALUES(recToPct), 
             recYdsAfterCatch=VALUES(recYdsAfterCatch), recYacPerCatch=VALUES(recYacPerCatch), recYds=VALUES(recYds), recYdsPerCatch=VALUES(recYdsPerCatch), 
-            recYdsPerGame=VALUES(recYdsPerGame), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), teamId=VALUES(teamId), weekIndex=VALUES(weekIndex)`
+            recYdsPerGame=VALUES(recYdsPerGame), seasonIndex=VALUES(seasonIndex), stageIndex=VALUES(stageIndex), weekIndex=VALUES(weekIndex)`
             ,[stat.fullName,stat.recCatches, stat.recCatchPct,stat.recDrops,stat.recLongest,stat.recPts,stat.rosterId,stat.playerId,stat.recTDs,stat.recToPct,stat.recYdsAfterCatch,
                 stat.recYacPerCatch,stat.recYds,stat.recYdsPerCatch,stat.recYdsPerGame,stat.scheduleId,stat.seasonIndex,stat.statId,stat.stageIndex,stat.teamId,stat.weekIndex])
 
