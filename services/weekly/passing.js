@@ -14,6 +14,10 @@ export const passing = async (stats, weekType) => {
             stat.weekIndex += 23; 
         }
         stat['playerId'] = generatePlayerIdWithFullName(stat.fullName, stat.rosterId); 
+        
+        if (stat.teamId === 972030015){
+            console.log(stat);
+        }
 
         stat.statId = adjustId(stat.statId, stat.seasonIndex);
         let success = await passingQuery(stat); 
