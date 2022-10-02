@@ -3,7 +3,6 @@ import { dbConfig } from '../../utils';
 
 export const scheduleQuery = async (game) => {
     let con = await mysql.createConnection(dbConfig); 
-    console.log(game);
     try { 
         let [rows,fields] = await con.query(
         `INSERT INTO schedules (awayScore, awayTeamId, isGameOfTheWeek, homeScore, homeTeamId, scheduleId, seasonIndex, stageIndex, weekStatus, weekIndex) 
